@@ -1,0 +1,386 @@
+/* ── Page Layout ─────────────────────────────────────── */
+.page-wrapper {
+  padding: 16px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  position: relative;
+}
+
+@media (min-width: 600px) {
+  .page-wrapper {
+    padding: 24px;
+  }
+}
+
+@media (min-width: 900px) {
+  .page-wrapper {
+    padding: 32px;
+  }
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 !important;
+}
+
+/* ── Header Paper ────────────────────────────────────── */
+.header-paper {
+  width: 100%;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08) !important;
+  margin-bottom: 24px;
+  background-color: #ffffff !important;
+}
+
+@media (min-width: 600px) {
+  .header-paper {
+    margin-bottom: 32px;
+  }
+}
+
+.header-banner {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  padding: 16px;
+  color: #ffffff;
+  border-radius: 16px 16px 0 0;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .header-banner {
+    padding: 24px;
+  }
+}
+
+@media (min-width: 900px) {
+  .header-banner {
+    padding: 32px;
+  }
+}
+
+.header-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.header-icon {
+  font-size: 20px !important;
+}
+
+@media (min-width: 600px) {
+  .header-icon {
+    font-size: 24px !important;
+  }
+}
+
+.header-title {
+  font-weight: 600 !important;
+  font-size: 1.2rem !important;
+  color: #ffffff;
+}
+
+@media (min-width: 600px) {
+  .header-title {
+    font-size: 1.5rem !important;
+  }
+}
+
+.header-subtitle {
+  margin-top: 4px !important;
+  font-size: 12px !important;
+  opacity: 0.9;
+  color: #ffffff;
+}
+
+@media (min-width: 600px) {
+  .header-subtitle {
+    font-size: 14px !important;
+  }
+}
+
+/* ── Stepper ─────────────────────────────────────────── */
+.stepper {
+  padding: 12px 16px !important;
+}
+
+@media (min-width: 600px) {
+  .stepper {
+    padding: 16px 24px !important;
+  }
+}
+
+.stepper .MuiStepLabel-label {
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  color: #0c83c8 !important;
+}
+
+@media (min-width: 600px) {
+  .stepper .MuiStepLabel-label {
+    font-size: 1rem !important;
+  }
+}
+
+/* ── Form Paper ──────────────────────────────────────── */
+.form-paper {
+  width: 100%;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08) !important;
+  background-color: #ffffff !important;
+  padding: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .form-paper {
+    padding: 16px !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .form-paper {
+    padding: 24px !important;
+  }
+}
+
+/* ── Form Section ────────────────────────────────────── */
+.form-section {
+  padding: 16px !important;
+}
+
+@media (min-width: 600px) {
+  .form-section {
+    padding: 24px !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .form-section {
+    padding: 32px !important;
+  }
+}
+
+/* ── Gradient Text ───────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.section-title {
+  margin-bottom: 16px !important;
+  font-size: 1.2rem !important;
+}
+
+@media (min-width: 600px) {
+  .section-title {
+    font-size: 1.4rem !important;
+  }
+}
+
+.field-label {
+  margin-bottom: 8px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+}
+
+@media (min-width: 600px) {
+  .field-label {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* ── Text Fields ─────────────────────────────────────── */
+.text-field {
+  margin-bottom: 24px !important;
+}
+
+.text-field .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.text-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: #0c83c8;
+}
+
+.text-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #fc7a46;
+}
+
+.text-field .MuiInputLabel-root {
+  color: #0c83c8;
+}
+
+.text-field .MuiInputLabel-root.Mui-focused {
+  color: #fc7a46;
+}
+
+.text-field .MuiFormHelperText-root {
+  color: #4b5563;
+}
+
+.tags-field {
+  margin-bottom: 32px !important;
+}
+
+/* ── Form Actions ────────────────────────────────────── */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn-clear {
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  font-size: 12px !important;
+  border-radius: 8px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-clear {
+    font-size: 14px !important;
+  }
+}
+
+.btn-clear:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+}
+
+.btn-submit {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  font-size: 12px !important;
+  border-radius: 8px !important;
+  padding: 4px 16px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-submit {
+    font-size: 14px !important;
+    padding: 6px 24px !important;
+  }
+}
+
+.btn-submit:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ── Tag Chip ─────────────────────────────────────────── */
+.tag-chip {
+  margin: 4px !important;
+  background-color: #e3f2fd !important;
+  color: #0c83c8 !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+}
+
+@media (min-width: 600px) {
+  .tag-chip {
+    font-size: 12px !important;
+  }
+}
+
+.tag-chip:hover {
+  background-color: #d1e9ff !important;
+}
+
+.no-tags-text {
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .no-tags-text {
+    font-size: 14px !important;
+  }
+}
+
+/* ── Dialog ──────────────────────────────────────────── */
+.dialog-paper {
+  border-radius: 12px !important;
+}
+
+.dialog-title {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  font-size: 16px !important;
+}
+
+@media (min-width: 600px) {
+  .dialog-title {
+    font-size: 18px !important;
+  }
+}
+
+.dialog-content {
+  padding: 24px !important;
+}
+
+.dialog-content-text {
+  font-size: 14px !important;
+}
+
+@media (min-width: 600px) {
+  .dialog-content-text {
+    font-size: 16px !important;
+  }
+}
+
+.dialog-detail {
+  margin-top: 8px !important;
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .dialog-detail {
+    font-size: 14px !important;
+  }
+}
+
+.dialog-actions {
+  padding: 16px !important;
+}
+
+.btn-dialog-cancel {
+  color: #0c83c8 !important;
+  font-size: 12px !important;
+  border-radius: 8px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-dialog-cancel {
+    font-size: 14px !important;
+  }
+}
+
+/* ── Snackbar & Alert ────────────────────────────────── */
+.snackbar {
+  margin-top: 16px !important;
+}
+
+.alert {
+  width: 100% !important;
+  color: #ffffff !important;
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .alert {
+    font-size: 14px !important;
+  }
+}
+
+.alert .MuiAlert-icon {
+  color: #ffffff !important;
+}
+
+.alert--success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}

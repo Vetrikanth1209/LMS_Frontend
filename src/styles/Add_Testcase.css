@@ -1,0 +1,339 @@
+/* ── Page Container ──────────────────────────────────── */
+.page-container {
+  min-height: 100vh;
+  padding-top: 48px !important;
+  padding-bottom: 48px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+@media (min-width: 600px) {
+  .page-container {
+    padding-top: 32px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+/* ── Single Test Case Form Paper ─────────────────────── */
+.form-paper {
+  width: 100% !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  margin-bottom: 32px !important;
+  animation: fadeIn 0.5s forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header Banner ───────────────────────────────────── */
+.header-banner {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  padding: 16px 20px;
+  color: white;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .header-banner {
+    padding: 20px 24px;
+  }
+}
+
+.header-title-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.header-title {
+  font-weight: 600 !important;
+  color: white !important;
+}
+
+.header-subtitle {
+  font-size: 12px !important;
+  color: white !important;
+}
+
+@media (min-width: 600px) {
+  .header-subtitle {
+    font-size: 14px !important;
+  }
+}
+
+/* ── Form Body ───────────────────────────────────────── */
+.form-body {
+  padding: 16px !important;
+}
+
+@media (min-width: 600px) {
+  .form-body {
+    padding: 24px !important;
+  }
+}
+
+/* ── Field Group ─────────────────────────────────────── */
+.field-group {
+  margin-bottom: 24px !important;
+}
+
+.field-label {
+  font-weight: 500 !important;
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+}
+
+@media (min-width: 600px) {
+  .field-label {
+    font-size: 16px !important;
+  }
+}
+
+/* ── Styled TextField ────────────────────────────────── */
+.styled-textfield .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.styled-textfield .MuiOutlinedInput-root fieldset {
+  border-color: #0c83c8;
+}
+
+.styled-textfield .MuiOutlinedInput-root:hover fieldset {
+  border-color: #fc7a46;
+}
+
+.styled-textfield .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #0c83c8;
+}
+
+/* ── Form Actions ────────────────────────────────────── */
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e6f7;
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn-clear {
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-clear {
+    font-size: 14px !important;
+  }
+}
+
+.btn-clear:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+  background-color: #f5f7ff !important;
+}
+
+.btn-submit {
+  border-radius: 8px !important;
+  padding: 12px 32px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  font-size: 12px !important;
+  box-shadow: 0 4px 12px rgba(12, 131, 200, 0.2) !important;
+}
+
+@media (min-width: 600px) {
+  .btn-submit {
+    font-size: 14px !important;
+  }
+}
+
+.btn-submit:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.btn-spinner {
+  margin-right: 8px !important;
+}
+
+/* ── CSV Paper ───────────────────────────────────────── */
+.csv-paper {
+  padding: 16px !important;
+  width: 100% !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(255, 255, 250, 0.95) !important;
+}
+
+@media (min-width: 600px) {
+  .csv-paper {
+    padding: 32px !important;
+  }
+}
+
+/* ── Gradient Text ───────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.csv-title {
+  font-weight: bold !important;
+  margin-bottom: 16px !important;
+}
+
+@media (min-width: 600px) {
+  .csv-title {
+    margin-bottom: 24px !important;
+  }
+}
+
+/* ── CSV Upload Row ──────────────────────────────────── */
+.csv-upload-row {
+  margin-bottom: 24px !important;
+}
+
+.btn-upload {
+  border-radius: 8px !important;
+  border-color: #0c83c8 !important;
+  color: #0c83c8 !important;
+  text-transform: none !important;
+  font-size: 0.8rem !important;
+  padding: 4px 16px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-upload {
+    font-size: 0.9rem !important;
+    padding: 6px 24px !important;
+  }
+}
+
+.btn-upload:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+}
+
+.csv-hint {
+  margin-top: 8px !important;
+  font-size: 0.75rem !important;
+}
+
+@media (min-width: 600px) {
+  .csv-hint {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* ── DataGrid Wrapper ────────────────────────────────── */
+.datagrid-wrapper {
+  height: 250px;
+  width: 100%;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+@media (min-width: 600px) {
+  .datagrid-wrapper {
+    height: 350px;
+    margin-bottom: 24px;
+  }
+}
+
+/* ── DataGrid Styles ─────────────────────────────────── */
+.csv-datagrid {
+  border-radius: 8px !important;
+}
+
+.csv-datagrid .MuiDataGrid-columnHeaders {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 0.75rem !important;
+}
+
+@media (min-width: 600px) {
+  .csv-datagrid .MuiDataGrid-columnHeaders {
+    font-size: 0.875rem !important;
+  }
+}
+
+.csv-datagrid .MuiDataGrid-row:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.csv-datagrid .MuiDataGrid-row:hover {
+  background-color: #e3f2fd !important;
+}
+
+.csv-datagrid .MuiDataGrid-cell {
+  font-size: 0.7rem !important;
+}
+
+@media (min-width: 600px) {
+  .csv-datagrid .MuiDataGrid-cell {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ── Column Header ───────────────────────────────────── */
+.col-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.col-header-text {
+  font-weight: bold !important;
+  color: #0c83c8 !important;
+}
+
+/* ── Create Selected Button ──────────────────────────── */
+.btn-create-selected {
+  border-radius: 8px !important;
+  background-color: #6c757d !important;
+  font-size: 0.8rem !important;
+  padding: 4px 16px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-create-selected {
+    font-size: 0.9rem !important;
+    padding: 6px 24px !important;
+  }
+}
+
+.btn-create-selected:hover {
+  background-color: #5a6268 !important;
+}
+
+/* ── Snackbar & Alert ────────────────────────────────── */
+.alert {
+  width: 100% !important;
+  white-space: pre-wrap !important;
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .alert {
+    font-size: 14px !important;
+  }
+}
+
+.alert--success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}

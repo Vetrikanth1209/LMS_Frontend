@@ -1,0 +1,241 @@
+/* =============================================
+   AdminDashboard.css
+   Styles for AdminDashboard & DashCard components
+   ============================================= */
+
+/* ---------- Page Wrapper ---------- */
+.admin-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgba(12, 131, 200, 0.06) 0%,
+    rgba(252, 122, 70, 0.06) 100%
+  );
+  font-family: "'Plus Jakarta Sans', sans-serif";
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---------- Decorative Blobs ---------- */
+.blob-top-right {
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(12, 131, 200, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.blob-bottom-left {
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(252, 122, 70, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ---------- Content Area ---------- */
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+  padding: 40px 24px;
+}
+
+/* ---------- Heading Section ---------- */
+.dashboard-heading {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.dashboard-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0c83c8;
+  margin: 0 0 10px;
+}
+
+.dashboard-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-subtitle {
+  font-size: 15px;
+  color: #999;
+  margin: 0;
+}
+
+/* ---------- Cards Grid ---------- */
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+/* ---------- Dash Card ---------- */
+.dash-card {
+  background: #fff;
+  border: 0.5px solid #e8e8e8;
+  border-radius: 20px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  overflow: hidden;
+  position: relative;
+}
+
+.dash-card:hover {
+  transform: translateY(-6px);
+}
+
+/* ---------- Card Accent Bar ---------- */
+.card-accent-bar {
+  height: 4px;
+  /* background set via inline style (dynamic color) */
+}
+
+/* ---------- Card Top Section ---------- */
+.card-top {
+  padding: 28px 28px 20px;
+  /* background set via inline style (dynamic color) */
+  border-bottom: 0.5px solid #f0f0f0;
+}
+
+.card-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  /* background set via inline style (dynamic color) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.card-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-family: "'Plus Jakarta Sans', sans-serif";
+  /* color & background set via inline style (dynamic color) */
+}
+
+.card-title {
+  font-family: "'Plus Jakarta Sans', sans-serif";
+  font-weight: 700;
+  font-size: 18px;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.card-description {
+  font-family: "'Plus Jakarta Sans', sans-serif";
+  font-size: 13.5px;
+  color: #888;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ---------- Card Features Section ---------- */
+.card-features {
+  padding: 16px 28px 20px;
+}
+
+.features-label {
+  font-family: "'Plus Jakarta Sans', sans-serif";
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #bbb;
+  margin: 0 0 10px;
+}
+
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.feature-pill {
+  background: #f5f5f5;
+  color: #666;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-family: "'Plus Jakarta Sans', sans-serif";
+  font-weight: 500;
+}
+
+/* ---------- Card Action Row ---------- */
+.card-action-row {
+  margin-top: auto;
+  padding: 14px 28px;
+  border-top: 0.5px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-more-info {
+  background: transparent;
+  border: none;
+  font-family: "'Plus Jakarta Sans', sans-serif";
+  font-size: 13px;
+  font-weight: 500;
+  color: #aaa;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-start {
+  border: none;
+  color: #fff;
+  font-family: "'Plus Jakarta Sans', sans-serif";
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* background set via inline style (dynamic color) */
+}
+
+.btn-start:hover {
+  opacity: 0.88;
+}
+
+.btn-start-arrow {
+  font-size: 15px;
+}

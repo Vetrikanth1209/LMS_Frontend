@@ -1,0 +1,448 @@
+/* =============================================
+   LinkModuleToPOC.css
+   Styles for Link_Module_To_POC component
+   ============================================= */
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Page Wrapper ---------- */
+.lmtp-root {
+  padding: 32px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ---------- Stepper Card ---------- */
+.lmtp-stepper-card {
+  padding: 24px;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08) !important;
+  margin-bottom: 32px !important;
+  background-color: #ffffff !important;
+}
+
+/* ---------- Header Banner ---------- */
+.lmtp-header {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: #ffffff;
+  border-radius: 16px !important;
+  text-align: center;
+  opacity: 0;
+  animation: fadeInUp 0.5s forwards;
+}
+
+.lmtp-header-subtitle {
+  margin-top: 4px !important;
+  font-size: 14px !important;
+}
+
+/* ---------- Stepper ---------- */
+.lmtp-stepper {
+  padding: 16px 0;
+}
+
+.lmtp-stepper .MuiStepLabel-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.lmtp-stepper .MuiStepLabel-label.Mui-active,
+.lmtp-stepper .MuiStepLabel-label.Mui-completed {
+  color: #0c83c8;
+}
+
+/* ---------- Content Card ---------- */
+.lmtp-content-card {
+  padding: 24px;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08) !important;
+  background-color: #ffffff !important;
+}
+
+/* ---------- Step Header Row ---------- */
+.lmtp-step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.lmtp-step-title {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600 !important;
+  font-size: 1.4rem !important;
+}
+
+/* ---------- Add Button ---------- */
+.lmtp-btn-add {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+}
+
+.lmtp-btn-add:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- DataGrid Wrapper ---------- */
+.lmtp-grid-wrap {
+  height: 400px;
+  width: 100%;
+}
+
+/* ---------- Navigation Rows ---------- */
+.lmtp-nav-end {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  gap: 8px;
+}
+
+.lmtp-nav-between {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.lmtp-nav-start {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 16px;
+  gap: 8px;
+}
+
+/* ---------- Nav Buttons ---------- */
+.lmtp-btn-next {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+}
+
+.lmtp-btn-next:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.lmtp-btn-next:disabled {
+  background-color: #b0bec5 !important;
+  color: #ffffff !important;
+}
+
+.lmtp-btn-prev {
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+}
+
+.lmtp-btn-prev:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+  background-color: #e3f2fd !important;
+}
+
+/* ---------- Review Section ---------- */
+.lmtp-review-desc {
+  margin-bottom: 24px !important;
+  color: #4b5563 !important;
+  font-size: 1rem !important;
+}
+
+.lmtp-review-box {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #fafafa;
+}
+
+.lmtp-review-subtitle {
+  margin-bottom: 8px !important;
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lmtp-review-body {
+  font-size: 0.95rem !important;
+  margin-bottom: 4px !important;
+}
+
+.lmtp-review-empty {
+  color: #6b7280 !important;
+  font-size: 0.95rem !important;
+}
+
+.lmtp-review-error {
+  color: #dc2626 !important;
+  font-size: 0.95rem !important;
+}
+
+/* ---------- FAB ---------- */
+.lmtp-fab {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 1000 !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(12, 131, 200, 0.15) !important;
+  text-transform: none !important;
+}
+
+.lmtp-fab:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.lmtp-fab:disabled {
+  background-color: #b0bec5 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+/* ---------- Dialogs ---------- */
+.lmtp-dialog .MuiPaper-root {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(12, 131, 200, 0.1);
+}
+
+.lmtp-dialog-title {
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600 !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-size: 1.2rem !important;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+.lmtp-dialog-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lmtp-dialog-close-btn {
+  color: #0c83c8 !important;
+}
+
+.lmtp-dialog-close-btn:hover {
+  color: #fc7a46 !important;
+}
+
+.lmtp-dialog-content {
+  padding: 16px 24px !important;
+  background-color: #ffffff !important;
+}
+
+.lmtp-dialog-text {
+  color: #4b5563 !important;
+  font-size: 1rem !important;
+  margin-bottom: 16px !important;
+}
+
+.lmtp-dialog-detail {
+  margin-top: 8px !important;
+  font-size: 0.95rem !important;
+  color: #1f2937 !important;
+}
+
+.lmtp-dialog-actions {
+  padding: 12px 24px !important;
+  background-color: #f5f7fa !important;
+}
+
+/* ---------- Dialog: Cancel & Confirm buttons ---------- */
+.lmtp-dialog-btn-cancel {
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+.lmtp-dialog-btn-cancel:hover {
+  color: #0c83c8 !important;
+  background-color: #e3f2fd !important;
+}
+
+.lmtp-dialog-btn-confirm {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+}
+
+.lmtp-dialog-btn-confirm:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.lmtp-dialog-btn-confirm:disabled {
+  background-color: #b0bec5 !important;
+  color: #ffffff !important;
+}
+
+/* ---------- Details Dialog: Code List ---------- */
+.lmtp-details-list {
+  max-height: 300px;
+  overflow: auto;
+  font-family: "Roboto Mono", monospace;
+  background-color: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.lmtp-details-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+}
+
+.lmtp-details-item:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lmtp-details-item:hover {
+  background-color: #e3f2fd;
+}
+
+.lmtp-details-item-text {
+  font-size: 0.9rem !important;
+  color: #1f2937 !important;
+}
+
+.lmtp-details-copy-btn {
+  color: #0c83c8 !important;
+}
+
+.lmtp-details-copy-btn:hover {
+  color: #fc7a46 !important;
+}
+
+.lmtp-dialog-btn-copy-all {
+  color: #0c83c8 !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+.lmtp-dialog-btn-copy-all:hover {
+  color: #fc7a46 !important;
+  background-color: #e3f2fd !important;
+}
+
+.lmtp-dialog-btn-close {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+}
+
+.lmtp-dialog-btn-close:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Snackbar ---------- */
+.lmtp-snackbar-alert {
+  width: 100% !important;
+  font-size: 0.9rem !important;
+  color: #ffffff !important;
+}
+
+.lmtp-snackbar-alert .MuiAlert-icon {
+  color: #ffffff !important;
+}
+
+.lmtp-snackbar-alert--success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .lmtp-root {
+    padding: 16px;
+  }
+
+  .lmtp-stepper-card,
+  .lmtp-content-card {
+    padding: 12px;
+  }
+
+  .lmtp-header {
+    padding: 16px;
+  }
+
+  .lmtp-header-subtitle {
+    font-size: 12px !important;
+  }
+
+  .lmtp-stepper .MuiStepLabel-label {
+    font-size: 0.85rem;
+  }
+
+  .lmtp-step-title {
+    font-size: 1.2rem !important;
+  }
+
+  .lmtp-grid-wrap {
+    height: 300px;
+  }
+
+  .lmtp-review-subtitle {
+    font-size: 1rem !important;
+  }
+
+  .lmtp-review-body,
+  .lmtp-review-empty,
+  .lmtp-review-error {
+    font-size: 0.9rem !important;
+  }
+
+  .lmtp-fab {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+
+  .lmtp-dialog-title {
+    font-size: 1rem !important;
+  }
+
+  .lmtp-dialog-text,
+  .lmtp-dialog-detail {
+    font-size: 0.9rem !important;
+  }
+
+  .lmtp-details-item-text {
+    font-size: 0.85rem !important;
+  }
+}

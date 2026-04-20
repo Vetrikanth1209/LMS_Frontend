@@ -1,0 +1,142 @@
+/* =============================================
+   AddExpert.css
+   Styles for Add_Expert component
+   ============================================= */
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Card ---------- */
+.add-expert-paper {
+  border-radius: 12px !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  opacity: 0;
+  animation: fadeInUp 0.5s forwards;
+}
+
+/* ---------- Header ---------- */
+.add-expert-header {
+  padding: 24px;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  color: white;
+  text-align: center;
+}
+
+.add-expert-header-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.add-expert-title {
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+  color: white !important;
+}
+
+.add-expert-subtitle {
+  font-size: 14px !important;
+}
+
+/* ---------- Form Body ---------- */
+.add-expert-form {
+  padding: 24px;
+}
+
+/* ---------- MUI TextField overrides ---------- */
+.add-expert-textfield .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.add-expert-textfield .MuiOutlinedInput-root fieldset {
+  border-color: #0c83c8;
+}
+
+.add-expert-textfield .MuiOutlinedInput-root:hover fieldset {
+  border-color: #fc7a46;
+}
+
+.add-expert-textfield .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #0c83c8;
+}
+
+/* ---------- Buttons ---------- */
+.add-expert-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.add-expert-btn-clear {
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+}
+
+.add-expert-btn-clear:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+}
+
+.add-expert-btn-submit {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+}
+
+.add-expert-btn-submit:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Snackbar Alert ---------- */
+.add-expert-snackbar-alert {
+  width: 100% !important;
+  font-size: 14px !important;
+}
+
+.add-expert-snackbar-alert--success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .add-expert-header {
+    padding: 16px;
+  }
+
+  .add-expert-form {
+    padding: 16px;
+  }
+
+  .add-expert-title {
+    font-size: 1.2rem !important;
+  }
+
+  .add-expert-subtitle {
+    font-size: 12px !important;
+  }
+
+  .add-expert-btn-clear,
+  .add-expert-btn-submit {
+    font-size: 12px !important;
+  }
+
+  .add-expert-snackbar-alert {
+    font-size: 12px !important;
+  }
+}

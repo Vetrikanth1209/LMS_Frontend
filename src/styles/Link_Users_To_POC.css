@@ -1,0 +1,625 @@
+/* =============================================
+   Link_Users_To_POC - Component Styles
+   ============================================= */
+
+/* ---------- Keyframe Animations ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Page Wrapper ---------- */
+.poc-page-wrapper {
+  padding: 32px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+@media (max-width: 600px) {
+  .poc-page-wrapper {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .poc-page-wrapper {
+    padding: 24px;
+  }
+}
+
+/* ---------- Header Paper ---------- */
+.poc-header-paper {
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08);
+  margin-bottom: 32px;
+  background-color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .poc-header-paper {
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+}
+
+/* ---------- Gradient Banner ---------- */
+.poc-gradient-banner {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: #ffffff;
+  border-radius: 16px;
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+@media (max-width: 600px) {
+  .poc-gradient-banner {
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+}
+
+.poc-banner-title {
+  font-weight: 700 !important;
+  font-size: 2.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .poc-banner-title {
+    font-size: 1.8rem !important;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .poc-banner-title {
+    font-size: 2.2rem !important;
+  }
+}
+
+.poc-banner-subtitle {
+  margin-top: 4px !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .poc-banner-subtitle {
+    font-size: 12px !important;
+  }
+}
+
+/* ---------- Stepper ---------- */
+.poc-stepper {
+  padding: 16px 0 !important;
+}
+
+@media (max-width: 600px) {
+  .poc-stepper {
+    padding: 12px 0 !important;
+  }
+}
+
+.poc-stepper .MuiStepLabel-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+@media (max-width: 600px) {
+  .poc-stepper .MuiStepLabel-label {
+    font-size: 0.85rem;
+  }
+}
+
+/* ---------- Step Icon ---------- */
+.poc-step-icon-root {
+  background-color: #d1d5db;
+  z-index: 1;
+  color: #ffffff;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.poc-step-icon-root.active,
+.poc-step-icon-root.completed {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  box-shadow: 0 4px 12px rgba(12, 131, 200, 0.3);
+}
+
+/* ---------- Step Connector ---------- */
+.poc-step-connector.MuiStepConnector-alternativeLabel {
+  top: 20px;
+  left: calc(-50% + 28px);
+  right: calc(50% + 28px);
+}
+
+.poc-step-connector.MuiStepConnector-active .MuiStepConnector-line,
+.poc-step-connector.MuiStepConnector-completed .MuiStepConnector-line {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+}
+
+.poc-step-connector .MuiStepConnector-line {
+  height: 4px;
+  border: 0;
+  background-color: #d1d5db;
+  border-radius: 2px;
+}
+
+/* ---------- Content Paper ---------- */
+.poc-content-paper {
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08);
+  background-color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .poc-content-paper {
+    padding: 12px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .poc-content-paper {
+    padding: 16px;
+  }
+}
+
+/* ---------- Section Header Row ---------- */
+.poc-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* ---------- Gradient Text ---------- */
+.poc-gradient-text {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600 !important;
+  font-size: 1.4rem !important;
+}
+
+@media (max-width: 600px) {
+  .poc-gradient-text {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* ---------- Add Button ---------- */
+.poc-add-button {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+}
+
+.poc-add-button:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- DataGrid Container ---------- */
+.poc-datagrid-container {
+  height: 400px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .poc-datagrid-container {
+    height: 300px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .poc-datagrid-container {
+    height: 350px;
+  }
+}
+
+/* ---------- DataGrid Styles ---------- */
+.poc-datagrid {
+  box-shadow: 0 2px 8px rgba(12, 131, 200, 0.05) !important;
+  border-radius: 12px !important;
+  border: none !important;
+  overflow: hidden !important;
+}
+
+.poc-datagrid .MuiDataGrid-columnHeaders {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: #0c83c8;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #0c83c8;
+}
+
+.poc-datagrid .MuiDataGrid-columnHeaderTitle {
+  font-weight: 600;
+}
+
+.poc-datagrid .MuiDataGrid-row:nth-of-type(odd) {
+  background-color: #f8fafc;
+}
+
+.poc-datagrid .MuiDataGrid-row:hover {
+  background-color: #e3f2fd;
+  transition: background-color 0.2s ease;
+}
+
+.poc-datagrid .MuiDataGrid-cell {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 8px;
+}
+
+@media (max-width: 600px) {
+  .poc-datagrid .MuiDataGrid-columnHeader,
+  .poc-datagrid .MuiDataGrid-cell {
+    min-width: 100px !important;
+  }
+}
+
+/* ---------- Navigation Buttons Row ---------- */
+.poc-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Primary (Gradient) Button ---------- */
+.poc-btn-primary {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+}
+
+.poc-btn-primary:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.poc-btn-primary:disabled {
+  background-color: #b0bec5 !important;
+  color: #ffffff !important;
+}
+
+/* ---------- Secondary (Outlined) Button ---------- */
+.poc-btn-secondary {
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+}
+
+.poc-btn-secondary:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+  background-color: #e3f2fd !important;
+}
+
+/* ---------- Review Step - Info Box ---------- */
+.poc-review-box {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #fafafa;
+}
+
+@media (max-width: 600px) {
+  .poc-review-box {
+    padding: 12px;
+  }
+}
+
+.poc-review-subtitle {
+  margin-bottom: 8px !important;
+  font-weight: 600 !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.1rem !important;
+}
+
+@media (max-width: 600px) {
+  .poc-review-subtitle {
+    font-size: 1rem !important;
+  }
+}
+
+.poc-review-body {
+  margin-bottom: 4px !important;
+  font-size: 0.95rem !important;
+}
+
+@media (max-width: 600px) {
+  .poc-review-body {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ---------- Review Table ---------- */
+.poc-review-table-container {
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.poc-review-table .MuiTableHead-root .MuiTableRow-root {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+}
+
+.poc-review-table .MuiTableHead-root th {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 10px 8px;
+}
+
+@media (max-width: 600px) {
+  .poc-review-table .MuiTableHead-root th {
+    font-size: 0.85rem;
+  }
+}
+
+.poc-review-table .MuiTableBody-root .MuiTableRow-root:hover {
+  background-color: #e3f2fd;
+}
+
+.poc-review-table .MuiTableBody-root td {
+  padding: 8px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+@media (max-width: 600px) {
+  .poc-review-table .MuiTableBody-root td {
+    font-size: 0.85rem;
+  }
+}
+
+/* ---------- FAB (Floating Action Button) ---------- */
+.poc-fab {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 1000 !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 12px 24px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(12, 131, 200, 0.15) !important;
+  text-transform: none !important;
+}
+
+@media (max-width: 600px) {
+  .poc-fab {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+}
+
+.poc-fab:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.poc-fab:disabled {
+  background-color: #b0bec5 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+/* ---------- Dialogs ---------- */
+.poc-dialog-paper {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(12, 131, 200, 0.1) !important;
+}
+
+.poc-dialog-title {
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600 !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.2rem !important;
+  padding: 12px 24px !important;
+}
+
+@media (max-width: 600px) {
+  .poc-dialog-title {
+    font-size: 1.1rem !important;
+  }
+}
+
+.poc-dialog-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.poc-dialog-content {
+  padding: 16px 24px !important;
+  background-color: #ffffff !important;
+}
+
+@media (max-width: 600px) {
+  .poc-dialog-content {
+    padding: 16px !important;
+  }
+}
+
+.poc-dialog-content-text {
+  color: #4b5563 !important;
+  font-size: 1rem !important;
+  margin-bottom: 16px !important;
+}
+
+@media (max-width: 600px) {
+  .poc-dialog-content-text {
+    font-size: 0.95rem !important;
+  }
+}
+
+.poc-dialog-body-text {
+  margin-top: 8px !important;
+  font-size: 0.95rem !important;
+  color: #1f2937 !important;
+}
+
+@media (max-width: 600px) {
+  .poc-dialog-body-text {
+    font-size: 0.9rem !important;
+  }
+}
+
+.poc-dialog-actions {
+  padding: 12px 24px !important;
+  background-color: #f5f7fa !important;
+}
+
+@media (max-width: 600px) {
+  .poc-dialog-actions {
+    padding: 12px 16px !important;
+  }
+}
+
+/* ---------- Details Dialog - Code Box ---------- */
+.poc-details-code-box {
+  max-height: 300px;
+  overflow: auto;
+  font-family: "Roboto Mono", monospace;
+  background-color: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.poc-details-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+}
+
+.poc-details-item:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.poc-details-item:hover {
+  background-color: #e3f2fd;
+}
+
+.poc-details-item-text {
+  font-size: 0.9rem !important;
+  color: #1f2937 !important;
+}
+
+@media (max-width: 600px) {
+  .poc-details-item-text {
+    font-size: 0.85rem !important;
+  }
+}
+
+/* ---------- Icon Buttons ---------- */
+.poc-icon-btn {
+  color: #0c83c8 !important;
+}
+
+.poc-icon-btn:hover {
+  color: #fc7a46 !important;
+}
+
+/* ---------- Dialog Cancel Button ---------- */
+.poc-btn-cancel {
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+.poc-btn-cancel:hover {
+  color: #0c83c8 !important;
+  background-color: #e3f2fd !important;
+}
+
+/* ---------- Copy All Button ---------- */
+.poc-btn-copy-all {
+  color: #0c83c8 !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+.poc-btn-copy-all:hover {
+  color: #fc7a46 !important;
+  background-color: #e3f2fd !important;
+}
+
+/* ---------- Snackbar Alert ---------- */
+.poc-snackbar {
+  margin-bottom: 8px;
+  margin-right: 16px;
+}
+
+@media (max-width: 600px) {
+  .poc-snackbar {
+    margin-bottom: 48px;
+  }
+}
+
+.poc-alert-success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-size: 0.9rem !important;
+  width: 100% !important;
+}
+
+.poc-alert-success .MuiAlert-icon {
+  color: #ffffff !important;
+}
+
+/* ---------- Muted / Helper Text ---------- */
+.poc-text-muted {
+  color: #6b7280 !important;
+  font-size: 0.95rem !important;
+}
+
+@media (max-width: 600px) {
+  .poc-text-muted {
+    font-size: 0.9rem !important;
+  }
+}
+
+.poc-text-error {
+  color: #dc2626 !important;
+  font-size: 0.95rem !important;
+}
+
+@media (max-width: 600px) {
+  .poc-text-error {
+    font-size: 0.9rem !important;
+  }
+}

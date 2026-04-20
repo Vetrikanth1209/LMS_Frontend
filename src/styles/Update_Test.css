@@ -1,0 +1,471 @@
+/* =============================================
+   UpdateTestModule.css
+   Styles for UpdateTestModule component
+   ============================================= */
+
+/* ---------- Page Wrapper ---------- */
+.utm-root {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 48px;
+}
+
+/* ---------- Outer Card ---------- */
+.utm-outer-card {
+  padding: 32px;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  width: 100%;
+  max-width: 1600px;
+  background-color: white !important;
+}
+
+/* ---------- Header Banner ---------- */
+.utm-header {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: white;
+  border-radius: 16px !important;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.utm-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.utm-header-title {
+  font-weight: 600 !important;
+  color: #fff !important;
+}
+
+.utm-header-subtitle {
+  margin-top: 8px !important;
+}
+
+/* ---------- Stepper ---------- */
+.utm-stepper {
+  margin-bottom: 32px;
+  padding: 0 8px;
+}
+
+.utm-stepper .MuiStepLabel-label {
+  font-size: 14px;
+}
+
+/* ---------- Step Title (gradient text) ---------- */
+.utm-step-title {
+  margin-bottom: 16px !important;
+  font-size: 1.5rem !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- Search + Action Row ---------- */
+.utm-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Search Field ---------- */
+.utm-search-field {
+  max-width: 400px;
+}
+
+.utm-search-field .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.utm-search-field .MuiOutlinedInput-root fieldset {
+  border-color: #0c83c8;
+}
+
+.utm-search-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: #fc7a46;
+}
+
+.utm-search-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #0c83c8;
+}
+
+/* ---------- Add Button ---------- */
+.utm-btn-add {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+}
+
+.utm-btn-add:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- DataGrid Wrapper ---------- */
+.utm-grid-wrap {
+  height: 400px;
+  width: 100%;
+}
+
+/* ---------- Loading / Empty state ---------- */
+.utm-grid-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* ---------- Navigation Rows ---------- */
+.utm-nav-end {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.utm-nav-between {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.utm-nav-start {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- Nav Buttons ---------- */
+.utm-btn-next {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+  padding: 6px 24px !important;
+}
+
+.utm-btn-next:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.utm-btn-prev {
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.utm-btn-prev:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+}
+
+/* ---------- Review Section ---------- */
+.utm-review-intro {
+  margin-bottom: 24px !important;
+  font-size: 16px !important;
+}
+
+.utm-review-score {
+  margin-bottom: 24px !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.utm-review-box {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.utm-review-box-title {
+  margin-bottom: 8px !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+}
+
+.utm-review-body {
+  font-size: 14px !important;
+}
+
+.utm-review-error {
+  font-size: 14px !important;
+}
+
+/* ---------- Table Header Row ---------- */
+.utm-table-header-row {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+}
+
+.utm-table-header-cell {
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+}
+
+.utm-table-header-cell-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.utm-table-body-cell {
+  font-size: 14px !important;
+}
+
+/* ---------- MCQ Tag Chip ---------- */
+.utm-mcq-tag {
+  background-color: #e3f2fd;
+  color: #0c83c8;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* ---------- FAB ---------- */
+.utm-fab {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 1000 !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  transition: all 0.3s ease !important;
+  width: 56px !important;
+  height: 56px !important;
+}
+
+.utm-fab:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ---------- Menu ---------- */
+.utm-menu-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 14px !important;
+}
+
+.utm-menu-item:hover {
+  background-color: #e3f2fd !important;
+}
+
+/* ---------- Dialog ---------- */
+.utm-dialog .MuiPaper-root {
+  border-radius: 12px;
+}
+
+.utm-dialog-title {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  font-size: 18px !important;
+}
+
+.utm-dialog-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.utm-dialog-content {
+  padding: 24px !important;
+}
+
+.utm-dialog-text {
+  font-size: 16px !important;
+}
+
+.utm-dialog-detail {
+  margin-top: 16px !important;
+  font-size: 14px !important;
+}
+
+.utm-dialog-score {
+  margin-top: 8px !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.utm-dialog-actions {
+  padding: 16px !important;
+}
+
+.utm-dialog-btn-cancel {
+  color: #0c83c8 !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.utm-dialog-btn-confirm {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.utm-dialog-btn-confirm:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.utm-dialog-btn-copy-all {
+  color: #0c83c8 !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.utm-dialog-btn-close {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.utm-dialog-btn-close:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Details List ---------- */
+.utm-details-list {
+  max-height: 80vh;
+  overflow: auto;
+  font-family: monospace;
+  background-color: #f9f9f9;
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.utm-details-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+}
+
+.utm-details-item:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+.utm-details-item:hover {
+  background-color: #f0f0f0;
+}
+
+.utm-details-item-text {
+  font-size: 14px !important;
+}
+
+/* ---------- Snackbar ---------- */
+.utm-snackbar-alert {
+  width: 100% !important;
+  font-size: 14px !important;
+}
+
+.utm-snackbar-alert--success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .utm-root {
+    padding: 16px;
+  }
+
+  .utm-outer-card {
+    padding: 12px;
+  }
+
+  .utm-header {
+    padding: 16px;
+  }
+
+  .utm-step-title {
+    font-size: 1.2rem !important;
+  }
+
+  .utm-stepper .MuiStepLabel-label {
+    font-size: 12px;
+  }
+
+  .utm-grid-wrap {
+    height: 300px;
+  }
+
+  .utm-btn-next,
+  .utm-btn-prev,
+  .utm-btn-add {
+    font-size: 12px !important;
+  }
+
+  .utm-review-intro,
+  .utm-review-score {
+    font-size: 14px !important;
+  }
+
+  .utm-review-box-title,
+  .utm-review-body,
+  .utm-review-error {
+    font-size: 12px !important;
+  }
+
+  .utm-table-header-cell,
+  .utm-table-body-cell {
+    font-size: 12px !important;
+  }
+
+  .utm-mcq-tag {
+    font-size: 10px;
+  }
+
+  .utm-dialog-title {
+    font-size: 16px !important;
+  }
+
+  .utm-dialog-text {
+    font-size: 14px !important;
+  }
+
+  .utm-dialog-detail,
+  .utm-dialog-score,
+  .utm-dialog-btn-cancel,
+  .utm-dialog-btn-confirm,
+  .utm-dialog-btn-copy-all,
+  .utm-dialog-btn-close,
+  .utm-details-item-text {
+    font-size: 12px !important;
+  }
+
+  .utm-menu-item {
+    font-size: 12px !important;
+  }
+
+  .utm-fab {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+
+  .utm-snackbar-alert {
+    font-size: 12px !important;
+  }
+}

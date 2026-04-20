@@ -1,0 +1,73 @@
+/* =============================================
+   AddPOC.css
+   Styles for Add_POC component
+   ============================================= */
+
+/* ---------- Card Header ---------- */
+.poc-form-header {
+  padding: 24px;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: white;
+  text-align: center;
+}
+
+.poc-form-title {
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.poc-form-subtitle {
+  text-align: center;
+}
+
+/* ---------- Form Body ---------- */
+.poc-form-body {
+  padding: 32px;
+}
+
+.poc-form-field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.poc-form-field-icon {
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+/* ---------- Switch Row ---------- */
+.poc-cert-switch {
+  margin-bottom: 24px !important;
+}
+
+/* ---------- Buttons ---------- */
+.poc-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.poc-btn-clear {
+  padding: 6px 32px !important;
+  border-radius: 12px !important;
+}
+
+.poc-btn-submit {
+  padding: 6px 32px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.poc-btn-submit:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Snackbar ---------- */
+.poc-snackbar-alert {
+  width: 100% !important;
+}

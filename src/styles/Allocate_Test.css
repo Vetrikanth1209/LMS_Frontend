@@ -1,0 +1,483 @@
+/* =============================================
+   Allocate_Test - Component Styles
+   ============================================= */
+
+/* ---------- Page Wrapper ---------- */
+.alloc-page-wrapper {
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  padding: 32px;
+}
+
+@media (max-width: 600px) {
+  .alloc-page-wrapper {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .alloc-page-wrapper {
+    padding: 24px;
+  }
+}
+
+/* ---------- Header Paper ---------- */
+.alloc-header-paper {
+  padding: 24px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08) !important;
+  margin-bottom: 32px !important;
+  background-color: #ffffff !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-header-paper {
+    padding: 16px !important;
+    margin-bottom: 24px !important;
+  }
+}
+
+/* ---------- Gradient Banner ---------- */
+.alloc-gradient-banner {
+  margin-bottom: 32px !important;
+  padding: 24px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  border-radius: 16px !important;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .alloc-gradient-banner {
+    padding: 16px !important;
+  }
+}
+
+.alloc-banner-title {
+  font-weight: 700 !important;
+  font-size: 2.2rem !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-banner-title {
+    font-size: 1.8rem !important;
+  }
+}
+
+.alloc-banner-subtitle {
+  margin-top: 4px !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-banner-subtitle {
+    font-size: 12px !important;
+  }
+}
+
+/* ---------- Stepper ---------- */
+.alloc-stepper {
+  margin-top: 16px !important;
+  padding: 16px 0 !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-stepper {
+    padding: 12px 0 !important;
+  }
+}
+
+.alloc-stepper .MuiStepLabel-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #0c83c8;
+}
+
+@media (max-width: 600px) {
+  .alloc-stepper .MuiStepLabel-label {
+    font-size: 0.85rem;
+  }
+}
+
+/* ---------- Step Icon ---------- */
+.alloc-step-icon-root {
+  z-index: 1;
+  color: #fff;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  background-color: #d1d5db;
+}
+
+.alloc-step-icon-root.active,
+.alloc-step-icon-root.completed {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  box-shadow: 0 4px 12px rgba(12, 131, 200, 0.3);
+}
+
+/* ---------- Step Connector ---------- */
+.alloc-connector.MuiStepConnector-alternativeLabel {
+  top: 20px;
+  left: calc(-50% + 28px);
+  right: calc(50% + 28px);
+}
+
+.alloc-connector.MuiStepConnector-active .MuiStepConnector-line,
+.alloc-connector.MuiStepConnector-completed .MuiStepConnector-line {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+}
+
+.alloc-connector .MuiStepConnector-line {
+  height: 4px;
+  border: 0;
+  background-color: #d1d5db;
+  border-radius: 2px;
+}
+
+/* ---------- Content Paper ---------- */
+.alloc-content-paper {
+  padding: 24px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08) !important;
+  background-color: #ffffff !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-content-paper {
+    padding: 12px !important;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .alloc-content-paper {
+    padding: 16px !important;
+  }
+}
+
+/* ---------- Gradient Section Title ---------- */
+.alloc-section-title {
+  margin-bottom: 16px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.4rem !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-section-title {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* ---------- DataGrid Container ---------- */
+.alloc-datagrid-container {
+  height: 400px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .alloc-datagrid-container {
+    height: 300px;
+  }
+}
+
+.alloc-datagrid-container-lg {
+  height: 500px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .alloc-datagrid-container-lg {
+    height: 350px;
+  }
+}
+
+/* ---------- Loading Spinner Box ---------- */
+.alloc-loader-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* ---------- Navigation Buttons Row ---------- */
+.alloc-nav-end {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  gap: 8px;
+}
+
+.alloc-nav-between {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.alloc-nav-start {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 16px;
+  gap: 8px;
+}
+
+/* ---------- Primary Button ---------- */
+.alloc-btn-primary {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-btn-primary {
+    font-size: 12px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+.alloc-btn-primary:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Secondary (Outlined) Button ---------- */
+.alloc-btn-secondary {
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-btn-secondary {
+    font-size: 12px !important;
+  }
+}
+
+.alloc-btn-secondary:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+}
+
+/* ---------- Review Step Info Box ---------- */
+.alloc-review-box {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.alloc-review-box-title {
+  font-weight: bold !important;
+  margin-bottom: 8px !important;
+  font-size: 16px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-review-box-title {
+    font-size: 14px !important;
+  }
+}
+
+.alloc-review-body {
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-review-body {
+    font-size: 12px !important;
+  }
+}
+
+.alloc-review-description {
+  margin-bottom: 24px !important;
+  font-size: 16px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-review-description {
+    font-size: 14px !important;
+  }
+}
+
+/* ---------- POC Info Stack ---------- */
+.alloc-poc-info-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ---------- Review Table ---------- */
+.alloc-review-table-container {
+  border-radius: 8px;
+}
+
+.alloc-review-table thead .MuiTableRow-root {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+}
+
+.alloc-review-table thead th {
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-review-table thead th {
+    font-size: 12px !important;
+  }
+}
+
+.alloc-review-table tbody td {
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-review-table tbody td {
+    font-size: 12px !important;
+  }
+}
+
+/* ---------- Tag Chips ---------- */
+.alloc-tag-chip {
+  margin: 4px !important;
+  background-color: #e3f2fd !important;
+  color: #0c83c8 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-tag-chip {
+    font-size: 10px !important;
+  }
+}
+
+.alloc-tag-chip:hover {
+  background-color: #d1e9ff !important;
+}
+
+.alloc-tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* ---------- FAB ---------- */
+.alloc-fab {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  font-size: 14px !important;
+  border-radius: 12px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  color: #ffffff !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-fab {
+    bottom: 16px !important;
+    right: 16px !important;
+    font-size: 12px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+.alloc-fab:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Dialog ---------- */
+.alloc-dialog-paper {
+  border-radius: 12px !important;
+}
+
+.alloc-dialog-title {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  font-size: 18px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-dialog-title {
+    font-size: 16px !important;
+  }
+}
+
+.alloc-dialog-content {
+  padding: 24px !important;
+}
+
+.alloc-dialog-content-text {
+  font-size: 16px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-dialog-content-text {
+    font-size: 14px !important;
+  }
+}
+
+.alloc-dialog-body-text {
+  font-size: 14px !important;
+  margin-top: 16px !important;
+}
+
+.alloc-dialog-test-item {
+  font-size: 14px !important;
+  margin-left: 16px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-dialog-body-text,
+  .alloc-dialog-test-item {
+    font-size: 12px !important;
+  }
+}
+
+.alloc-dialog-actions {
+  padding: 16px !important;
+}
+
+/* ---------- Cancel Button ---------- */
+.alloc-btn-cancel {
+  color: #0c83c8 !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-btn-cancel {
+    font-size: 12px !important;
+  }
+}
+
+/* ---------- DatePicker sx (referenced via slotProps, kept in JS) ---------- */
+
+/* ---------- Snackbar Alert ---------- */
+.alloc-alert {
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .alloc-alert {
+    font-size: 12px !important;
+  }
+}
+
+.alloc-alert-success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}

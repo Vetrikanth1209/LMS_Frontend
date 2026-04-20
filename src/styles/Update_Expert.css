@@ -1,0 +1,373 @@
+/* =============================================
+   Update_Expert - Component Styles
+   ============================================= */
+
+/* ---------- Keyframe Animations ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Page Wrapper ---------- */
+.expert-page-wrapper {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 48px 48px;
+}
+
+@media (max-width: 600px) {
+  .expert-page-wrapper {
+    padding: 32px 16px;
+  }
+}
+
+/* ---------- Gradient Header Banner ---------- */
+.expert-header-banner {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  border-radius: 16px !important;
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+@media (max-width: 600px) {
+  .expert-header-banner {
+    padding: 16px;
+  }
+}
+
+.expert-header-icon-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.expert-header-title {
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .expert-header-title {
+    font-size: 1.2rem !important;
+  }
+}
+
+.expert-header-subtitle {
+  margin-top: 4px !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .expert-header-subtitle {
+    font-size: 12px !important;
+  }
+}
+
+/* ---------- Stepper Paper ---------- */
+.expert-stepper-paper {
+  padding: 24px !important;
+  margin-bottom: 32px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+@media (max-width: 600px) {
+  .expert-stepper-paper {
+    padding: 16px !important;
+  }
+}
+
+/* ---------- Stepper ---------- */
+.expert-stepper {
+  margin-bottom: 32px !important;
+}
+
+/* ---------- Custom Step Icon ---------- */
+.expert-step-icon {
+  display: flex;
+  height: 36px;
+  width: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+}
+
+.expert-step-icon.active,
+.expert-step-icon.completed {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  border: 2px solid #0c83c8;
+  box-shadow: 0 0 8px rgba(12, 131, 200, 0.5);
+}
+
+.expert-step-icon.inactive {
+  background: #d1d5db;
+  border: none;
+  box-shadow: none;
+}
+
+.expert-step-label {
+  font-weight: 400 !important;
+  color: #6b7280 !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .expert-step-label {
+    font-size: 12px !important;
+  }
+}
+
+.expert-step-label.active {
+  font-weight: 600 !important;
+  color: #0c83c8 !important;
+}
+
+/* ---------- Step Connector ---------- */
+.expert-connector.MuiStepConnector-alternativeLabel {
+  top: 10px;
+  left: calc(-50% + 16px);
+  right: calc(50% + 16px);
+}
+
+.expert-connector.MuiStepConnector-active .MuiStepConnector-line {
+  border-color: #0c83c8;
+}
+
+.expert-connector.MuiStepConnector-completed .MuiStepConnector-line {
+  border-color: #fc7a46;
+}
+
+.expert-connector .MuiStepConnector-line {
+  border-top-width: 3px;
+  border-radius: 1px;
+  border-color: #d1d5db;
+}
+
+/* ---------- Gradient Section Title ---------- */
+.expert-section-title {
+  margin-bottom: 16px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .expert-section-title {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* ---------- Search Field ---------- */
+.expert-search-wrapper {
+  margin-bottom: 16px;
+}
+
+.expert-search-field {
+  max-width: 400px;
+}
+
+.expert-search-field .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.expert-search-field .MuiOutlinedInput-root fieldset {
+  border-color: #0c83c8;
+}
+
+.expert-search-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: #fc7a46;
+}
+
+.expert-search-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #0c83c8;
+}
+
+/* ---------- DataGrid Container ---------- */
+.expert-datagrid-container {
+  height: 400px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .expert-datagrid-container {
+    height: 300px;
+  }
+}
+
+/* ---------- DataGrid Styles ---------- */
+.expert-datagrid .MuiDataGrid-columnHeaders {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: #0c83c8;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+@media (max-width: 600px) {
+  .expert-datagrid .MuiDataGrid-columnHeaders {
+    font-size: 14px;
+  }
+}
+
+.expert-datagrid .MuiDataGrid-row:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.expert-datagrid .MuiDataGrid-row:hover {
+  background-color: #e3f2fd;
+}
+
+.expert-datagrid .MuiDataGrid-cell {
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .expert-datagrid .MuiDataGrid-cell {
+    font-size: 12px;
+  }
+}
+
+/* ---------- Review Step ---------- */
+.expert-review-description {
+  margin-bottom: 24px !important;
+  font-size: 16px !important;
+  color: #6b7280 !important;
+}
+
+@media (max-width: 600px) {
+  .expert-review-description {
+    font-size: 14px !important;
+  }
+}
+
+/* ---------- Collapsible Section Button ---------- */
+.expert-section-btn {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  margin-bottom: 8px !important;
+  border-radius: 8px !important;
+}
+
+.expert-section-btn:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.expert-section-btn-label {
+  flex-grow: 1;
+  font-size: 1.25rem !important;
+}
+
+@media (max-width: 600px) {
+  .expert-section-btn-label {
+    font-size: 1rem !important;
+  }
+}
+
+/* ---------- Review List Items ---------- */
+.expert-review-list-item {
+  border-radius: 4px;
+}
+
+.expert-review-list-item:hover {
+  background-color: #e3f2fd !important;
+}
+
+.expert-review-list-primary {
+  font-size: 16px !important;
+}
+
+.expert-review-list-secondary {
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .expert-review-list-primary {
+    font-size: 14px !important;
+  }
+
+  .expert-review-list-secondary {
+    font-size: 12px !important;
+  }
+}
+
+/* ---------- Review Alert ---------- */
+.expert-review-alert {
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .expert-review-alert {
+    font-size: 12px !important;
+  }
+}
+
+/* ---------- Navigation Buttons Row ---------- */
+.expert-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+/* ---------- Back Button ---------- */
+.expert-btn-back {
+  color: #0c83c8 !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+@media (max-width: 600px) {
+  .expert-btn-back {
+    font-size: 12px !important;
+  }
+}
+
+.expert-btn-back:hover {
+  color: #fc7a46 !important;
+}
+
+/* ---------- Next / Submit Button ---------- */
+.expert-btn-next {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+}
+
+@media (max-width: 600px) {
+  .expert-btn-next {
+    font-size: 12px !important;
+  }
+}
+
+.expert-btn-next:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Snackbar Alert ---------- */
+.expert-alert {
+  width: 100% !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .expert-alert {
+    font-size: 12px !important;
+  }
+}
+
+.expert-alert-success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}

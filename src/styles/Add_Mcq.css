@@ -1,0 +1,510 @@
+/* =============================================
+   Add_Mcq - Component Styles
+   ============================================= */
+
+/* ---------- Keyframe Animations ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Page Container ---------- */
+.mcq-container {
+  min-height: 100vh;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (max-width: 600px) {
+  .mcq-container {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ---------- Single MCQ Form Paper ---------- */
+.mcq-form-paper {
+  width: 100%;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+  margin-bottom: 32px !important;
+}
+
+/* ---------- Gradient Header ---------- */
+.mcq-header {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  padding: 20px 24px;
+  color: white;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .mcq-header {
+    padding: 16px 20px;
+  }
+}
+
+.mcq-header-icon-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.mcq-header-title {
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-header-title {
+    font-size: 1.2rem !important;
+  }
+}
+
+.mcq-header-subtitle {
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-header-subtitle {
+    font-size: 12px !important;
+  }
+}
+
+/* ---------- Form Body ---------- */
+.mcq-form-body {
+  padding: 24px;
+}
+
+@media (max-width: 600px) {
+  .mcq-form-body {
+    padding: 16px;
+  }
+}
+
+/* ---------- Field Label ---------- */
+.mcq-field-label {
+  font-weight: 500 !important;
+  margin-bottom: 8px !important;
+  font-size: 16px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-field-label {
+    font-size: 14px !important;
+  }
+}
+
+.mcq-field-block {
+  margin-bottom: 24px;
+}
+
+/* ---------- Text Fields ---------- */
+.mcq-text-field .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.mcq-text-field .MuiOutlinedInput-root fieldset {
+  border-color: #0c83c8;
+}
+
+.mcq-text-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: #fc7a46;
+}
+
+.mcq-text-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #0c83c8;
+}
+
+/* ---------- Options Header Label ---------- */
+.mcq-options-label {
+  font-weight: 500 !important;
+  margin-bottom: 16px !important;
+  font-size: 16px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-options-label {
+    font-size: 14px !important;
+  }
+}
+
+/* ---------- RadioGroup Error Border ---------- */
+.mcq-radio-group-error {
+  border: 1px solid red;
+  border-radius: 8px;
+}
+
+/* ---------- Option Row ---------- */
+.mcq-option-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e6f7;
+  transition: all 0.2s;
+}
+
+@media (max-width: 600px) {
+  .mcq-option-row {
+    padding: 12px;
+  }
+}
+
+.mcq-option-row:hover {
+  background-color: #f0f2ff;
+}
+
+/* ---------- Option Radio ---------- */
+.mcq-radio {
+  color: #0c83c8 !important;
+}
+
+.mcq-radio.Mui-checked {
+  color: #0c83c8 !important;
+}
+
+/* ---------- Option Text Field ---------- */
+.mcq-option-field {
+  flex-grow: 1;
+  margin-right: 16px !important;
+}
+
+.mcq-option-field .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.mcq-option-field .MuiOutlinedInput-root fieldset {
+  border-color: #0c83c8;
+}
+
+.mcq-option-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: #fc7a46;
+}
+
+.mcq-option-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #0c83c8;
+}
+
+/* ---------- Option Letter Badge ---------- */
+.mcq-option-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0e6f7;
+  color: #0c83c8;
+  font-weight: 500;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* ---------- Answer Error Text ---------- */
+.mcq-answer-error {
+  color: #d32f2f;
+  margin-top: 8px !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-answer-error {
+    font-size: 12px !important;
+  }
+}
+
+/* ---------- Correct Answer Preview ---------- */
+.mcq-answer-preview {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: #f0f2ff;
+  border-radius: 8px;
+  margin-bottom: 32px;
+  border: 1px solid #0c83c8;
+}
+
+@media (max-width: 600px) {
+  .mcq-answer-preview {
+    padding: 12px;
+  }
+}
+
+.mcq-answer-preview-label {
+  font-weight: 500 !important;
+  color: #0c83c8 !important;
+  margin-right: 16px !important;
+  font-size: 16px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-answer-preview-label {
+    font-size: 14px !important;
+  }
+}
+
+.mcq-answer-preview-value {
+  background-color: white;
+  border: 1px solid #0c83c8;
+  border-radius: 6px;
+  padding: 8px 16px;
+  min-width: 150px;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .mcq-answer-preview-value {
+    font-size: 12px;
+  }
+}
+
+/* ---------- Form Actions Row ---------- */
+.mcq-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e6f7;
+}
+
+/* ---------- Clear Button ---------- */
+.mcq-btn-clear {
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-btn-clear {
+    font-size: 12px !important;
+  }
+}
+
+.mcq-btn-clear:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+  background-color: #f5f7ff !important;
+}
+
+/* ---------- Submit Button ---------- */
+.mcq-btn-submit {
+  border-radius: 8px !important;
+  padding: 12px 32px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(12, 131, 200, 0.2) !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-btn-submit {
+    font-size: 12px !important;
+  }
+}
+
+.mcq-btn-submit:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- CSV Section Paper ---------- */
+.mcq-csv-paper {
+  padding: 32px !important;
+  width: 100%;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(255, 255, 250, 0.95) !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-csv-paper {
+    padding: 16px !important;
+  }
+}
+
+/* ---------- CSV Section Title ---------- */
+.mcq-csv-title {
+  font-weight: bold !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin-bottom: 24px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-csv-title {
+    margin-bottom: 16px !important;
+  }
+}
+
+/* ---------- Upload Button ---------- */
+.mcq-btn-upload {
+  border-radius: 8px !important;
+  border-color: #0c83c8 !important;
+  color: #0c83c8 !important;
+  text-transform: none !important;
+  font-size: 0.9rem !important;
+  padding: 6px 24px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-btn-upload {
+    font-size: 0.8rem !important;
+    padding: 4px 16px !important;
+  }
+}
+
+.mcq-btn-upload:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+}
+
+/* ---------- CSV Help Text ---------- */
+.mcq-csv-help-text {
+  margin-top: 8px !important;
+  font-size: 0.875rem !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-csv-help-text {
+    font-size: 0.75rem !important;
+  }
+}
+
+/* ---------- DataGrid Container ---------- */
+.mcq-datagrid-container {
+  height: 350px;
+  width: 100%;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+
+@media (max-width: 600px) {
+  .mcq-datagrid-container {
+    height: 250px;
+    margin-bottom: 16px;
+  }
+}
+
+/* ---------- DataGrid Styles ---------- */
+.mcq-datagrid {
+  border-radius: 8px !important;
+}
+
+.mcq-datagrid .MuiDataGrid-columnHeaders {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 600px) {
+  .mcq-datagrid .MuiDataGrid-columnHeaders {
+    font-size: 0.75rem;
+  }
+}
+
+.mcq-datagrid .MuiDataGrid-row:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.mcq-datagrid .MuiDataGrid-row:hover {
+  background-color: #e3f2fd;
+}
+
+.mcq-datagrid .MuiDataGrid-cell {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 600px) {
+  .mcq-datagrid .MuiDataGrid-cell {
+    font-size: 0.7rem;
+  }
+}
+
+/* ---------- Bulk Action Buttons Row ---------- */
+.mcq-bulk-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Create All Button ---------- */
+.mcq-btn-create-all {
+  border-radius: 8px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  font-size: 0.9rem !important;
+  padding: 6px 24px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-btn-create-all {
+    font-size: 0.8rem !important;
+    padding: 4px 16px !important;
+  }
+}
+
+.mcq-btn-create-all:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Create Selected Button ---------- */
+.mcq-btn-create-selected {
+  border-radius: 8px !important;
+  background-color: #6c757d !important;
+  color: #ffffff !important;
+  font-size: 0.9rem !important;
+  padding: 6px 24px !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-btn-create-selected {
+    font-size: 0.8rem !important;
+    padding: 4px 16px !important;
+  }
+}
+
+.mcq-btn-create-selected:hover {
+  background-color: #5a6268 !important;
+}
+
+/* ---------- Snackbar Alert ---------- */
+.mcq-alert {
+  width: 100% !important;
+  font-size: 14px !important;
+  white-space: pre-wrap !important;
+}
+
+@media (max-width: 600px) {
+  .mcq-alert {
+    font-size: 12px !important;
+  }
+}
+
+.mcq-alert-success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}

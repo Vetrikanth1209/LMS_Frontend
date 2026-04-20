@@ -1,0 +1,183 @@
+/* =============================================
+   AddModule.css
+   Styles for Add_Module component
+   ============================================= */
+
+/* ---------- Page Wrapper ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.add-module-root {
+  padding: 48px 16px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* ---------- Card ---------- */
+.add-module-paper {
+  width: 100%;
+  max-width: 560px;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+/* ---------- Header ---------- */
+.add-module-header {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  padding: 24px;
+  color: #ffffff;
+}
+
+.add-module-title {
+  font-weight: 800 !important;
+  font-size: 2rem !important;
+  color: #ffffff !important;
+}
+
+.add-module-subtitle {
+  font-size: 1rem !important;
+  opacity: 0.9;
+  margin-top: 8px !important;
+}
+
+/* ---------- Form Body ---------- */
+.add-module-form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- Date Row ---------- */
+.add-module-date-row {
+  display: flex;
+  gap: 16px;
+}
+
+.add-module-date-field {
+  width: 50%;
+}
+
+/* ---------- MUI TextField overrides ---------- */
+.add-module-textfield .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.add-module-textfield .MuiOutlinedInput-root fieldset {
+  border-color: #e0e0e0;
+}
+
+.add-module-textfield .MuiOutlinedInput-root:hover fieldset {
+  border-color: #0c83c8;
+}
+
+.add-module-textfield .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #0c83c8;
+}
+
+.add-module-textfield .MuiInputLabel-root {
+  color: #555;
+}
+
+.add-module-textfield .MuiInputLabel-root.Mui-focused {
+  color: #0c83c8;
+}
+
+/* ---------- Buttons ---------- */
+.add-module-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.add-module-btn-submit {
+  background-color: #0c83c8 !important;
+  font-weight: 600 !important;
+  padding: 8px 32px !important;
+  border-radius: 12px !important;
+  text-transform: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.add-module-btn-submit:hover {
+  background-color: #fc7a46 !important;
+}
+
+.add-module-btn-clear {
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  font-weight: 600 !important;
+  padding: 8px 32px !important;
+  border-radius: 12px !important;
+  text-transform: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.add-module-btn-clear:hover {
+  border-color: #fc7a46 !important;
+  background-color: #fff3e0 !important;
+}
+
+/* ---------- Snackbar Alert ---------- */
+.snackbar-alert-success {
+  background-color: #2e7d32 !important;
+}
+
+.snackbar-alert-success:hover {
+  background-color: #388e3c !important;
+}
+
+.snackbar-alert-error {
+  background-color: #d32f2f !important;
+}
+
+.snackbar-alert-error:hover {
+  background-color: #ef5350 !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .add-module-root {
+    padding: 16px;
+  }
+
+  .add-module-header {
+    padding: 16px;
+  }
+
+  .add-module-form {
+    padding: 16px;
+  }
+
+  .add-module-title {
+    font-size: 1.5rem !important;
+  }
+
+  .add-module-subtitle {
+    font-size: 0.9rem !important;
+  }
+
+  .add-module-date-row {
+    flex-direction: column;
+  }
+
+  .add-module-date-field {
+    width: 100%;
+  }
+}

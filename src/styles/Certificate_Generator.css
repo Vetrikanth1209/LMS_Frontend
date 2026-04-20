@@ -1,0 +1,316 @@
+/* =============================================
+   CertificateGenerator.css
+   Palette & UI conventions aligned with AddPOC.css
+   ============================================= */
+
+/* ── Design tokens ───────────────────────────────────────────────────────── */
+:root {
+  --cert-blue:        #0c83c8;
+  --cert-orange:      #fc7a46;
+  --cert-grad:        linear-gradient(90deg, #0c83c8, #fc7a46);
+  --cert-grad-rev:    linear-gradient(90deg, #fc7a46, #0c83c8);
+  --cert-grad-diag:   linear-gradient(135deg, #0c83c8, #fc7a46);
+  --cert-white:       #ffffff;
+  --cert-body-bg:     #f8fbff;
+  --cert-track-bg:    #e8f4fd;
+  --cert-muted:       #666666;
+  --cert-dim:         #aaaaaa;
+  --cert-dark:        #1a1a1a;
+  --cert-radius:      12px;
+  --cert-error:       #e53935;
+  --cert-error-dark:  #c62828;
+}
+
+/* ── Animations ──────────────────────────────────────────────────────────── */
+@keyframes cert-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+@keyframes cert-fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes cert-pulse {
+  0%, 100% { transform: scale(1);     opacity: 0.9; }
+  50%       { transform: scale(1.06); opacity: 1;   }
+}
+@keyframes cert-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Dialog paper ────────────────────────────────────────────────────────── */
+.cert-dialog-paper.cert-dialog-paper {
+  border-radius: var(--cert-radius) !important;
+  overflow: hidden !important;
+  width: 90vw !important;
+  max-width: 440px !important;
+  background: var(--cert-white) !important;
+  box-shadow:
+    0 24px 60px rgba(12, 131, 200, 0.18),
+    0 4px  16px rgba(0, 0, 0, 0.10) !important;
+}
+
+/* ── Header — mirrors .poc-form-header ───────────────────────────────────── */
+.cert-dialog-header {
+  padding: 24px !important;
+  background: var(--cert-grad) !important;
+  color: var(--cert-white) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.cert-dialog-header .cert-header-icon {
+  color: var(--cert-white) !important;
+  font-size: 28px !important;
+}
+
+/* mirrors .poc-form-title */
+.cert-dialog-header .cert-header-title {
+  color: var(--cert-white) !important;
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
+
+/* mirrors .poc-form-subtitle */
+.cert-dialog-header .cert-header-subtitle {
+  color: rgba(255, 255, 255, 0.82) !important;
+  font-size: 0.78rem !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
+
+/* ── Close button ────────────────────────────────────────────────────────── */
+.cert-close-btn.cert-close-btn {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: var(--cert-white) !important;
+  border-radius: var(--cert-radius) !important;
+  padding: 6px !important;
+}
+.cert-close-btn.cert-close-btn:hover {
+  background: rgba(255, 255, 255, 0.32) !important;
+}
+
+/* ── Body — mirrors .poc-form-body ──────────────────────────────────────── */
+.cert-dialog-body {
+  padding: 32px !important;
+  background: var(--cert-body-bg) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+
+/* ── Spinning icon ───────────────────────────────────────────────────────── */
+.cert-spin-icon.cert-spin-icon {
+  font-size: 52px !important;
+  color: var(--cert-blue) !important;
+  animation: cert-spin 2.5s linear infinite !important;
+}
+
+/* ── Progress bar ────────────────────────────────────────────────────────── */
+.cert-progress-wrap {
+  width: 100%;
+}
+
+.cert-progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.cert-progress-header .cert-progress-label {
+  font-size: 0.78rem !important;
+  color: var(--cert-blue) !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+}
+
+.cert-progress-header .cert-progress-percent {
+  font-size: 0.78rem !important;
+  color: var(--cert-orange) !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+}
+
+.cert-progress-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 99px;
+  background: var(--cert-track-bg);
+  overflow: hidden;
+  position: relative;
+}
+
+.cert-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--cert-grad);
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.cert-progress-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  background-size: 400px 100%;
+  animation: cert-shimmer 1.6s infinite linear;
+}
+
+/* ── Step list ───────────────────────────────────────────────────────────── */
+.cert-steps-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cert-step-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: var(--cert-radius);
+  background: transparent;
+  transition: background 0.3s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cert-step-row.is-active {
+  background: rgba(12, 131, 200, 0.06);
+  animation: cert-fadeInUp 0.35s ease;
+}
+.cert-step-row.is-done {
+  background: linear-gradient(
+    90deg,
+    rgba(12, 131, 200, 0.08),
+    rgba(252, 122, 70, 0.08)
+  );
+}
+
+.cert-step-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--cert-track-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--cert-white);
+  font-weight: 700;
+  transition: background 0.4s;
+}
+.cert-step-dot.is-active { background: var(--cert-blue); }
+.cert-step-dot.is-done   { background: var(--cert-grad-diag); }
+
+.cert-step-row .cert-step-label {
+  font-size: 0.82rem !important;
+  color: var(--cert-dim) !important;
+  font-weight: 400 !important;
+  margin: 0 !important;
+}
+.cert-step-row.is-active .cert-step-label {
+  color: var(--cert-dark) !important;
+  font-weight: 500 !important;
+}
+.cert-step-row.is-done .cert-step-label {
+  color: var(--cert-blue) !important;
+  font-weight: 500 !important;
+}
+
+/* ── Action button — mirrors .poc-btn-submit exactly ─────────────────────── */
+.cert-action-btn {
+  margin-top: 24px;
+  display: inline-block;
+  padding: 6px 32px !important;           /* identical to poc-btn-submit */
+  border-radius: var(--cert-radius) !important;
+  background: var(--cert-grad) !important;
+  color: var(--cert-white) !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.25s ease;
+  border: none;
+  text-align: center;
+}
+.cert-action-btn:hover {
+  background: var(--cert-grad-rev) !important; /* mirrors poc-btn-submit:hover */
+}
+
+/* ── Error state ─────────────────────────────────────────────────────────── */
+.cert-error-wrap {
+  text-align: center;
+  animation: cert-fadeInUp 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cert-error-wrap .cert-error-icon {
+  font-size: 52px !important;
+  color: var(--cert-error) !important;
+  margin-bottom: 8px !important;
+}
+
+.cert-error-wrap .cert-error-title {
+  color: var(--cert-error-dark) !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  margin: 0 0 4px !important;
+}
+
+.cert-error-wrap .cert-error-msg {
+  color: var(--cert-muted) !important;
+  font-size: 0.82rem !important;
+  max-width: 320px !important;
+  margin: 0 auto !important;
+}
+
+/* ── Success state ───────────────────────────────────────────────────────── */
+.cert-success-wrap {
+  text-align: center;
+  animation: cert-pulse 0.6s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cert-success-wrap .cert-success-icon {
+  font-size: 60px !important;
+  margin-bottom: 8px !important;
+  background: var(--cert-grad-diag) !important;
+  border-radius: 50% !important;
+  color: var(--cert-white) !important;
+  padding: 6px !important;
+  box-sizing: border-box !important;
+}
+
+/* mirrors .poc-form-title — bold white-on-gradient treatment */
+.cert-success-wrap .cert-success-title {
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  background: var(--cert-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 4px !important;
+}
+
+.cert-success-wrap .cert-success-sub {
+  color: var(--cert-muted) !important;
+  font-size: 0.82rem !important;
+  text-align: center !important;
+  margin: 0 !important;
+}

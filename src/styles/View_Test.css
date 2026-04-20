@@ -1,0 +1,654 @@
+/* =============================================
+   TestGrid - Component Styles
+   ============================================= */
+
+/* ── Design Tokens (CSS Variables) ─────────────────────────── */
+:root {
+  --test-primary:       #0c83c8;
+  --test-primary-dark:  #0a6faa;
+  --test-primary-light: #e8f4fd;
+  --test-accent:        #fc7a46;
+  --test-accent-light:  #fff3ee;
+  --test-danger:        #e53935;
+  --test-danger-light:  #ffebee;
+  --test-bg:            #f0f6ff;
+  --test-surface:       #ffffff;
+  --test-border:        #e2eaf4;
+  --test-text:          #1a2640;
+  --test-muted:         #7a8fa6;
+  --test-stripe:        #f5f9ff;
+  --test-success:       #2e7d32;
+  --test-success-light: #e8f5e9;
+}
+
+/* ── Page Wrapper ───────────────────────────────────────────── */
+.test-grid-wrapper {
+  padding: 40px;
+  background-color: var(--test-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (max-width: 600px) {
+  .test-grid-wrapper {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .test-grid-wrapper {
+    padding: 32px;
+  }
+}
+
+/* ── Header Row ─────────────────────────────────────────────── */
+.test-grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.test-grid-title {
+  font-weight: 900 !important;
+  font-size: 2.2rem !important;
+  background: linear-gradient(135deg, var(--test-primary), var(--test-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 600px) {
+  .test-grid-title {
+    font-size: 1.6rem !important;
+  }
+}
+
+.test-grid-subtitle {
+  color: var(--test-muted) !important;
+  margin-top: 4px !important;
+}
+
+/* ── Stat Chips ─────────────────────────────────────────────── */
+.test-grid-stat-chips {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.test-grid-stat-chip {
+  padding: 12px 20px;
+  border-radius: 14px;
+  background-color: var(--test-surface);
+  box-shadow: 0 2px 12px rgba(12, 131, 200, 0.1);
+  border: 1px solid var(--test-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.test-grid-stat-value {
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+}
+
+.test-grid-stat-label {
+  color: var(--test-muted) !important;
+}
+
+/* ── Toolbar ────────────────────────────────────────────────── */
+.test-grid-toolbar {
+  padding: 16px !important;
+  border-radius: 16px !important;
+  background-color: var(--test-surface) !important;
+  border: 1px solid var(--test-border) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+}
+
+@media (max-width: 600px) {
+  .test-grid-toolbar {
+    padding: 12px !important;
+  }
+}
+
+/* Search field */
+.test-grid-search-field {
+  flex: 1;
+  min-width: 220px;
+}
+
+.test-grid-search-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.test-grid-search-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--test-primary);
+}
+
+.test-grid-search-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: var(--test-accent);
+}
+
+/* Refresh button */
+.test-grid-btn-refresh {
+  background-color: var(--test-primary-light) !important;
+  color: var(--test-primary) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s !important;
+}
+
+.test-grid-btn-refresh:hover {
+  background-color: var(--test-primary) !important;
+  color: #ffffff !important;
+}
+
+/* Results chip */
+.test-grid-results-chip {
+  background-color: var(--test-primary-light) !important;
+  color: var(--test-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* ── Table Paper ────────────────────────────────────────────── */
+.test-grid-table-paper {
+  border-radius: 20px !important;
+  background-color: var(--test-surface) !important;
+  border: 1px solid var(--test-border) !important;
+  overflow: auto !important;
+}
+
+.test-grid-table-min-width {
+  min-width: 1240px;
+}
+
+/* ── Table Header ───────────────────────────────────────────── */
+.test-grid-table-head {
+  background: linear-gradient(135deg, var(--test-primary), var(--test-accent));
+  padding: 0 16px;
+  display: grid;
+}
+
+.test-grid-head-cell {
+  padding: 14px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+  color: #ffffff;
+}
+
+.test-grid-head-cell.sortable {
+  cursor: pointer;
+}
+
+.test-grid-head-cell.sortable:hover {
+  opacity: 0.82;
+}
+
+.test-grid-head-label {
+  font-weight: 800 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+}
+
+/* ── Table Body Row ─────────────────────────────────────────── */
+.test-grid-table-row {
+  display: grid;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--test-border);
+  align-items: center;
+  transition: background 0.15s;
+}
+
+.test-grid-table-row:hover {
+  background-color: #eaf4ff !important;
+}
+
+.test-grid-table-row.even {
+  background-color: var(--test-surface);
+}
+
+.test-grid-table-row.odd {
+  background-color: var(--test-stripe);
+}
+
+.test-grid-table-cell {
+  padding: 12px 8px;
+  overflow: hidden;
+}
+
+/* ── Empty / Loading States ─────────────────────────────────── */
+.test-grid-loader-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0;
+}
+
+.test-grid-empty-box {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.test-grid-empty-label {
+  color: var(--test-muted) !important;
+  font-weight: 600 !important;
+}
+
+/* ── Cell Content ───────────────────────────────────────────── */
+
+/* Name cell */
+.test-cell-name-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.test-cell-name-avatar {
+  width: 30px !important;
+  height: 30px !important;
+  background-color: var(--test-primary-light) !important;
+  color: var(--test-primary) !important;
+  flex-shrink: 0;
+}
+
+.test-cell-name-text {
+  font-weight: 700 !important;
+  font-size: 0.84rem !important;
+  color: var(--test-text) !important;
+}
+
+/* Language chip */
+.test-cell-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.test-lang-chip {
+  background-color: var(--test-accent-light) !important;
+  color: var(--test-accent) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  height: 22px !important;
+  border-radius: 6px !important;
+}
+
+/* Score */
+.test-score-text {
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+  color: var(--test-text) !important;
+}
+
+/* MCQ / Coding ID chips */
+.test-mcq-chip {
+  background-color: var(--test-primary-light) !important;
+  color: var(--test-primary) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  height: 22px !important;
+  border-radius: 6px !important;
+}
+
+.test-coding-chip {
+  background-color: var(--test-accent-light) !important;
+  color: var(--test-accent) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  height: 22px !important;
+  border-radius: 6px !important;
+}
+
+/* Status chip */
+.test-status-chip-active {
+  background-color: var(--test-success-light) !important;
+  color: var(--test-success) !important;
+  font-weight: 700 !important;
+  font-size: 0.7rem !important;
+  height: 22px !important;
+  border-radius: 6px !important;
+}
+
+.test-status-chip-disabled {
+  background-color: var(--test-danger-light) !important;
+  color: var(--test-danger) !important;
+  font-weight: 700 !important;
+  font-size: 0.7rem !important;
+  height: 22px !important;
+  border-radius: 6px !important;
+}
+
+/* Status switch */
+.test-status-switch .MuiSwitch-switchBase.Mui-checked {
+  color: var(--test-success) !important;
+}
+
+.test-status-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: var(--test-success) !important;
+}
+
+/* Active At */
+.test-activeat-text {
+  font-size: 0.78rem !important;
+  color: var(--test-muted) !important;
+}
+
+/* Test ID */
+.test-id-text {
+  font-size: 0.72rem !important;
+  color: var(--test-muted) !important;
+  font-family: monospace !important;
+  word-break: break-all;
+}
+
+/* Copy button */
+.test-copy-btn {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+  transition: all 0.18s !important;
+}
+
+.test-copy-btn.idle {
+  color: var(--test-muted) !important;
+  background-color: transparent !important;
+}
+
+.test-copy-btn.copied {
+  color: var(--test-success) !important;
+  background-color: var(--test-success-light) !important;
+}
+
+.test-copy-btn:hover {
+  background-color: var(--test-primary-light) !important;
+  color: var(--test-primary) !important;
+}
+
+/* Action buttons */
+.test-action-box {
+  display: flex;
+  gap: 6px;
+}
+
+.test-btn-edit {
+  color: var(--test-primary) !important;
+  background-color: var(--test-primary-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.test-btn-edit:hover {
+  background-color: var(--test-primary) !important;
+  color: #ffffff !important;
+}
+
+.test-btn-delete {
+  color: var(--test-danger) !important;
+  background-color: var(--test-danger-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.test-btn-delete:hover {
+  background-color: var(--test-danger) !important;
+  color: #ffffff !important;
+}
+
+/* Highlight mark */
+.test-highlight {
+  background: #fde68a;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ── Pagination ─────────────────────────────────────────────── */
+.test-grid-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  border-top: 1px solid var(--test-border);
+  background-color: #fafbff;
+}
+
+.test-grid-pagination-info {
+  color: var(--test-muted) !important;
+}
+
+.test-grid-pagination-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.test-grid-btn-page {
+  border-radius: 10px !important;
+  border-color: var(--test-border) !important;
+  color: var(--test-primary) !important;
+  text-transform: none !important;
+  min-width: 80px !important;
+}
+
+.test-grid-btn-page:hover {
+  border-color: var(--test-primary) !important;
+}
+
+.test-grid-btn-page:disabled {
+  opacity: 0.4 !important;
+}
+
+/* ── Dialogs ────────────────────────────────────────────────── */
+.test-dialog-paper {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+/* Edit dialog title */
+.test-dialog-title-primary {
+  background: linear-gradient(135deg, var(--test-primary), var(--test-accent)) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 18px 24px !important;
+}
+
+/* Delete dialog title */
+.test-dialog-title-danger {
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 18px 24px !important;
+}
+
+/* Status — activate dialog title */
+.test-dialog-title-activate {
+  background: linear-gradient(135deg, #2e7d32, #388e3c) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 18px 24px !important;
+}
+
+/* Status — disable dialog title */
+.test-dialog-title-disable {
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 18px 24px !important;
+}
+
+.test-dialog-content {
+  padding-top: 24px !important;
+  padding-bottom: 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+.test-dialog-content-simple {
+  padding-top: 20px !important;
+}
+
+.test-dialog-actions {
+  padding: 16px 24px !important;
+  gap: 8px !important;
+}
+
+/* Cancel button */
+.test-btn-dialog-cancel {
+  border-radius: 10px !important;
+  border-color: var(--test-border) !important;
+  color: var(--test-muted) !important;
+  text-transform: none !important;
+}
+
+/* Edit confirm button */
+.test-btn-dialog-confirm {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, var(--test-primary), var(--test-accent)) !important;
+  box-shadow: 0 4px 14px rgba(12, 131, 200, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.test-btn-dialog-confirm:hover {
+  background: linear-gradient(135deg, var(--test-primary-dark), #e06030) !important;
+}
+
+/* Delete confirm button */
+.test-btn-dialog-danger {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  box-shadow: 0 4px 14px rgba(229, 57, 53, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.test-btn-dialog-danger:hover {
+  background: linear-gradient(135deg, #c62828, #b71c1c) !important;
+}
+
+/* Status activate confirm button */
+.test-btn-dialog-activate {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #2e7d32, #388e3c) !important;
+  color: #ffffff !important;
+}
+
+.test-btn-dialog-activate:hover {
+  background: linear-gradient(135deg, #1b5e20, #2e7d32) !important;
+}
+
+/* Status disable confirm button */
+.test-btn-dialog-disable {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  color: #ffffff !important;
+}
+
+.test-btn-dialog-disable:hover {
+  background: linear-gradient(135deg, #c62828, #b71c1c) !important;
+}
+
+/* Edit field */
+.test-edit-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.test-edit-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--test-primary);
+}
+
+.test-edit-field label.Mui-focused {
+  color: var(--test-primary);
+}
+
+/* Delete info box */
+.test-delete-info-box {
+  background-color: #fff5f5;
+  border: 1px solid #ffcdd2;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.test-delete-info-name {
+  font-weight: 700 !important;
+  color: #c62828 !important;
+  font-size: 0.95rem !important;
+}
+
+.test-delete-info-sub {
+  color: var(--test-muted) !important;
+}
+
+/* Status info box - activate */
+.test-status-info-box-activate {
+  background-color: #f1f8f1;
+  border: 1px solid #c8e6c9;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Status info box - disable */
+.test-status-info-box-disable {
+  background-color: #fff5f5;
+  border: 1px solid #ffcdd2;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.test-status-info-name-activate {
+  font-weight: 700 !important;
+  color: #2e7d32 !important;
+  font-size: 0.95rem !important;
+}
+
+.test-status-info-name-disable {
+  font-weight: 700 !important;
+  color: #c62828 !important;
+  font-size: 0.95rem !important;
+}
+
+/* ── Snackbar ───────────────────────────────────────────────── */
+.test-snackbar-alert {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+}

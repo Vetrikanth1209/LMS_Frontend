@@ -1,0 +1,479 @@
+/* =============================================
+   ModulePage - Component Styles
+   ============================================= */
+
+/* ── Design Tokens (CSS Variables) ─────────────────────────── */
+:root {
+  --mod-primary:       #0c83c8;
+  --mod-primary-dark:  #0a6faa;
+  --mod-primary-light: #e8f4fd;
+  --mod-accent:        #38bdf8;
+  --mod-danger:        #e53935;
+  --mod-danger-light:  #ffebee;
+  --mod-bg:            #f0f6ff;
+  --mod-surface:       #ffffff;
+  --mod-border:        #e2eaf4;
+  --mod-text:          #1a2640;
+  --mod-muted:         #7a8fa6;
+  --mod-stripe:        #f5f9ff;
+}
+
+/* ── Page Wrapper ───────────────────────────────────────────── */
+.mod-page-wrapper {
+  padding: 40px;
+  background-color: var(--mod-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (max-width: 600px) {
+  .mod-page-wrapper {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .mod-page-wrapper {
+    padding: 32px;
+  }
+}
+
+/* ── Header Row ─────────────────────────────────────────────── */
+.mod-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.mod-header-title {
+  font-weight: 900 !important;
+  font-size: 2.2rem !important;
+  background: linear-gradient(135deg, var(--mod-primary), #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 600px) {
+  .mod-header-title {
+    font-size: 1.6rem !important;
+  }
+}
+
+.mod-header-subtitle {
+  color: var(--mod-muted) !important;
+  margin-top: 4px !important;
+}
+
+/* ── Stat Chips ─────────────────────────────────────────────── */
+.mod-stat-chips {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mod-stat-chip {
+  padding: 12px 20px;
+  border-radius: 14px;
+  background-color: var(--mod-surface);
+  box-shadow: 0 2px 12px rgba(12, 131, 200, 0.1);
+  border: 1px solid var(--mod-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mod-stat-chip-value {
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+}
+
+.mod-stat-chip-label {
+  color: var(--mod-muted) !important;
+}
+
+/* ── Toolbar ────────────────────────────────────────────────── */
+.mod-toolbar {
+  padding: 16px !important;
+  border-radius: 16px !important;
+  background-color: var(--mod-surface) !important;
+  border: 1px solid var(--mod-border) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+}
+
+@media (max-width: 600px) {
+  .mod-toolbar {
+    padding: 12px !important;
+  }
+}
+
+/* Search field */
+.mod-search-field {
+  flex: 1;
+  min-width: 220px;
+}
+
+.mod-search-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.mod-search-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--mod-primary);
+}
+
+/* Refresh button */
+.mod-btn-refresh {
+  background-color: var(--mod-primary-light) !important;
+  color: var(--mod-primary) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s !important;
+}
+
+.mod-btn-refresh:hover {
+  background-color: var(--mod-primary) !important;
+  color: #ffffff !important;
+}
+
+/* Results chip */
+.mod-results-chip {
+  background-color: var(--mod-primary-light) !important;
+  color: var(--mod-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* ── Table Paper ────────────────────────────────────────────── */
+.mod-table-paper {
+  border-radius: 20px !important;
+  background-color: var(--mod-surface) !important;
+  border: 1px solid var(--mod-border) !important;
+  overflow: hidden !important;
+}
+
+/* ── Table Header ───────────────────────────────────────────── */
+.mod-table-head {
+  background: linear-gradient(135deg, var(--mod-primary), var(--mod-primary-dark));
+  padding: 0 16px;
+  display: grid;
+}
+
+.mod-table-head-cell {
+  padding: 14px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+  color: #ffffff;
+}
+
+.mod-table-head-cell.sortable {
+  cursor: pointer;
+}
+
+.mod-table-head-cell.sortable:hover {
+  opacity: 0.82;
+}
+
+.mod-table-head-label {
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+}
+
+/* ── Table Body Row ─────────────────────────────────────────── */
+.mod-table-row {
+  display: grid;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--mod-border);
+  align-items: center;
+  transition: background 0.15s;
+}
+
+.mod-table-row:hover {
+  background-color: #eaf4ff !important;
+}
+
+.mod-table-row.even {
+  background-color: var(--mod-surface);
+}
+
+.mod-table-row.odd {
+  background-color: var(--mod-stripe);
+}
+
+.mod-table-cell {
+  padding: 12px 8px;
+  overflow: hidden;
+}
+
+/* ── Empty / Loading States ─────────────────────────────────── */
+.mod-loader-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0;
+}
+
+.mod-empty-box {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.mod-empty-label {
+  color: var(--mod-muted) !important;
+  font-weight: 600 !important;
+}
+
+/* ── Cell Content ───────────────────────────────────────────── */
+
+/* Name cell */
+.mod-cell-name-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mod-cell-name-avatar {
+  width: 30px !important;
+  height: 30px !important;
+  background-color: var(--mod-primary-light) !important;
+  color: var(--mod-primary) !important;
+  flex-shrink: 0;
+}
+
+.mod-cell-name-text {
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  color: var(--mod-text) !important;
+}
+
+/* Tech / Duration icon row */
+.mod-cell-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Tech chip */
+.mod-tech-chip {
+  background-color: #e8f0fe !important;
+  color: #1a56db !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+}
+
+/* Duration chip */
+.mod-duration-chip {
+  background-color: #e8fdf5 !important;
+  color: #0d7a56 !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+}
+
+/* Action buttons */
+.mod-action-box {
+  display: flex;
+  gap: 6px;
+}
+
+.mod-btn-edit {
+  color: var(--mod-primary) !important;
+  background-color: var(--mod-primary-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.mod-btn-edit:hover {
+  background-color: var(--mod-primary) !important;
+  color: #ffffff !important;
+}
+
+.mod-btn-delete {
+  color: var(--mod-danger) !important;
+  background-color: var(--mod-danger-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.mod-btn-delete:hover {
+  background-color: var(--mod-danger) !important;
+  color: #ffffff !important;
+}
+
+/* Highlight mark */
+.mod-highlight {
+  background: #fde68a;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ── Pagination ─────────────────────────────────────────────── */
+.mod-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  border-top: 1px solid var(--mod-border);
+  background-color: #fafbff;
+}
+
+.mod-pagination-info {
+  color: var(--mod-muted) !important;
+}
+
+.mod-pagination-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.mod-btn-page {
+  border-radius: 10px !important;
+  border-color: var(--mod-border) !important;
+  color: var(--mod-primary) !important;
+  text-transform: none !important;
+  min-width: 80px !important;
+}
+
+.mod-btn-page:hover {
+  border-color: var(--mod-primary) !important;
+}
+
+.mod-btn-page:disabled {
+  opacity: 0.4 !important;
+}
+
+/* ── Dialogs ────────────────────────────────────────────────── */
+.mod-dialog-paper {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+/* Edit dialog title */
+.mod-dialog-title-primary {
+  background: linear-gradient(135deg, var(--mod-primary), var(--mod-primary-dark)) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 18px 24px !important;
+}
+
+/* Delete dialog title */
+.mod-dialog-title-danger {
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 18px 24px !important;
+}
+
+.mod-dialog-content {
+  padding-top: 24px !important;
+  padding-bottom: 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+.mod-dialog-content-simple {
+  padding-top: 20px !important;
+}
+
+.mod-dialog-actions {
+  padding: 16px 24px !important;
+  gap: 8px !important;
+}
+
+/* Cancel button */
+.mod-btn-dialog-cancel {
+  border-radius: 10px !important;
+  border-color: var(--mod-border) !important;
+  color: var(--mod-muted) !important;
+  text-transform: none !important;
+}
+
+/* Edit confirm button */
+.mod-btn-dialog-confirm {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, var(--mod-primary), var(--mod-primary-dark)) !important;
+  box-shadow: 0 4px 14px rgba(12, 131, 200, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.mod-btn-dialog-confirm:hover {
+  background: linear-gradient(135deg, var(--mod-primary-dark), #075e91) !important;
+}
+
+/* Delete confirm button */
+.mod-btn-dialog-danger {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  box-shadow: 0 4px 14px rgba(229, 57, 53, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.mod-btn-dialog-danger:hover {
+  background: linear-gradient(135deg, #c62828, #b71c1c) !important;
+}
+
+/* Edit field */
+.mod-edit-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.mod-edit-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--mod-primary);
+}
+
+.mod-edit-field label.Mui-focused {
+  color: var(--mod-primary);
+}
+
+/* Delete info box */
+.mod-delete-info-box {
+  background-color: #fff5f5;
+  border: 1px solid #ffcdd2;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.mod-delete-info-name {
+  font-weight: 700 !important;
+  color: #c62828 !important;
+  font-size: 0.95rem !important;
+}
+
+.mod-delete-info-sub {
+  color: var(--mod-muted) !important;
+}
+
+/* ── Snackbar ───────────────────────────────────────────────── */
+.mod-snackbar-alert {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+}

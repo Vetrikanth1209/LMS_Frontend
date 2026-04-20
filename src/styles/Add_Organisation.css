@@ -1,0 +1,63 @@
+/* =============================================
+   AddOrganisation.css
+   Styles for Add_Organisation component
+   ============================================= */
+
+/* ---------- Card Header ---------- */
+.org-form-header {
+  padding: 24px;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: white;
+  text-align: center;
+}
+
+.org-form-header-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.org-form-header-subtitle {
+  font-size: 0.875rem;
+}
+
+/* ---------- Form Body ---------- */
+.org-form-body {
+  padding: 32px;
+}
+
+.org-form-field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.org-form-field-icon {
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+/* ---------- Buttons ---------- */
+.org-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.org-btn-submit {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  padding: 6px 32px !important;
+}
+
+.org-btn-submit:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.org-btn-clear {
+  border-radius: 12px !important;
+  padding: 6px 32px !important;
+}

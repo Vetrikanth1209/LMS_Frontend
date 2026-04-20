@@ -1,0 +1,486 @@
+/* =============================================
+   ExpertPage.css
+   Styles for ExpertPage component
+   ============================================= */
+
+/* ─── Design Tokens ──────────────────────────────────────────── */
+:root {
+  --ep-primary:       #0c83c8;
+  --ep-primary-dark:  #0a6faa;
+  --ep-primary-light: #e8f4fd;
+  --ep-accent:        #fc7a46;
+  --ep-accent-light:  #fff3ee;
+  --ep-danger:        #e53935;
+  --ep-danger-light:  #ffebee;
+  --ep-bg:            #f0f6ff;
+  --ep-surface:       #ffffff;
+  --ep-border:        #e2eaf4;
+  --ep-text:          #1a2640;
+  --ep-muted:         #7a8fa6;
+  --ep-stripe:        #f5f9ff;
+}
+
+/* ─── Page Wrapper ───────────────────────────────────────────── */
+.ep-root {
+  padding: 40px;
+  background-color: var(--ep-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
+.ep-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.ep-header-title {
+  font-weight: 900 !important;
+  font-size: 2.2rem !important;
+  background: linear-gradient(135deg, var(--ep-primary), var(--ep-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ep-header-subtitle {
+  color: var(--ep-muted) !important;
+  margin-top: 4px !important;
+}
+
+/* ─── Stat Chips ─────────────────────────────────────────────── */
+.ep-stat-chips {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ep-stat-chip {
+  padding: 12px 20px;
+  border-radius: 14px;
+  background-color: var(--ep-surface);
+  box-shadow: 0 2px 12px rgba(12, 131, 200, 0.1);
+  border: 1px solid var(--ep-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ep-stat-chip-value {
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+}
+
+.ep-stat-chip-label {
+  color: var(--ep-muted) !important;
+}
+
+/* ─── Toolbar ────────────────────────────────────────────────── */
+.ep-toolbar {
+  padding: 16px;
+  border-radius: 16px;
+  background-color: var(--ep-surface);
+  border: 1px solid var(--ep-border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ep-search-field {
+  flex: 1;
+  min-width: 220px;
+}
+
+.ep-search-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.ep-search-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--ep-primary);
+}
+
+.ep-search-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: var(--ep-accent);
+}
+
+.ep-refresh-btn {
+  background-color: var(--ep-primary-light) !important;
+  color: var(--ep-primary) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s !important;
+}
+
+.ep-refresh-btn:hover {
+  background-color: var(--ep-primary) !important;
+  color: #fff !important;
+}
+
+.ep-result-chip {
+  background-color: var(--ep-primary-light) !important;
+  color: var(--ep-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* ─── Table Card ─────────────────────────────────────────────── */
+.ep-table-card {
+  border-radius: 20px !important;
+  background-color: var(--ep-surface) !important;
+  border: 1px solid var(--ep-border) !important;
+  overflow: hidden !important;
+}
+
+/* ─── Table Head ─────────────────────────────────────────────── */
+.ep-thead {
+  background: linear-gradient(135deg, var(--ep-primary), var(--ep-accent));
+  padding: 0 16px;
+  display: grid;
+}
+
+.ep-th {
+  padding: 14px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+  color: #fff;
+}
+
+.ep-th--sortable {
+  cursor: pointer;
+}
+
+.ep-th--sortable:hover {
+  opacity: 0.82;
+}
+
+.ep-th-label {
+  font-weight: 800 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+
+/* ─── Table Body ─────────────────────────────────────────────── */
+.ep-tbody-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0;
+}
+
+.ep-tbody-empty {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.ep-tbody-empty-label {
+  color: var(--ep-muted) !important;
+  font-weight: 600 !important;
+}
+
+.ep-tr {
+  padding: 0 16px;
+  border-bottom: 1px solid var(--ep-border);
+  align-items: center;
+  transition: background 0.15s;
+  display: grid;
+}
+
+.ep-tr:hover {
+  background-color: #eaf4ff !important;
+}
+
+.ep-td {
+  padding: 12px 8px;
+  overflow: hidden;
+}
+
+/* ─── Cell: Expert Name ──────────────────────────────────────── */
+.ep-cell-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ep-cell-name-avatar {
+  width: 30px !important;
+  height: 30px !important;
+  background-color: var(--ep-primary-light) !important;
+  color: var(--ep-primary) !important;
+  flex-shrink: 0;
+}
+
+.ep-cell-name-text {
+  font-weight: 700 !important;
+  font-size: 0.84rem !important;
+  color: var(--ep-text) !important;
+}
+
+/* ─── Cell: Role ─────────────────────────────────────────────── */
+.ep-cell-role {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ep-cell-role-chip {
+  background-color: var(--ep-accent-light) !important;
+  color: var(--ep-accent) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  height: 22px !important;
+  border-radius: 6px !important;
+}
+
+/* ─── Cell: Generic icon + text ─────────────────────────────── */
+.ep-cell-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ep-cell-text {
+  font-size: 0.82rem !important;
+  color: var(--ep-text) !important;
+}
+
+.ep-cell-text--mono {
+  font-size: 0.75rem !important;
+  color: var(--ep-muted) !important;
+  font-family: monospace !important;
+  word-break: break-all;
+}
+
+.ep-cell-text--mono-wrap {
+  font-size: 0.75rem !important;
+  color: var(--ep-muted) !important;
+  font-family: monospace !important;
+}
+
+/* ─── Cell: Actions ──────────────────────────────────────────── */
+.ep-cell-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.ep-action-btn-edit {
+  color: var(--ep-primary) !important;
+  background-color: var(--ep-primary-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.ep-action-btn-edit:hover {
+  background-color: var(--ep-primary) !important;
+  color: #fff !important;
+}
+
+.ep-action-btn-delete {
+  color: var(--ep-danger) !important;
+  background-color: var(--ep-danger-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.ep-action-btn-delete:hover {
+  background-color: var(--ep-danger) !important;
+  color: #fff !important;
+}
+
+/* ─── Pagination ─────────────────────────────────────────────── */
+.ep-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  border-top: 1px solid var(--ep-border);
+  background-color: #fafbff;
+}
+
+.ep-pagination-info {
+  color: var(--ep-muted) !important;
+}
+
+.ep-pagination-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.ep-pagination-btn {
+  border-radius: 10px !important;
+  border-color: var(--ep-border) !important;
+  color: var(--ep-primary) !important;
+  text-transform: none !important;
+  min-width: 80px !important;
+}
+
+.ep-pagination-btn:hover {
+  border-color: var(--ep-primary) !important;
+}
+
+.ep-pagination-btn:disabled {
+  opacity: 0.4 !important;
+}
+
+/* ─── Edit Dialog ────────────────────────────────────────────── */
+.ep-edit-dialog .MuiPaper-root {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.ep-edit-dialog-title {
+  background: linear-gradient(135deg, var(--ep-primary), var(--ep-accent)) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
+
+.ep-edit-dialog-content {
+  padding-top: 24px !important;
+  padding-bottom: 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+.ep-edit-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.ep-edit-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--ep-primary);
+}
+
+.ep-edit-field .MuiInputLabel-root.Mui-focused {
+  color: var(--ep-primary);
+}
+
+.ep-edit-dialog-actions {
+  padding: 16px 24px !important;
+  gap: 8px !important;
+}
+
+.ep-btn-cancel {
+  border-radius: 10px !important;
+  border-color: var(--ep-border) !important;
+  color: var(--ep-muted) !important;
+  text-transform: none !important;
+}
+
+.ep-btn-save {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, var(--ep-primary), var(--ep-accent)) !important;
+  box-shadow: 0 4px 14px rgba(12, 131, 200, 0.3) !important;
+}
+
+.ep-btn-save:hover {
+  background: linear-gradient(135deg, var(--ep-primary-dark), #e06030) !important;
+}
+
+/* ─── Delete Dialog ──────────────────────────────────────────── */
+.ep-del-dialog .MuiPaper-root {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.ep-del-dialog-title {
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
+
+.ep-del-dialog-content {
+  padding-top: 20px !important;
+}
+
+.ep-del-desc {
+  color: var(--ep-text) !important;
+  margin-bottom: 12px !important;
+}
+
+.ep-del-user-box {
+  background-color: #fff5f5;
+  border: 1px solid #ffcdd2;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.ep-del-user-name {
+  font-weight: 700 !important;
+  color: #c62828 !important;
+  font-size: 0.95rem !important;
+}
+
+.ep-del-user-meta {
+  color: var(--ep-muted) !important;
+}
+
+.ep-del-warning {
+  color: var(--ep-muted) !important;
+  margin-top: 16px !important;
+}
+
+.ep-del-dialog-actions {
+  padding: 16px 24px !important;
+  gap: 8px !important;
+}
+
+.ep-btn-delete {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  box-shadow: 0 4px 14px rgba(229, 57, 53, 0.3) !important;
+}
+
+.ep-btn-delete:hover {
+  background: linear-gradient(135deg, #c62828, #b71c1c) !important;
+}
+
+/* ─── Snackbar ───────────────────────────────────────────────── */
+.ep-snackbar-alert {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* ─── Highlight mark ─────────────────────────────────────────── */
+.ep-highlight {
+  background: #fde68a;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .ep-root {
+    padding: 16px;
+  }
+
+  .ep-header-title {
+    font-size: 1.6rem !important;
+  }
+}

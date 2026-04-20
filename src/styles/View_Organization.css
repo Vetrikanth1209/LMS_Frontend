@@ -1,0 +1,492 @@
+/* =============================================
+   OrganizationPage - Component Styles
+   ============================================= */
+
+/* ── Design Tokens (CSS Variables) ─────────────────────────── */
+:root {
+  --org-primary:       #0c83c8;
+  --org-primary-dark:  #0a6faa;
+  --org-primary-light: #e8f4fd;
+  --org-accent:        #38bdf8;
+  --org-danger:        #e53935;
+  --org-danger-light:  #ffebee;
+  --org-bg:            #f0f6ff;
+  --org-surface:       #ffffff;
+  --org-border:        #e2eaf4;
+  --org-text:          #1a2640;
+  --org-muted:         #7a8fa6;
+  --org-stripe:        #f5f9ff;
+}
+
+/* ── Page Wrapper ───────────────────────────────────────────── */
+.org-page-wrapper {
+  padding: 40px;
+  background-color: var(--org-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (max-width: 600px) {
+  .org-page-wrapper {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .org-page-wrapper {
+    padding: 32px;
+  }
+}
+
+/* ── Header Row ─────────────────────────────────────────────── */
+.org-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.org-header-title {
+  font-weight: 900 !important;
+  font-size: 2.2rem !important;
+  background: linear-gradient(135deg, var(--org-primary), #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 600px) {
+  .org-header-title {
+    font-size: 1.6rem !important;
+  }
+}
+
+.org-header-subtitle {
+  color: var(--org-muted) !important;
+  margin-top: 4px !important;
+}
+
+/* ── Stat Chips ─────────────────────────────────────────────── */
+.org-stat-chips {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.org-stat-chip {
+  padding: 12px 20px;
+  border-radius: 14px;
+  background-color: var(--org-surface);
+  box-shadow: 0 2px 12px rgba(12, 131, 200, 0.1);
+  border: 1px solid var(--org-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.org-stat-chip-value {
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+}
+
+.org-stat-chip-label {
+  color: var(--org-muted) !important;
+}
+
+/* ── Toolbar ────────────────────────────────────────────────── */
+.org-toolbar {
+  padding: 16px !important;
+  border-radius: 16px !important;
+  background-color: var(--org-surface) !important;
+  border: 1px solid var(--org-border) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+}
+
+@media (max-width: 600px) {
+  .org-toolbar {
+    padding: 12px !important;
+  }
+}
+
+/* Search field */
+.org-search-field {
+  flex: 1;
+  min-width: 220px;
+}
+
+.org-search-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.org-search-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--org-primary);
+}
+
+/* Refresh button */
+.org-btn-refresh {
+  background-color: var(--org-primary-light) !important;
+  color: var(--org-primary) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s !important;
+}
+
+.org-btn-refresh:hover {
+  background-color: var(--org-primary) !important;
+  color: #ffffff !important;
+}
+
+/* Results chip */
+.org-results-chip {
+  background-color: var(--org-primary-light) !important;
+  color: var(--org-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* ── Table Paper ────────────────────────────────────────────── */
+.org-table-paper {
+  border-radius: 20px !important;
+  background-color: var(--org-surface) !important;
+  border: 1px solid var(--org-border) !important;
+  overflow: hidden !important;
+}
+
+/* ── Table Header ───────────────────────────────────────────── */
+.org-table-head {
+  background: linear-gradient(135deg, var(--org-primary), var(--org-primary-dark));
+  padding: 0 16px;
+  display: grid;
+}
+
+.org-table-head-cell {
+  padding: 14px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+  color: #ffffff;
+}
+
+.org-table-head-cell.sortable {
+  cursor: pointer;
+}
+
+.org-table-head-cell.sortable:hover {
+  opacity: 0.85;
+}
+
+.org-table-head-label {
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+}
+
+/* ── Table Body Row ─────────────────────────────────────────── */
+.org-table-row {
+  display: grid;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--org-border);
+  align-items: center;
+  transition: background 0.15s;
+}
+
+.org-table-row:hover {
+  background-color: #eaf4ff !important;
+}
+
+.org-table-row.even {
+  background-color: var(--org-surface);
+}
+
+.org-table-row.odd {
+  background-color: var(--org-stripe);
+}
+
+.org-table-cell {
+  padding: 12px 8px;
+  overflow: hidden;
+}
+
+/* ── Empty / Loading States ─────────────────────────────────── */
+.org-loader-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0;
+}
+
+.org-empty-box {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.org-empty-label {
+  color: var(--org-muted) !important;
+  font-weight: 600 !important;
+}
+
+/* ── Cell Content ───────────────────────────────────────────── */
+
+/* Name cell */
+.org-cell-name-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.org-cell-name-avatar {
+  width: 30px !important;
+  height: 30px !important;
+  background-color: var(--org-primary-light) !important;
+  color: var(--org-primary) !important;
+  flex-shrink: 0;
+}
+
+.org-cell-name-text {
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  color: var(--org-text) !important;
+}
+
+/* Address cell */
+.org-cell-address-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.org-cell-address-text {
+  font-size: 0.8rem !important;
+  color: var(--org-muted) !important;
+  line-height: 1.4 !important;
+  word-break: break-word;
+}
+
+/* Generic icon row */
+.org-cell-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.org-cell-text {
+  font-size: 0.82rem !important;
+  color: var(--org-text) !important;
+}
+
+/* Date chip */
+.org-date-chip {
+  background-color: var(--org-primary-light) !important;
+  color: var(--org-primary) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  height: 24px !important;
+}
+
+.org-date-chip .MuiChip-icon {
+  margin-left: 6px !important;
+}
+
+/* Action buttons */
+.org-action-box {
+  display: flex;
+  gap: 6px;
+}
+
+.org-btn-edit {
+  color: var(--org-primary) !important;
+  background-color: var(--org-primary-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.org-btn-edit:hover {
+  background-color: var(--org-primary) !important;
+  color: #ffffff !important;
+}
+
+.org-btn-delete {
+  color: var(--org-danger) !important;
+  background-color: var(--org-danger-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.org-btn-delete:hover {
+  background-color: var(--org-danger) !important;
+  color: #ffffff !important;
+}
+
+/* Highlight mark */
+.org-highlight {
+  background: #fde68a;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ── Pagination ─────────────────────────────────────────────── */
+.org-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  border-top: 1px solid var(--org-border);
+  background-color: #fafbff;
+}
+
+.org-pagination-info {
+  color: var(--org-muted) !important;
+}
+
+.org-pagination-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.org-btn-page {
+  border-radius: 10px !important;
+  border-color: var(--org-border) !important;
+  color: var(--org-primary) !important;
+  text-transform: none !important;
+  min-width: 80px !important;
+}
+
+.org-btn-page:hover {
+  border-color: var(--org-primary) !important;
+}
+
+.org-btn-page:disabled {
+  opacity: 0.4 !important;
+}
+
+/* ── Dialogs ────────────────────────────────────────────────── */
+.org-dialog-paper {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+/* Edit dialog title */
+.org-dialog-title-primary {
+  background: linear-gradient(135deg, var(--org-primary), var(--org-primary-dark)) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 18px 24px !important;
+}
+
+/* Delete dialog title */
+.org-dialog-title-danger {
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 18px 24px !important;
+}
+
+.org-dialog-content {
+  padding-top: 24px !important;
+  padding-bottom: 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+.org-dialog-content-simple {
+  padding-top: 20px !important;
+}
+
+.org-dialog-actions {
+  padding: 16px 24px !important;
+  gap: 8px !important;
+}
+
+/* Cancel button */
+.org-btn-dialog-cancel {
+  border-radius: 10px !important;
+  border-color: var(--org-border) !important;
+  color: var(--org-muted) !important;
+  text-transform: none !important;
+}
+
+/* Edit confirm button */
+.org-btn-dialog-confirm {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, var(--org-primary), var(--org-primary-dark)) !important;
+  box-shadow: 0 4px 14px rgba(12, 131, 200, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.org-btn-dialog-confirm:hover {
+  background: linear-gradient(135deg, var(--org-primary-dark), #075e91) !important;
+}
+
+/* Delete confirm button */
+.org-btn-dialog-danger {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  box-shadow: 0 4px 14px rgba(229, 57, 53, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.org-btn-dialog-danger:hover {
+  background: linear-gradient(135deg, #c62828, #b71c1c) !important;
+}
+
+/* Edit field */
+.org-edit-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.org-edit-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--org-primary);
+}
+
+.org-edit-field label.Mui-focused {
+  color: var(--org-primary);
+}
+
+/* Delete info box */
+.org-delete-info-box {
+  background-color: #fff5f5;
+  border: 1px solid #ffcdd2;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.org-delete-info-name {
+  font-weight: 700 !important;
+  color: #c62828 !important;
+  font-size: 0.95rem !important;
+}
+
+.org-delete-info-sub {
+  color: var(--org-muted) !important;
+}
+
+/* ── Snackbar ───────────────────────────────────────────────── */
+.org-snackbar-alert {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+}

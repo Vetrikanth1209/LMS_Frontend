@@ -1,0 +1,347 @@
+/* =============================================
+   UpdateOrganization.css
+   Styles for Update_Organization component
+   ============================================= */
+
+/* ---------- Page Wrapper ---------- */
+.update-org-root {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 48px 24px;
+}
+
+/* ---------- Top Card (Stepper Wrapper) ---------- */
+.update-org-stepper-card {
+  padding: 24px;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  margin-bottom: 32px !important;
+}
+
+/* ---------- Header Banner ---------- */
+.update-org-header {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: white;
+  border-radius: 16px !important;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.update-org-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.update-org-title {
+  font-weight: 600 !important;
+  color: #fff !important;
+}
+
+.update-org-subtitle {
+  margin-top: 8px !important;
+}
+
+/* ---------- Stepper label ---------- */
+.update-org-stepper .MuiStepLabel-label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ---------- Content Card ---------- */
+.update-org-content-card {
+  padding: 24px;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ---------- Step Section Titles ---------- */
+.update-org-step-title {
+  margin-bottom: 16px !important;
+  font-size: 1.5rem !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- Search Field ---------- */
+.update-org-search-wrap {
+  margin-bottom: 16px;
+}
+
+.update-org-search-field {
+  max-width: 400px;
+}
+
+.update-org-search-field .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.update-org-search-field .MuiOutlinedInput-root fieldset {
+  border-color: #0c83c8;
+}
+
+.update-org-search-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: #fc7a46;
+}
+
+.update-org-search-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #0c83c8;
+}
+
+/* ---------- DataGrid Wrapper ---------- */
+.update-org-grid-wrap {
+  height: 450px;
+  width: 100%;
+}
+
+/* ---------- DataGrid sx (applied via className on sx prop) ---------- */
+.update-org-datagrid {
+  border: none !important;
+  border-radius: 8px !important;
+}
+
+.update-org-datagrid .MuiDataGrid-columnHeaders {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  color: #0c83c8;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.update-org-datagrid .MuiDataGrid-row:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.update-org-datagrid .MuiDataGrid-row:hover {
+  background-color: #e3f2fd;
+}
+
+.update-org-datagrid .MuiDataGrid-cell {
+  font-size: 14px;
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.update-org-datagrid .MuiDataGrid-footerContainer {
+  background-color: #ffffff;
+  border-top: 1px solid #e0e0e0;
+  color: #0c83c8;
+  font-weight: 600;
+}
+
+.update-org-datagrid .MuiDataGrid-overlay {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* ---------- Step Navigation Rows ---------- */
+.update-org-nav-end {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.update-org-nav-between {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.update-org-nav-start {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 16px;
+}
+
+/* ---------- Nav Buttons ---------- */
+.update-org-btn-next {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.update-org-btn-next:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.update-org-btn-prev {
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.update-org-btn-prev:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+}
+
+/* ---------- Review Section Boxes ---------- */
+.update-org-review-box {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.update-org-review-subtitle {
+  margin-bottom: 8px !important;
+  font-weight: bold !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.update-org-review-alert {
+  border-radius: 12px !important;
+  font-size: 14px !important;
+}
+
+/* ---------- FAB ---------- */
+.update-org-fab {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 1000 !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  width: 56px !important;
+  height: 56px !important;
+}
+
+.update-org-fab:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Dialog ---------- */
+.update-org-dialog .MuiPaper-root {
+  border-radius: 12px;
+}
+
+.update-org-dialog-title {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  font-size: 18px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.update-org-dialog-close-btn {
+  color: #ffffff !important;
+}
+
+.update-org-dialog-content {
+  padding: 24px !important;
+}
+
+.update-org-dialog-text {
+  font-size: 16px !important;
+  color: #333 !important;
+}
+
+.update-org-dialog-detail {
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.update-org-dialog-actions {
+  padding: 16px !important;
+}
+
+.update-org-dialog-btn-cancel {
+  color: #0c83c8 !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.update-org-dialog-btn-confirm {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.update-org-dialog-btn-confirm:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+/* ---------- Snackbar ---------- */
+.update-org-snackbar-alert {
+  width: 100% !important;
+  font-size: 14px !important;
+}
+
+.update-org-snackbar-alert--success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .update-org-root {
+    padding: 16px;
+  }
+
+  .update-org-stepper-card,
+  .update-org-content-card {
+    padding: 16px;
+  }
+
+  .update-org-header {
+    padding: 16px;
+  }
+
+  .update-org-step-title {
+    font-size: 1.2rem !important;
+  }
+
+  .update-org-stepper .MuiStepLabel-label {
+    font-size: 12px;
+  }
+
+  .update-org-grid-wrap {
+    height: 300px;
+  }
+
+  .update-org-datagrid .MuiDataGrid-columnHeaders {
+    font-size: 14px;
+  }
+
+  .update-org-datagrid .MuiDataGrid-cell {
+    font-size: 12px;
+  }
+
+  .update-org-btn-next,
+  .update-org-btn-prev {
+    font-size: 12px !important;
+  }
+
+  .update-org-review-subtitle,
+  .update-org-review-alert {
+    font-size: 12px !important;
+  }
+
+  .update-org-fab {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .update-org-dialog-title {
+    font-size: 16px !important;
+  }
+
+  .update-org-dialog-text,
+  .update-org-dialog-detail,
+  .update-org-dialog-btn-cancel,
+  .update-org-dialog-btn-confirm {
+    font-size: 12px !important;
+  }
+
+  .update-org-snackbar-alert {
+    font-size: 12px !important;
+  }
+}

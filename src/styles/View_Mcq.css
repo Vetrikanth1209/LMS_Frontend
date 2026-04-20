@@ -1,0 +1,695 @@
+/* =============================================
+   McqAdminPage.css
+   Styles for McqAdminPage component
+   ============================================= */
+
+/* ─── Design Tokens ──────────────────────────────────────────── */
+:root {
+  --mp-primary:       #0c83c8;
+  --mp-primary-dark:  #0a6faa;
+  --mp-primary-light: #e8f4fd;
+  --mp-accent:        #fc7a46;
+  --mp-accent-light:  #fff3ee;
+  --mp-danger:        #e53935;
+  --mp-danger-light:  #ffebee;
+  --mp-bg:            #f0f6ff;
+  --mp-surface:       #ffffff;
+  --mp-border:        #e2eaf4;
+  --mp-text:          #1a2640;
+  --mp-muted:         #7a8fa6;
+  --mp-stripe:        #f5f9ff;
+  --mp-tag-bg:        #e3f2fd;
+  --mp-green:         #2e7d32;
+  --mp-green-light:   #e8f5e9;
+}
+
+/* ─── Page Wrapper ───────────────────────────────────────────── */
+.mp-root {
+  padding: 40px;
+  background-color: var(--mp-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
+.mp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.mp-header-title {
+  font-weight: 900 !important;
+  font-size: 2.2rem !important;
+  background: linear-gradient(135deg, var(--mp-primary), var(--mp-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mp-header-subtitle {
+  color: var(--mp-muted) !important;
+  margin-top: 4px !important;
+}
+
+/* ─── Stat Chips ─────────────────────────────────────────────── */
+.mp-stat-chips {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mp-stat-chip {
+  padding: 12px 20px;
+  border-radius: 14px;
+  background-color: var(--mp-surface);
+  box-shadow: 0 2px 12px rgba(12, 131, 200, 0.1);
+  border: 1px solid var(--mp-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mp-stat-chip-value {
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+}
+
+.mp-stat-chip-label {
+  color: var(--mp-muted) !important;
+}
+
+/* ─── Toolbar ────────────────────────────────────────────────── */
+.mp-toolbar {
+  padding: 16px;
+  border-radius: 16px;
+  background-color: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.mp-search-field {
+  flex: 1;
+  min-width: 220px;
+}
+
+.mp-search-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.mp-search-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--mp-primary);
+}
+
+.mp-search-field .MuiOutlinedInput-root:hover fieldset {
+  border-color: var(--mp-accent);
+}
+
+.mp-refresh-btn {
+  background-color: var(--mp-primary-light) !important;
+  color: var(--mp-primary) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s !important;
+}
+
+.mp-refresh-btn:hover {
+  background-color: var(--mp-primary) !important;
+  color: #fff !important;
+}
+
+.mp-result-chip {
+  background-color: var(--mp-primary-light) !important;
+  color: var(--mp-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* ─── Table Card ─────────────────────────────────────────────── */
+.mp-table-card {
+  border-radius: 20px !important;
+  background-color: var(--mp-surface) !important;
+  border: 1px solid var(--mp-border) !important;
+  overflow: hidden !important;
+}
+
+/* ─── Table Head ─────────────────────────────────────────────── */
+.mp-thead {
+  background: linear-gradient(135deg, var(--mp-primary), var(--mp-accent));
+  padding: 0 16px;
+  display: grid;
+}
+
+.mp-th {
+  padding: 14px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+  color: #fff;
+}
+
+.mp-th--sortable {
+  cursor: pointer;
+}
+
+.mp-th--sortable:hover {
+  opacity: 0.82;
+}
+
+.mp-th-label {
+  font-weight: 800 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+
+/* ─── Table Body ─────────────────────────────────────────────── */
+.mp-tbody-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0;
+}
+
+.mp-tbody-empty {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.mp-tbody-empty-label {
+  color: var(--mp-muted) !important;
+  font-weight: 600 !important;
+}
+
+.mp-tr {
+  padding: 0 16px;
+  border-bottom: 1px solid var(--mp-border);
+  align-items: start;
+  transition: background 0.15s;
+  display: grid;
+}
+
+.mp-tr:hover {
+  background-color: #eaf4ff !important;
+}
+
+.mp-td {
+  padding: 12px 8px;
+  overflow: hidden;
+}
+
+/* ─── Cell: Question ─────────────────────────────────────────── */
+.mp-cell-question {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.mp-cell-question-avatar {
+  width: 28px !important;
+  height: 28px !important;
+  background-color: var(--mp-primary-light) !important;
+  color: var(--mp-primary) !important;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.mp-cell-question-text {
+  font-size: 0.82rem !important;
+  color: var(--mp-text) !important;
+  font-weight: 600 !important;
+  line-height: 1.45 !important;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* ─── Cell: Options ──────────────────────────────────────────── */
+.mp-cell-options {
+  padding: 4px 0;
+}
+
+.mp-cell-option-text {
+  font-size: 0.78rem !important;
+  color: var(--mp-muted) !important;
+  line-height: 1.5 !important;
+}
+
+.mp-cell-option-letter {
+  font-weight: 700;
+  color: var(--mp-primary);
+}
+
+.mp-cell-no-options {
+  font-size: 0.78rem !important;
+  color: var(--mp-muted) !important;
+}
+
+/* ─── Cell: Answer ───────────────────────────────────────────── */
+.mp-cell-answer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mp-cell-answer-chip {
+  background-color: var(--mp-green-light) !important;
+  color: var(--mp-green) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  height: 22px !important;
+  border-radius: 6px !important;
+}
+
+/* ─── Cell: Tags ─────────────────────────────────────────────── */
+.mp-cell-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 0;
+}
+
+.mp-cell-tag-chip {
+  background-color: var(--mp-tag-bg) !important;
+  color: var(--mp-primary) !important;
+  font-weight: 600 !important;
+  font-size: 0.7rem !important;
+  height: 20px !important;
+  border-radius: 6px !important;
+}
+
+.mp-cell-tag-chip .MuiChip-icon {
+  color: var(--mp-primary) !important;
+  margin-left: 4px !important;
+}
+
+.mp-cell-no-tags {
+  font-size: 0.78rem !important;
+  color: var(--mp-muted) !important;
+}
+
+/* ─── Cell: MCQ ID ───────────────────────────────────────────── */
+.mp-cell-id {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.mp-cell-id-text {
+  font-size: 0.72rem !important;
+  color: var(--mp-muted) !important;
+  font-family: monospace !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.mp-cell-id-copy-btn {
+  color: var(--mp-primary) !important;
+  width: 22px !important;
+  height: 22px !important;
+  flex-shrink: 0;
+}
+
+/* ─── Cell: Actions ──────────────────────────────────────────── */
+.mp-cell-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.mp-action-btn-edit {
+  color: var(--mp-primary) !important;
+  background-color: var(--mp-primary-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.mp-action-btn-edit:hover {
+  background-color: var(--mp-primary) !important;
+  color: #fff !important;
+}
+
+.mp-action-btn-delete {
+  color: var(--mp-danger) !important;
+  background-color: var(--mp-danger-light) !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 30px !important;
+  transition: all 0.18s !important;
+}
+
+.mp-action-btn-delete:hover {
+  background-color: var(--mp-danger) !important;
+  color: #fff !important;
+}
+
+/* ─── Pagination ─────────────────────────────────────────────── */
+.mp-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  border-top: 1px solid var(--mp-border);
+  background-color: #fafbff;
+}
+
+.mp-pagination-info {
+  color: var(--mp-muted) !important;
+}
+
+.mp-pagination-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.mp-pagination-btn {
+  border-radius: 10px !important;
+  border-color: var(--mp-border) !important;
+  color: var(--mp-primary) !important;
+  text-transform: none !important;
+  min-width: 80px !important;
+}
+
+.mp-pagination-btn:hover {
+  border-color: var(--mp-primary) !important;
+}
+
+.mp-pagination-btn:disabled {
+  opacity: 0.4 !important;
+}
+
+/* ─── Edit Dialog ────────────────────────────────────────────── */
+.mp-edit-dialog .MuiPaper-root {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.mp-edit-dialog-title {
+  background: linear-gradient(135deg, var(--mp-primary), var(--mp-accent)) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
+
+.mp-edit-dialog-content {
+  padding-top: 24px !important;
+  padding-bottom: 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+/* Question field */
+.mp-question-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.mp-question-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--mp-primary);
+}
+
+.mp-question-field .MuiInputLabel-root.Mui-focused {
+  color: var(--mp-primary);
+}
+
+/* Options section */
+.mp-options-label {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: var(--mp-muted) !important;
+  margin-bottom: 8px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.mp-option-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.mp-option-letter-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background-color: var(--mp-primary-light);
+  color: var(--mp-primary);
+  font-weight: 800;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mp-option-field .MuiOutlinedInput-root {
+  border-radius: 10px;
+}
+
+.mp-option-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--mp-primary);
+}
+
+.mp-option-remove-btn {
+  color: var(--mp-danger) !important;
+  background-color: var(--mp-danger-light) !important;
+  border-radius: 8px !important;
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.mp-option-remove-btn:hover {
+  background-color: var(--mp-danger) !important;
+  color: #fff !important;
+}
+
+.mp-btn-add-option {
+  text-transform: none !important;
+  color: var(--mp-primary) !important;
+  font-weight: 700 !important;
+  margin-top: 4px !important;
+}
+
+.mp-btn-add-option:hover {
+  background-color: var(--mp-primary-light) !important;
+}
+
+/* Answer field */
+.mp-answer-field .MuiOutlinedInput-root {
+  border-radius: 12px;
+}
+
+.mp-answer-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--mp-green);
+}
+
+.mp-answer-field .MuiInputLabel-root.Mui-focused {
+  color: var(--mp-green);
+}
+
+/* Tags section */
+.mp-tags-label {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: var(--mp-muted) !important;
+  margin-bottom: 8px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.mp-tag-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mp-tag-input-field {
+  flex: 1;
+}
+
+.mp-tag-input-field .MuiOutlinedInput-root {
+  border-radius: 10px;
+}
+
+.mp-tag-input-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--mp-primary);
+}
+
+.mp-btn-add-tag {
+  border-radius: 10px !important;
+  border-color: var(--mp-primary) !important;
+  color: var(--mp-primary) !important;
+  text-transform: none !important;
+}
+
+.mp-btn-add-tag:hover {
+  background-color: var(--mp-primary-light) !important;
+}
+
+.mp-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mp-edit-tag-chip {
+  background-color: var(--mp-tag-bg) !important;
+  color: var(--mp-primary) !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+}
+
+.mp-edit-tag-chip .MuiChip-deleteIcon {
+  color: var(--mp-primary) !important;
+}
+
+.mp-edit-tag-chip .MuiChip-deleteIcon:hover {
+  color: var(--mp-danger) !important;
+}
+
+.mp-no-tags-yet {
+  font-size: 0.78rem !important;
+  color: var(--mp-muted) !important;
+}
+
+/* Dialog Actions */
+.mp-edit-dialog-actions {
+  padding: 16px 24px !important;
+  gap: 8px !important;
+}
+
+.mp-btn-cancel {
+  border-radius: 10px !important;
+  border-color: var(--mp-border) !important;
+  color: var(--mp-muted) !important;
+  text-transform: none !important;
+}
+
+.mp-btn-save {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, var(--mp-primary), var(--mp-accent)) !important;
+  box-shadow: 0 4px 14px rgba(12, 131, 200, 0.3) !important;
+}
+
+.mp-btn-save:hover {
+  background: linear-gradient(135deg, var(--mp-primary-dark), #e06030) !important;
+}
+
+/* ─── Delete Dialog ──────────────────────────────────────────── */
+.mp-del-dialog .MuiPaper-root {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.mp-del-dialog-title {
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
+
+.mp-del-dialog-content {
+  padding-top: 20px !important;
+}
+
+.mp-del-desc {
+  color: var(--mp-text) !important;
+  margin-bottom: 12px !important;
+}
+
+.mp-del-question-box {
+  background-color: #fff5f5;
+  border: 1px solid #ffcdd2;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.mp-del-question-text {
+  font-weight: 700 !important;
+  color: #c62828 !important;
+  font-size: 0.88rem !important;
+  line-height: 1.5 !important;
+}
+
+.mp-del-tag-row {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.mp-del-tag-chip {
+  background-color: var(--mp-tag-bg) !important;
+  color: var(--mp-primary) !important;
+  font-size: 0.7rem !important;
+  height: 20px !important;
+}
+
+.mp-del-warning {
+  color: var(--mp-muted) !important;
+  margin-top: 16px !important;
+}
+
+.mp-del-dialog-actions {
+  padding: 16px 24px !important;
+  gap: 8px !important;
+}
+
+.mp-btn-delete {
+  border-radius: 10px !important;
+  text-transform: none !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  box-shadow: 0 4px 14px rgba(229, 57, 53, 0.3) !important;
+}
+
+.mp-btn-delete:hover {
+  background: linear-gradient(135deg, #c62828, #b71c1c) !important;
+}
+
+/* ─── Snackbar ───────────────────────────────────────────────── */
+.mp-snackbar-alert {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* ─── Highlight mark ─────────────────────────────────────────── */
+.mp-highlight {
+  background: #fde68a;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .mp-root {
+    padding: 16px;
+  }
+
+  .mp-header-title {
+    font-size: 1.6rem !important;
+  }
+}

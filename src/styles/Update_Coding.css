@@ -1,0 +1,456 @@
+/* ── Page Wrapper ────────────────────────────────────── */
+.page-wrapper {
+  padding: 16px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  position: relative;
+}
+
+@media (min-width: 600px) {
+  .page-wrapper { padding: 24px; }
+}
+
+@media (min-width: 900px) {
+  .page-wrapper { padding: 32px; }
+}
+
+/* ── Header Paper ────────────────────────────────────── */
+.header-paper {
+  padding: 16px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08) !important;
+  margin-bottom: 24px !important;
+  background-color: #ffffff !important;
+}
+
+@media (min-width: 600px) {
+  .header-paper { padding: 24px !important; margin-bottom: 32px !important; }
+}
+
+/* ── Header Banner ───────────────────────────────────── */
+.header-banner {
+  margin-bottom: 32px !important;
+  padding: 16px !important;
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #ffffff !important;
+  border-radius: 16px !important;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .header-banner { padding: 24px !important; }
+}
+
+.header-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.header-icon {
+  font-size: 20px !important;
+  color: #ffffff;
+}
+
+@media (min-width: 600px) {
+  .header-icon { font-size: 24px !important; }
+}
+
+.header-title {
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  font-size: 1.2rem !important;
+}
+
+@media (min-width: 600px) {
+  .header-title { font-size: 1.5rem !important; }
+}
+
+.header-subtitle {
+  margin-top: 4px !important;
+  font-size: 12px !important;
+  color: #ffffff !important;
+}
+
+@media (min-width: 600px) {
+  .header-subtitle { font-size: 14px !important; }
+}
+
+/* ── Stepper ─────────────────────────────────────────── */
+.stepper {
+  padding: 12px 0 !important;
+}
+
+@media (min-width: 600px) {
+  .stepper { padding: 16px 0 !important; }
+}
+
+.stepper .MuiStepLabel-label {
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  color: #0c83c8 !important;
+}
+
+@media (min-width: 600px) {
+  .stepper .MuiStepLabel-label { font-size: 1rem !important; }
+}
+
+/* ── Content Paper ───────────────────────────────────── */
+.content-paper {
+  padding: 12px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(12, 131, 200, 0.08) !important;
+  background-color: #ffffff !important;
+}
+
+@media (min-width: 600px) { .content-paper { padding: 16px !important; } }
+@media (min-width: 900px) { .content-paper { padding: 24px !important; } }
+
+/* ── Step Box ────────────────────────────────────────── */
+.step-box {
+  margin-bottom: 16px;
+}
+
+/* ── Step Title Row ──────────────────────────────────── */
+.step-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* ── Gradient Text ───────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.step-title {
+  font-size: 1.2rem !important;
+}
+
+@media (min-width: 600px) {
+  .step-title { font-size: 1.4rem !important; }
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn-add {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  padding: 4px 16px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-add { font-size: 14px !important; padding: 6px 24px !important; }
+}
+
+.btn-add:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.btn-next {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  padding: 4px 16px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-next { font-size: 14px !important; padding: 6px 24px !important; }
+}
+
+.btn-next:hover {
+  background: linear-gradient(90deg, #fc7a46, #0c83c8) !important;
+}
+
+.btn-prev {
+  color: #0c83c8 !important;
+  border-color: #0c83c8 !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-prev { font-size: 14px !important; }
+}
+
+.btn-prev:hover {
+  border-color: #fc7a46 !important;
+  color: #fc7a46 !important;
+}
+
+/* ── DataGrid Box ────────────────────────────────────── */
+.datagrid-box {
+  height: 300px;
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .datagrid-box { height: 400px; }
+}
+
+/* ── DataGrid Styles ─────────────────────────────────── */
+.data-grid {
+  border-radius: 12px !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(12, 131, 200, 0.05) !important;
+}
+
+.data-grid .MuiDataGrid-columnHeaders {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+@media (min-width: 600px) {
+  .data-grid .MuiDataGrid-columnHeaders { font-size: 15px !important; }
+}
+
+.data-grid .MuiDataGrid-row:nth-of-type(odd) {
+  background-color: #f8fafc;
+}
+
+.data-grid .MuiDataGrid-row:hover {
+  background-color: #e3f2fd !important;
+}
+
+.data-grid .MuiDataGrid-cell {
+  font-size: 12px !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+@media (min-width: 600px) {
+  .data-grid .MuiDataGrid-cell { font-size: 14px !important; }
+}
+
+.data-grid .MuiCheckbox-root {
+  color: #0c83c8 !important;
+}
+
+.data-grid .MuiCheckbox-root.Mui-checked {
+  color: #fc7a46 !important;
+}
+
+/* ── Column Header ───────────────────────────────────── */
+.col-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.col-header-text {
+  font-weight: bold !important;
+}
+
+/* ── Tag Chip ─────────────────────────────────────────── */
+.tag-chip {
+  margin: 4px !important;
+  background-color: #e3f2fd !important;
+  color: #0c83c8 !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+}
+
+@media (min-width: 600px) {
+  .tag-chip { font-size: 12px !important; }
+}
+
+.tag-chip:hover {
+  background-color: #d1e9ff !important;
+}
+
+.no-tags-text {
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .no-tags-text { font-size: 14px !important; }
+}
+
+.tags-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+/* ── Step Actions ────────────────────────────────────── */
+.step-actions {
+  display: flex;
+  margin-top: 16px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.step-actions--end {
+  justify-content: flex-end;
+}
+
+.step-actions--between {
+  justify-content: space-between;
+}
+
+/* ── Loader ──────────────────────────────────────────── */
+.loader-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.loader {
+  color: #0c83c8 !important;
+}
+
+.empty-text {
+  text-align: center;
+  padding: 32px 0;
+}
+
+/* ── Review Cards ────────────────────────────────────── */
+.review-subtitle {
+  margin-bottom: 24px !important;
+  font-size: 14px !important;
+}
+
+@media (min-width: 600px) {
+  .review-subtitle { font-size: 16px !important; }
+}
+
+.review-card {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.review-card-title {
+  margin-bottom: 8px !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+}
+
+@media (min-width: 600px) {
+  .review-card-title { font-size: 16px !important; }
+}
+
+.review-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.review-detail {
+  font-size: 12px !important;
+  margin-top: 4px !important;
+}
+
+@media (min-width: 600px) {
+  .review-detail { font-size: 14px !important; }
+}
+
+/* ── Review Table ────────────────────────────────────── */
+.review-table-container {
+  border-radius: 8px !important;
+}
+
+.review-table-head {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}
+
+.review-th {
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .review-th { font-size: 14px !important; }
+}
+
+.review-td {
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .review-td { font-size: 14px !important; }
+}
+
+.invalid-uuid {
+  color: #d32f2f;
+}
+
+/* ── Dialog ──────────────────────────────────────────── */
+.dialog-paper {
+  border-radius: 12px !important;
+}
+
+.dialog-title {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+  color: white !important;
+  font-size: 16px !important;
+}
+
+@media (min-width: 600px) {
+  .dialog-title { font-size: 18px !important; }
+}
+
+.dialog-content {
+  padding: 24px !important;
+}
+
+.dialog-content-text {
+  font-size: 14px !important;
+}
+
+@media (min-width: 600px) {
+  .dialog-content-text { font-size: 16px !important; }
+}
+
+.dialog-detail-box {
+  margin-top: 8px;
+}
+
+.dialog-tc-item {
+  font-size: 12px !important;
+  margin-left: 16px !important;
+  margin-top: 4px !important;
+}
+
+@media (min-width: 600px) {
+  .dialog-tc-item { font-size: 14px !important; }
+}
+
+.dialog-actions {
+  padding: 16px !important;
+}
+
+.btn-dialog-cancel {
+  color: #0c83c8 !important;
+  font-size: 12px !important;
+  border-radius: 8px !important;
+}
+
+@media (min-width: 600px) {
+  .btn-dialog-cancel { font-size: 14px !important; }
+}
+
+/* ── Alert / Snackbar ────────────────────────────────── */
+.alert {
+  width: 100% !important;
+  font-size: 12px !important;
+}
+
+@media (min-width: 600px) {
+  .alert { font-size: 14px !important; }
+}
+
+.alert--success {
+  background: linear-gradient(90deg, #0c83c8, #fc7a46) !important;
+}
