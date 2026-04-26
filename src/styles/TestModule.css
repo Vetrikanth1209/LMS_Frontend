@@ -1,0 +1,81 @@
+/* ============================================================
+   TestModule.css
+   Styles lifted exactly from TestModule.jsx inline styles.
+   No visual changes — only moved to CSS and values use tokens.
+   ============================================================ */
+
+/* ── Page title ───────────────────────────────────────────── */
+.tm-title {
+  text-align: center;
+  color: #2C3E50;
+  font-weight: var(--font-weight-bold, 700);
+}
+
+/* ── Loading state ────────────────────────────────────────── */
+.tm-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+/* ── Test card ────────────────────────────────────────────── */
+.tm-card {
+  padding: 16px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: linear-gradient(135deg, #6DD5FA, #2980B9);
+  color: #ffffff;
+}
+
+.tm-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Card: test name ──────────────────────────────────────── */
+.tm-card-name {
+  font-weight: var(--font-weight-bold, 700);
+  color: #ffffff;
+}
+
+/* ── Card: info row (clock / award) ──────────────────────── */
+.tm-card-info-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs, 8px);
+  margin-top: var(--spacing-xs, 8px);
+}
+
+.tm-card-info-text {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+/* ── Card: clock icon color ───────────────────────────────── */
+.tm-icon-clock {
+  color: #f1c40f;
+}
+
+/* ── Card: award icon color ───────────────────────────────── */
+.tm-icon-award {
+  color: #e74c3c;
+}
+
+/* ── Start Test button ────────────────────────────────────── */
+.tm-btn-start {
+  margin-top: var(--spacing-md, 16px) !important;
+  width: 100% !important;
+  background-color: #27AE60 !important;
+  color: #ffffff !important;
+}
+
+.tm-btn-start:hover {
+  background-color: #229954 !important;
+}
+
+.tm-btn-start:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

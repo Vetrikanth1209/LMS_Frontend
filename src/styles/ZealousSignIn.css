@@ -1,0 +1,429 @@
+/* ZealousSignIn.css */
+
+/* ── Keyframes ──────────────────────────────────────────────────────────────── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25%       { transform: translateY(-15px) translateX(10px); }
+  50%       { transform: translateY(0) translateX(20px); }
+  75%       { transform: translateY(15px) translateX(10px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+
+/* ── Page wrapper ───────────────────────────────────────────────────────────── */
+
+.signin-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    rgba(56, 182, 255, 0.05) 0%,
+    rgba(255, 102, 196, 0.05) 100%
+  );
+  position: relative;
+  overflow: hidden;
+  padding: 16px;
+}
+
+@media (min-width: 600px) {
+  .signin-page {
+    padding: 24px;
+  }
+}
+
+/* Decorative blobs via pseudo-elements */
+.signin-page::before,
+.signin-page::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  animation: float 20s infinite ease-in-out;
+}
+
+.signin-page::before {
+  top: -10%;
+  right: -5%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(56, 182, 255, 0.08) 0%, rgba(56, 182, 255, 0) 70%);
+  animation-delay: 0s;
+}
+
+.signin-page::after {
+  bottom: -10%;
+  left: -5%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 102, 196, 0.08) 0%, rgba(255, 102, 196, 0) 70%);
+  animation-delay: -7s;
+}
+
+@media (min-width: 900px) {
+  .signin-page::before {
+    width: 500px;
+    height: 500px;
+  }
+  .signin-page::after {
+    width: 400px;
+    height: 400px;
+  }
+}
+
+/* ── Decorative z-shapes ────────────────────────────────────────────────────── */
+
+.z-shape {
+  position: absolute;
+  opacity: 0.03;
+  background: #38b6ff;
+  animation: float 15s infinite ease-in-out;
+  height: 20px;
+}
+
+@media (min-width: 900px) {
+  .z-shape {
+    height: 30px;
+  }
+}
+
+.z-shape--1 {
+  top: 15%;
+  left: 10%;
+  width: 100px;
+  transform: rotate(-30deg);
+  animation-delay: -3s;
+}
+
+.z-shape--2 {
+  top: 20%;
+  left: 15%;
+  width: 80px;
+  transform: rotate(30deg);
+  animation-delay: -5s;
+}
+
+.z-shape--3 {
+  bottom: 25%;
+  right: 12%;
+  width: 100px;
+  transform: rotate(-30deg);
+  animation-delay: -8s;
+}
+
+.z-shape--4 {
+  bottom: 30%;
+  right: 17%;
+  width: 80px;
+  transform: rotate(30deg);
+  animation-delay: -10s;
+}
+
+@media (min-width: 900px) {
+  .z-shape--1,
+  .z-shape--3 { width: 200px; }
+  .z-shape--2,
+  .z-shape--4 { width: 160px; }
+}
+
+/* ── Card ───────────────────────────────────────────────────────────────────── */
+
+.signin-card {
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  border-radius: 24px !important;
+  overflow: hidden;
+  position: relative;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.signin-card.mounted {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Top gradient bar */
+.signin-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #38b6ff, #ff66c4);
+}
+
+/* Dot pattern overlay */
+.signin-card__dots {
+  position: absolute;
+  inset: 0;
+  opacity: 0.02;
+  background-image:
+    radial-gradient(#38b6ff 1px, transparent 1px),
+    radial-gradient(#ff66c4 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  pointer-events: none;
+}
+
+/* ── Logo header ────────────────────────────────────────────────────────────── */
+
+.signin-header {
+  background: linear-gradient(
+    to right,
+    rgba(56, 182, 255, 0.03),
+    rgba(255, 102, 196, 0.03)
+  );
+  padding: 24px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 900px) {
+  .signin-header {
+    padding: 32px 32px 24px;
+  }
+}
+
+.signin-header__logo-wrapper {
+  width: 200px;
+  height: 60px;
+  animation: pulse 3s infinite ease-in-out;
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.8s ease-out 0.3s, transform 0.8s ease-out 0.3s;
+}
+
+.signin-header__logo-wrapper.mounted {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (min-width: 600px) {
+  .signin-header__logo-wrapper {
+    width: 240px;
+    height: 72px;
+  }
+}
+
+.signin-header__logo {
+  width: 200px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.signin-header__heading {
+  color: rgba(0, 0, 0, 0.7) !important;
+  font-weight: 500 !important;
+  text-align: center;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.5px !important;
+  margin-top: 15px !important;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.8s ease-out 0.5s, transform 0.8s ease-out 0.5s;
+}
+
+.signin-header__heading.mounted {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (min-width: 600px) {
+  .signin-header__heading {
+    font-size: 1rem !important;
+  }
+}
+
+/* ── Form content area ──────────────────────────────────────────────────────── */
+
+.signin-content {
+  padding: 24px !important;
+  position: relative;
+}
+
+@media (min-width: 900px) {
+  .signin-content {
+    padding: 32px !important;
+  }
+}
+
+/* ── Text fields (MUI overrides) ────────────────────────────────────────────── */
+
+.signin-field {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.signin-field.mounted {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.signin-field--email {
+  margin-bottom: 24px !important;
+  transition: opacity 0.5s ease-out 0.6s, transform 0.5s ease-out 0.6s;
+}
+
+.signin-field--password {
+  margin-bottom: 16px !important;
+  transition: opacity 0.5s ease-out 0.7s, transform 0.5s ease-out 0.7s;
+}
+
+/* MUI outlined input overrides — applied via className on the sx prop wrappers */
+.signin-field .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.signin-field .MuiOutlinedInput-root:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.signin-field .MuiOutlinedInput-root.Mui-focused {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.signin-field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #38b6ff !important;
+  border-width: 2px !important;
+}
+
+.signin-field .MuiInputLabel-root {
+  font-family: "Roboto", sans-serif;
+}
+
+.signin-field .MuiInputLabel-root.Mui-focused {
+  color: #38b6ff !important;
+}
+
+.signin-field .MuiInputBase-input {
+  padding: 14px 14px 14px 0 !important;
+  font-size: 1rem !important;
+  font-family: "Roboto", sans-serif !important;
+}
+
+/* ── Password toggle icon ───────────────────────────────────────────────────── */
+
+.toggle-password-btn {
+  color: #666 !important;
+  transition: transform 0.2s ease, color 0.2s ease !important;
+}
+
+.toggle-password-btn:hover {
+  transform: scale(1.1) !important;
+  color: #38b6ff !important;
+}
+
+/* ── Submit button ──────────────────────────────────────────────────────────── */
+
+.signin-submit {
+  padding: 12px !important;
+  background: linear-gradient(45deg, #38b6ff 0%, #2a8cc0 100%) !important;
+  border-radius: 12px !important;
+  text-transform: none !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  box-shadow: 0 4px 15px rgba(56, 182, 255, 0.3) !important;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    all 0.3s ease,
+    opacity 0.5s ease-out 0.9s,
+    transform 0.5s ease-out 0.9s !important;
+}
+
+.signin-submit.mounted {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (min-width: 900px) {
+  .signin-submit {
+    padding: 14px !important;
+    font-size: 1rem !important;
+  }
+}
+
+/* Shimmer sweep */
+.signin-submit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.7s ease;
+}
+
+.signin-submit:hover {
+  box-shadow: 0 6px 20px rgba(56, 182, 255, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+.signin-submit:hover::before {
+  left: 100%;
+}
+
+.signin-submit:active {
+  transform: translateY(1px) !important;
+  box-shadow: 0 2px 10px rgba(56, 182, 255, 0.3) !important;
+}
+
+/* ── Tagline ────────────────────────────────────────────────────────────────── */
+
+.signin-tagline-wrapper {
+  text-align: center;
+  margin-top: 32px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease-out 1s, transform 0.5s ease-out 1s;
+}
+
+.signin-tagline-wrapper.mounted {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.signin-tagline {
+  color: #ff66c4 !important;
+  font-weight: 500 !important;
+  font-family: "Poppins", sans-serif !important;
+  position: relative;
+}
+
+.signin-tagline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #ff66c4;
+  transition: width 0.3s ease;
+}
+
+.signin-tagline:hover::after {
+  width: 100%;
+}

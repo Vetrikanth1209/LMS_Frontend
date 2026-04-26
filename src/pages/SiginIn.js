@@ -1,7 +1,5 @@
-import React from "react"
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import {
-  Box,
   Card,
   CardContent,
   TextField,
@@ -9,9 +7,6 @@ import {
   Typography,
   InputAdornment,
   IconButton,
-  Link,
-  useMediaQuery,
-  useTheme,
   CircularProgress,
   Container,
   Snackbar,
@@ -21,43 +16,34 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react"
 import Logo from "../assests/Crescent.png"
 import { signIn } from "../axios"
 import { useNavigate } from "react-router-dom"
+import "../styles/ZealousSignIn.css"
 
 export default function ZealousSignIn() {
   const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const [errors, setErrors] = useState({ email: "", password: "" })
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "error" })
-
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"))
+  const [email, setEmail]               = useState("")
+  const [password, setPassword]         = useState("")
+  const [isLoading, setIsLoading]       = useState(false)
+  const [mounted, setMounted]           = useState(false)
+  const [errors, setErrors]             = useState({ email: "", password: "" })
+  const [snackbar, setSnackbar]         = useState({ open: false, message: "", severity: "error" })
 
   const navigate = useNavigate()
 
-  // Animation on mount - with a slight delay to ensure DOM is ready
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setMounted(true)
-    }, 100)
-
+    const timer = setTimeout(() => setMounted(true), 100)
     return () => clearTimeout(timer)
   }, [])
 
-  const handleTogglePassword = () => {
-    setShowPassword((prev) => !prev)
-  }
+  const handleTogglePassword = () => setShowPassword((prev) => !prev)
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const newErrors = {
-      email: email.trim() === "" ? "Email is required" : !emailRegex.test(email) ? "Invalid email format" : "",
-      password: password.trim() === "" ? "Password is required" : "",
+      email:    email.trim() === ""   ? "Email is required"    : !emailRegex.test(email) ? "Invalid email format" : "",
+      password: password === ""       ? "Password is required" : "",
     }
     setErrors(newErrors)
-    return !newErrors.email && !newErrors.password
+    return { isValid: !newErrors.email && !newErrors.password, newErrors }
   }
 
   const handleSubmit = async (e) => {
@@ -113,292 +99,69 @@ export default function ZealousSignIn() {
     }
   }
 
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return
-    }
-    setSnackbar({ ...snackbar, open: false })
+  const handleSnackbarClose = (_e, reason) => {
+    if (reason === "clickaway") return
+    setSnackbar((prev) => ({ ...prev, open: false }))
   }
 
+  const m = mounted ? "mounted" : ""
+
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: `linear-gradient(135deg, rgba(56, 182, 255, 0.05) 0%, rgba(255, 102, 196, 0.05) 100%)`,
-        position: "relative",
-        overflow: "hidden",
-        fontFamily: "'Magnolia Script', cursive",
-        padding: { xs: "16px", sm: "24px" },
-
-        // Background decorative elements
-        "&::before, &::after": {
-          content: '""',
-          position: "absolute",
-          borderRadius: "50%",
-          animation: "float 20s infinite ease-in-out",
-        },
-        "&::before": {
-          top: "-10%",
-          right: "-5%",
-          width: { xs: "250px", md: "500px" },
-          height: { xs: "250px", md: "500px" },
-          background: "radial-gradient(circle, rgba(56, 182, 255, 0.08) 0%, rgba(56, 182, 255, 0) 70%)",
-          animationDelay: "0s",
-        },
-        "&::after": {
-          bottom: "-10%",
-          left: "-5%",
-          width: { xs: "200px", md: "400px" },
-          height: { xs: "200px", md: "400px" },
-          background: "radial-gradient(circle, rgba(255, 102, 196, 0.08) 0%, rgba(255, 102, 196, 0) 70%)",
-          animationDelay: "-7s",
-        },
-
-        // Z-shaped decorative elements inspired by the logo
-        "& .z-shape": {
-          position: "absolute",
-          opacity: 0.03,
-          background: "#38b6ff",
-          animation: "float 15s infinite ease-in-out",
-        },
-
-        // Animation keyframes
-        "@keyframes float": {
-          "0%, 100%": {
-            transform: "translateY(0) translateX(0)",
-          },
-          "25%": {
-            transform: "translateY(-15px) translateX(10px)",
-          },
-          "50%": {
-            transform: "translateY(0) translateX(20px)",
-          },
-          "75%": {
-            transform: "translateY(15px) translateX(10px)",
-          },
-        },
-
-        "@keyframes pulse": {
-          "0%, 100%": {
-            transform: "scale(1)",
-          },
-          "50%": {
-            transform: "scale(1.05)",
-          },
-        },
-
-        // Typography
-        "& *": {
-          fontFamily: "'Magnolia Script', cursive",
-        },
-        "& h1, & h2, & h3, & h4, & h5, & h6": {
-          fontFamily: "'Magnolia Script', cursive",
-          fontWeight: 600,
-        },
-      }}
-    >
-      {/* Z-shaped decorative elements inspired by the logo */}
-      <Box
-        className="z-shape"
-        sx={{
-          top: "15%",
-          left: "10%",
-          width: { xs: "100px", md: "200px" },
-          height: { xs: "20px", md: "30px" },
-          transform: "rotate(-30deg)",
-          animationDelay: "-3s",
-        }}
-      />
-      <Box
-        className="z-shape"
-        sx={{
-          top: "20%",
-          left: "15%",
-          width: { xs: "80px", md: "160px" },
-          height: { xs: "20px", md: "30px" },
-          transform: "rotate(30deg)",
-          animationDelay: "-5s",
-        }}
-      />
-      <Box
-        className="z-shape"
-        sx={{
-          bottom: "25%",
-          right: "12%",
-          width: { xs: "100px", md: "200px" },
-          height: { xs: "20px", md: "30px" },
-          transform: "rotate(-30deg)",
-          animationDelay: "-8s",
-        }}
-      />
-      <Box
-        className="z-shape"
-        sx={{
-          bottom: "30%",
-          right: "17%",
-          width: { xs: "80px", md: "160px" },
-          height: { xs: "20px", md: "30px" },
-          transform: "rotate(30deg)",
-          animationDelay: "-10s",
-        }}
-      />
+    <div className="signin-page">
+      {/* Decorative z-shapes */}
+      <div className="z-shape z-shape--1" />
+      <div className="z-shape z-shape--2" />
+      <div className="z-shape z-shape--3" />
+      <div className="z-shape z-shape--4" />
 
       <Container maxWidth="sm" sx={{ position: "relative", zIndex: 1 }}>
-        {/* Using CSS transitions instead of Material UI transitions */}
-        <Card
-          sx={{
-            width: "100%",
-            boxShadow: "0 10px 40px rgba(0,0,0,0.12)",
-            borderRadius: "24px",
-            overflow: "hidden",
-            position: "relative",
-            background: "rgba(255, 255, 255, 0.98)",
-            backdropFilter: "blur(10px)",
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0) scale(1)" : "translateY(20px) scale(0.98)",
-            transition: "opacity 0.6s ease-out, transform 0.6s ease-out",
+        <Card className={`signin-card ${m}`}>
+          {/* Dot pattern overlay */}
+          <div className="signin-card__dots" />
 
-            // Card decorative elements
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "6px",
-              background: "linear-gradient(90deg, #38b6ff, #ff66c4)",
-            },
-          }}
-        >
-          {/* Card pattern */}
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              opacity: 0.02,
-              backgroundImage: `radial-gradient(#38b6ff 1px, transparent 1px), radial-gradient(#ff66c4 1px, transparent 1px)`,
-              backgroundSize: "20px 20px",
-              backgroundPosition: "0 0, 10px 10px",
-              pointerEvents: "none",
-            }}
-          />
-
-          {/* Logo Header */}
-          <Box
-            sx={{
-              background: "linear-gradient(to right, rgba(56, 182, 255, 0.03), rgba(255, 102, 196, 0.03))",
-              padding: { xs: "24px 24px 16px", md: "32px 32px 24px" },
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              borderBottom: "1px solid rgba(0,0,0,0.05)",
-            }}
-          >
-            <Box
-              sx={{
-                position: "relative",
-                width: { xs: "200px", sm: "240px" },
-                height: { xs: "60px", sm: "72px" },
-                animation: "pulse 3s infinite ease-in-out",
-                mb: 2,
-                opacity: mounted ? 1 : 0,
-                transform: mounted ? "scale(1)" : "scale(0.9)",
-                transition: "opacity 0.8s ease-out, transform 0.8s ease-out",
-                transitionDelay: "0.3s",
-              }}
-            >
+          {/* Logo header */}
+          <div className="signin-header">
+            <div className={`signin-header__logo-wrapper ${m}`}>
               <img
                 src={Logo}
-                alt="Logo"
-                className="logo"
-                style={{ width: "200px", height: "100px" }}
+                alt="Zealous logo"
+                className="signin-header__logo"
+                data-testid="brand-logo"
               />
-            </Box>
-
+            </div>
             <Typography
               variant="h6"
-              component="h2"
-              sx={{
-                color: "rgba(0,0,0,0.7)",
-                fontWeight: 500,
-                textAlign: "center",
-                fontSize: { xs: "0.9rem", sm: "1rem" },
-                letterSpacing: "0.5px",
-                opacity: mounted ? 1 : 0,
-                transform: mounted ? "translateY(0)" : "translateY(10px)",
-                transition: "opacity 0.8s ease-out, transform 0.8s ease-out",
-                transitionDelay: "0.5s",
-                marginTop: "15px",
-              }}
+              component="h1"
+              className={`signin-header__heading ${m}`}
+              data-testid="page-heading"
             >
               Sign in to your account
             </Typography>
-          </Box>
+          </div>
 
-          <CardContent
-            sx={{
-              padding: { xs: "24px", md: "32px" },
-              position: "relative",
-            }}
-          >
-            <form onSubmit={handleSubmit}>
+          {/* Form */}
+          <CardContent className="signin-content">
+            <form onSubmit={handleSubmit} noValidate>
+
               <TextField
                 fullWidth
                 label="Email Address"
                 variant="outlined"
                 type="email"
-                required
+                inputMode="email"
+                autoComplete="email"
+                inputProps={{ "data-testid": "email-input" }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 error={!!errors.email}
                 helperText={errors.email}
+                className={`signin-field signin-field--email ${m}`}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <Mail size={20} color="#38b6ff" />
                     </InputAdornment>
                   ),
-                }}
-                sx={{
-                  marginBottom: "24px",
-                  opacity: mounted ? 1 : 0,
-                  transform: mounted ? "translateY(0)" : "translateY(10px)",
-                  transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
-                  transitionDelay: "0.6s",
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "12px",
-                    transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-                    "&:hover": {
-                      boxShadow: "0 3px 10px rgba(0,0,0,0.08)",
-                    },
-                    "&.Mui-focused": {
-                      transform: "translateY(-2px)",
-                      boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
-                      "& fieldset": {
-                        borderColor: "#38b6ff",
-                        borderWidth: "2px",
-                      },
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    fontFamily: "'Roboto', sans-serif",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "#38b6ff",
-                    fontFamily: "'Roboto', sans-serif",
-                  },
-                  "& .MuiInputBase-input": {
-                    padding: "14px 14px 14px 0",
-                    fontSize: "1rem",
-                    fontFamily: "'Roboto', sans-serif",
-                  },
                 }}
               />
 
@@ -407,11 +170,13 @@ export default function ZealousSignIn() {
                 label="Password"
                 variant="outlined"
                 type={showPassword ? "text" : "password"}
-                required
+                autoComplete="current-password"
+                inputProps={{ "data-testid": "password-input" }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 error={!!errors.password}
                 helperText={errors.password}
+                className={`signin-field signin-field--password ${m}`}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -421,151 +186,39 @@ export default function ZealousSignIn() {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="toggle password visibility"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
                         onClick={handleTogglePassword}
                         edge="end"
-                        sx={{
-                          color: "#666",
-                          transition: "transform 0.2s ease, color 0.2s ease",
-                          "&:hover": {
-                            transform: "scale(1.1)",
-                            color: "#38b6ff",
-                          },
-                        }}
+                        data-testid="toggle-password"
+                        className="toggle-password-btn"
                       >
                         {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                       </IconButton>
                     </InputAdornment>
                   ),
                 }}
-                sx={{
-                  marginBottom: "16px",
-                  opacity: mounted ? 1 : 0,
-                  transform: mounted ? "translateY(0)" : "translateY(10px)",
-                  transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
-                  transitionDelay: "0.7s",
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "12px",
-                    transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-                    "&:hover": {
-                      boxShadow: "0 3px 10px rgba(0,0,0,0.08)",
-                    },
-                    "&.Mui-focused": {
-                      transform: "translateY(-2px)",
-                      boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
-                      "& fieldset": {
-                        borderColor: "#38b6ff",
-                        borderWidth: "2px",
-                      },
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    fontFamily: "'Roboto', sans-serif",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "#38b6ff",
-                    fontFamily: "'Roboto', sans-serif",
-                  },
-                  "& .MuiInputBase-input": {
-                    padding: "14px 14px 14px 0",
-                    fontSize: "1rem",
-                    fontFamily: "'Roboto', sans-serif",
-                  },
-                }}
               />
-
-              <Box
-                sx={{
-                  textAlign: "right",
-                  marginBottom: "24px",
-                  opacity: mounted ? 1 : 0,
-                  transform: mounted ? "translateY(0)" : "translateY(10px)",
-                  transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
-                  transitionDelay: "0.8s",
-                }}
-              >
-              </Box>
 
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 disabled={isLoading}
-                sx={{
-                  padding: { xs: "12px", md: "14px" },
-                  background: "linear-gradient(45deg, #38b6ff 0%, #2a8cc0 100%)",
-                  borderRadius: "12px",
-                  textTransform: "none",
-                  fontSize: { xs: "0.9rem", md: "1rem" },
-                  fontWeight: 600,
-                  letterSpacing: "0.5px",
-                  boxShadow: "0 4px 15px rgba(56, 182, 255, 0.3)",
-                  position: "relative",
-                  overflow: "hidden",
-                  opacity: mounted ? 1 : 0,
-                  transform: mounted ? "translateY(0)" : "translateY(10px)",
-                  transition: "all 0.3s ease, opacity 0.5s ease-out, transform 0.5s ease-out",
-                  transitionDelay: "0.9s",
-                  "&::before": {
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: "-100%",
-                    width: "100%",
-                    height: "100%",
-                    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
-                    transition: "left 0.7s ease",
-                  },
-                  "&:hover": {
-                    boxShadow: "0 6px 20px rgba(56, 182, 255, 0.4)",
-                    transform: "translateY(-2px)",
-                    "&::before": {
-                      left: "100%",
-                    },
-                  },
-                  "&:active": {
-                    transform: "translateY(1px)",
-                    boxShadow: "0 2px 10px rgba(56, 182, 255, 0.3)",
-                  },
-                }}
+                data-testid="submit-button"
+                className={`signin-submit ${m}`}
               >
-                {isLoading ? <CircularProgress size={24} color="inherit" /> : "Sign In"}
+                {isLoading
+                  ? <CircularProgress size={24} color="inherit" data-testid="loading-spinner" />
+                  : "Sign In"
+                }
               </Button>
 
-              <Box
-                sx={{
-                  textAlign: "center",
-                  marginTop: "32px",
-                  opacity: mounted ? 1 : 0,
-                  transform: mounted ? "translateY(0)" : "translateY(10px)",
-                  transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
-                  transitionDelay: "1s",
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: "#ff66c4",
-                    fontWeight: 500,
-                    fontFamily: "'Poppins', sans-serif",
-                    position: "relative",
-                    "&::after": {
-                      content: '""',
-                      position: "absolute",
-                      bottom: "-2px",
-                      left: 0,
-                      width: "0%",
-                      height: "2px",
-                      backgroundColor: "#ff66c4",
-                      transition: "width 0.3s ease",
-                    },
-                    "&:hover::after": {
-                      width: "100%",
-                    },
-                  }}
-                >
+              <div className={`signin-tagline-wrapper ${m}`}>
+                <Typography className="signin-tagline">
                   Learn, Practice, Implement, Career
                 </Typography>
-              </Box>
+              </div>
+
             </form>
           </CardContent>
         </Card>
@@ -575,16 +228,18 @@ export default function ZealousSignIn() {
           autoHideDuration={6000}
           onClose={handleSnackbarClose}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          data-testid="snackbar"
         >
           <Alert
             onClose={handleSnackbarClose}
             severity={snackbar.severity}
             sx={{ width: "100%" }}
+            data-testid="snackbar-alert"
           >
             {snackbar.message}
           </Alert>
         </Snackbar>
       </Container>
-    </Box>
+    </div>
   )
 }

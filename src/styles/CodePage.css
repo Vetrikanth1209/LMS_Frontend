@@ -1,0 +1,549 @@
+/* ============================================================
+   CodingPage.css  —  Coding Test Interface Styles
+   All visual values reference tokens from token.css (:root).
+   No logic changes — only token substitution & sx extraction.
+   ============================================================ */
+
+/* ── Global scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-stripe);
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: var(--radius-sm);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark mode scrollbar overrides */
+[data-theme="dark"] ::-webkit-scrollbar-track  { background: #1f2937; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb  { background: #4b5563; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+
+/* Disable text selection during resize */
+.resize-active * {
+  user-select: none !important;
+}
+
+/* Mobile Monaco font fix */
+@media (max-width: 600px) {
+  .monaco-editor .inputarea {
+    font-size: 16px !important;
+    line-height: normal !important;
+  }
+}
+
+/* ── Root page wrapper ────────────────────────────────────── */
+.cp-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-page);
+}
+
+/* ── Top toolbar ──────────────────────────────────────────── */
+.cp-toolbar {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--bg-surface);
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.cp-toolbar__left {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: var(--spacing-xs);
+}
+
+.cp-toolbar__logo-icon {
+  color: var(--brand-primary);
+  margin-right: var(--spacing-xs);
+  font-size: 28px;
+}
+
+.cp-toolbar__title {
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-family);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cp-toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+/* Timer + student name badges */
+.cp-badge {
+  display: flex;
+  align-items: center;
+  background-color: rgba(56, 182, 255, 0.1);   /* alpha(primary, 0.1) */
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+}
+
+.cp-badge__text {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+}
+
+/* Language selector */
+.cp-lang-select {
+  min-width: 140px;
+  margin-right: var(--spacing-sm);
+}
+
+.cp-lang-select .MuiSelect-select {
+  display: flex;
+  align-items: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.cp-lang-select__label {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Main split layout ────────────────────────────────────── */
+.cp-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.cp-body--mobile {
+  flex-direction: column;
+}
+
+/* ── Editor column ────────────────────────────────────────── */
+.cp-editor-col {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.2s ease-out;
+}
+
+/* Editor sub-toolbar */
+.cp-editor-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--bg-surface);
+}
+
+.cp-editor-bar__title {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body);
+}
+
+.cp-editor-bar__actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Run button */
+.cp-btn-run {
+  font-family: var(--font-family) !important;
+  font-size: var(--font-size-sm) !important;
+}
+
+/* Editor area */
+.cp-editor-area {
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Output console ───────────────────────────────────────── */
+.cp-output {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: height 0.2s ease-out;
+}
+
+.cp-output-resize-handle {
+  height: 8px;
+  cursor: row-resize;
+  background-color: rgba(0, 0, 0, 0.08);
+  transition: var(--transition-default);
+}
+
+.cp-output-resize-handle:hover {
+  background-color: var(--brand-primary);
+}
+
+.cp-output-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cp-output-bar__left {
+  display: flex;
+  align-items: center;
+}
+
+.cp-output-bar__icon {
+  margin-right: var(--spacing-xs);
+  font-size: 20px;
+  color: var(--brand-primary);
+}
+
+.cp-output-bar__title {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body);
+}
+
+.cp-output-content {
+  flex: 1;
+  padding: var(--spacing-xs);
+  overflow: auto;
+  font-family: 'Fira Code', monospace;
+  font-size: var(--font-size-sm);
+  white-space: pre-wrap;
+  word-break: break-word;
+  background-color: rgba(240, 244, 248, 0.9);   /* alpha(bg-page, 0.9) */
+}
+
+/* ── Vertical resize divider ──────────────────────────────── */
+.cp-col-divider {
+  width: 8px;
+  cursor: col-resize;
+  background-color: rgba(0, 0, 0, 0.08);
+  transition: var(--transition-default);
+}
+
+.cp-col-divider:hover {
+  background-color: var(--brand-primary);
+}
+
+/* ── Problem / test cases column ──────────────────────────── */
+.cp-problem-col {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  transition: width 0.2s ease-out;
+}
+
+.cp-problem-col--mobile {
+  border-left: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Problem panel header */
+.cp-problem-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--bg-surface);
+}
+
+.cp-problem-bar__left {
+  display: flex;
+  align-items: center;
+}
+
+.cp-problem-bar__icon {
+  margin-right: var(--spacing-xs);
+  font-size: 20px;
+  color: #fc7a46;   /* secondary — no token mapped */
+}
+
+.cp-problem-bar__title {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body);
+}
+
+.cp-problem-bar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* Problem content scroll area */
+.cp-problem-body {
+  flex: 1;
+  overflow: auto;
+  padding: var(--spacing-xs);
+}
+
+/* Collapsed message (mobile) */
+.cp-collapsed-msg {
+  padding: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cp-collapsed-msg__text {
+  color: var(--color-text-muted);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Problem card ─────────────────────────────────────────── */
+.cp-problem-card {
+  margin-bottom: var(--spacing-xs);
+}
+
+.cp-problem-card__content {
+  padding: var(--spacing-xs);
+}
+
+.cp-problem-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.cp-problem-card__title {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body);
+}
+
+.cp-problem-card__statement {
+  font-family: var(--font-family);
+  color: var(--color-text-muted);
+  white-space: pre-wrap;
+  font-size: var(--font-size-sm);
+}
+
+/* ── Test case cards ──────────────────────────────────────── */
+.cp-testcase-card {
+  position: relative;
+}
+
+.cp-testcase-card__content {
+  padding: var(--spacing-xs);
+}
+
+.cp-testcase-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.cp-testcase-card__title {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.cp-testcase-card__code {
+  font-family: 'Fira Code', monospace;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xs);
+  padding: var(--spacing-xs);
+  background-color: rgba(240, 244, 248, 0.7);   /* alpha(bg-page, 0.7) */
+  border-radius: var(--radius-sm);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: var(--font-size-sm);
+}
+
+.cp-testcase-hidden {
+  color: var(--color-text-muted);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs);
+}
+
+.cp-testcase-empty {
+  color: var(--color-text-muted);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs);
+}
+
+/* ── Loading state ────────────────────────────────────────── */
+.cp-loading-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.cp-loading-spinner {
+  color: var(--brand-primary) !important;
+}
+
+/* ── Bottom action bar ────────────────────────────────────── */
+.cp-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--bg-surface);
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.cp-footer__nav {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.cp-btn-nav {
+  font-family: var(--font-family) !important;
+  font-size: var(--font-size-sm) !important;
+}
+
+.cp-btn-submit {
+  font-family: var(--font-family) !important;
+  font-size: var(--font-size-sm) !important;
+}
+
+/* ── Dialogs ──────────────────────────────────────────────── */
+.cp-dialog-paper {
+  border-radius: var(--radius-md) !important;
+}
+
+.cp-dialog-content {
+  padding: var(--spacing-2xl) !important;
+}
+
+.cp-dialog-title {
+  font-family: var(--font-family) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  margin-bottom: var(--spacing-sm);
+}
+
+.cp-dialog-body {
+  font-family: var(--font-family) !important;
+  color: var(--color-text-muted);
+}
+
+.cp-dialog-actions {
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+}
+
+.cp-dialog-btn {
+  font-family: var(--font-family) !important;
+}
+
+/* Progress dialog */
+.cp-progress-dialog__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-2xl);
+}
+
+.cp-progress-dialog__text {
+  font-family: var(--font-family) !important;
+}
+
+/* ── Instructions dialog ──────────────────────────────────── */
+.cp-instructions-list {
+  padding-left: var(--spacing-md);
+  margin-bottom: 0;
+}
+
+.cp-instructions-item {
+  font-family: var(--font-family);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Snackbar / alert overrides ───────────────────────────── */
+.cp-snackbar-alert {
+  width: 100%;
+  border-radius: var(--radius-sm) !important;
+  font-family: var(--font-family) !important;
+}
+
+/* Reset snackbar action buttons */
+.cp-snackbar-reset-btn {
+  font-family: var(--font-family) !important;
+}
+
+/* ── Difficulty chip colours (no token — kept as-is) ──────── */
+.cp-chip-easy   { background-color: #00af9b !important; color: var(--color-text-on-brand) !important; font-weight: var(--font-weight-bold) !important; }
+.cp-chip-hard   { background-color: #ff375f !important; color: var(--color-text-on-brand) !important; font-weight: var(--font-weight-bold) !important; }
+.cp-chip-medium { background-color: #ffa116 !important; color: var(--color-text-on-brand) !important; font-weight: var(--font-weight-bold) !important; }
+
+/* ── Responsive overrides ─────────────────────────────────── */
+@media (max-width: 600px) {
+  .cp-toolbar {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .cp-toolbar__logo-icon { font-size: 20px; }
+
+  .cp-badge__text        { font-size: 0.75rem; }
+
+  .cp-lang-select        { min-width: 100px; }
+
+  .cp-footer {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .cp-editor-col,
+  .cp-problem-col {
+    height: 50%;
+    width: 100% !important;
+  }
+}
+/* ── Terminal output content ──────────────────────────────── */
+.cp-output .cp-terminal-content {
+  flex: 1;
+  padding: 10px 14px;
+  overflow-y: auto;
+  background: #0d1117;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Override cp-output-content if still used elsewhere */
+.cp-output-content {
+  flex: 1;
+  padding: 10px 14px;
+  overflow: auto;
+  font-family: 'Fira Code', monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #0d1117;
+  color: #e5e7eb;
+}
+
+/* Run Test Cases button spacing */
+.cp-editor-bar__actions .cp-btn-run + .cp-btn-run {
+  margin-left: 4px;
+}

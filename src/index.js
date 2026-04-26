@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
+import "./styles/token.css";
+
 // ── Page imports ────────────────────────────────────────────────────────────
 import ZealousSignIn        from "./pages/SiginIn";
 import TestModule           from "./pages/TestModules";
@@ -133,7 +135,7 @@ function App() {
       <Route path="/mcq/:testId"          element={<McqPage />} />
       <Route path="/coding/:codeId"       element={<CodingPage />} />
       <Route path="/test-result"          element={<TestResult />} />
-      <Route path="/testresults"          element={<TestResult />} />
+      {/* <Route path="/testresults"          element={<TestResult />} /> */}
       <Route path="/info"                 element={<InstructionsPage />} />
       <Route path="/codelist"             element={<CodeList />} />
       <Route path="*"                     element={<Navigate to="/landing" replace />} />

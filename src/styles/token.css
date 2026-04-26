@@ -1,0 +1,88 @@
+/* ============================================================
+   tokens.css  —  Global Design Token File
+   
+   This is the SINGLE SOURCE OF TRUTH for all visual values.
+   The Theme Editor reads and writes to this file (or injects
+   these as :root overrides via a <style> tag from the JSON).
+
+   When a user saves a theme in the editor, the JSON looks like:
+   {
+     "--brand-primary": "#38b6ff",
+     "--font-family": "'Inter', sans-serif",
+     ...
+   }
+   On page load, your app reads that JSON and does:
+     document.documentElement.style.setProperty(key, value)
+   for each token — instantly applying the saved theme.
+   ============================================================ */
+
+:root {
+
+  /* ── Brand Colors ─────────────────────────────────────────
+     These are the main identity colors used across the app.
+     Change these and the whole app updates.               */
+  --brand-primary:        #38b6ff;   /* header bg start, spinner, progress inner */
+  --brand-primary-dark:   #2a8cc0;   /* header bg end, cert button hover         */
+  --brand-accent:         #ff66c4;   /* Take Tests btn, progress ring fill        */
+  --brand-accent-dark:    #e55ab2;   /* Take Tests btn hover                      */
+  --brand-disabled:       #cccccc;   /* disabled button background                */
+  --brand-danger:         #ff4444;   /* error message text                        */
+  --brand-success:        #2e7d32;   /* success states (used in other components) */
+
+  /* ── Text Colors ─────────────────────────────────────────  */
+  --color-text-primary:   #1a1a1a;
+  --color-text-secondary: #374151;
+  --color-text-muted:     #6b7280;   /* stat card labels                          */
+  --color-text-on-brand:  #ffffff;   /* text sitting on brand-colored backgrounds */
+
+  /* ── Background Colors ───────────────────────────────────  */
+  --bg-page:              #f0f4f8;
+  --bg-surface:           #ffffff;
+  --bg-stripe:            #f5f9ff;
+
+  /* ── Typography ──────────────────────────────────────────  */
+  --font-family:           'Inter', sans-serif;
+
+  --font-size-h1:          clamp(24px, 5vw, 28px);    /* dashboard welcome heading   */
+  --font-size-h2:          clamp(14px, 3vw, 16px);    /* header subtitle             */
+  --font-size-body:        clamp(14px, 3vw, 16px);    /* general body text           */
+  --font-size-sm:          clamp(10px, 2vw, 12px);    /* stat card label             */
+  --font-size-stat:        clamp(14px, 2.5vw, 16px);  /* stat card value             */
+  --font-size-progress:    clamp(28px, 6vw, 36px);    /* big % number in circle      */
+  --font-size-progress-lbl:clamp(12px, 2.5vw, 14px); /* "Course Progress" label     */
+
+  --font-weight-bold:      700;
+  --font-weight-semibold:  600;
+  --font-weight-medium:    500;
+  --font-weight-normal:    400;
+
+  /* ── Spacing ─────────────────────────────────────────────
+     Used for padding, margin, gap throughout all components */
+  --spacing-xs:  8px;
+  --spacing-sm:  12px;
+  --spacing-md:  16px;
+  --spacing-lg:  20px;
+  --spacing-xl:  24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+
+  /* ── Border Radius ───────────────────────────────────────  */
+  --radius-sm:   8px;    /* buttons, small elements             */
+  --radius-md:   12px;   /* stat cards, chips                   */
+  --radius-lg:   20px;   /* header banner bottom corners        */
+  --radius-xl:   24px;   /* large cards                         */
+  --radius-full: 50%;    /* circles (progress ring, icon wrap)  */
+
+  /* ── Layout ──────────────────────────────────────────────  */
+  --max-content-width:    1400px;
+  --progress-circle-size: clamp(150px, 25vw, 200px);
+  --stat-card-min-height: 70px;
+
+  /* ── Shadows ─────────────────────────────────────────────  */
+  --shadow-header:  0 4px 20px rgba(56, 182, 255, 0.2);
+  --shadow-card:    0 2px 12px rgba(12, 131, 200, 0.1);
+  --shadow-hover:   0 6px 20px rgba(0, 0, 0, 0.12);
+
+  /* ── Transitions ─────────────────────────────────────────  */
+  --transition-default: all 0.3s ease;
+}

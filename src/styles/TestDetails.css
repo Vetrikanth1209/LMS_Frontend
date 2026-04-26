@@ -1,0 +1,377 @@
+/* ============================================================
+   TestDetails.css
+   Styles for the TestDetails component.
+   All values reference tokens from token.css (:root variables).
+   ============================================================ */
+
+/* ── Page wrapper ─────────────────────────────────────────── */
+.td-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing-2xl);          /* 32px — maps to MUI p:4 */
+  background-color: var(--bg-page);     /* #f0f4f8 ≈ MUI background.default #f5f7fa */
+}
+
+.td-page-wrapper--small {
+  padding: var(--spacing-md);           /* 16px — maps to MUI p:2 on small screens */
+}
+
+/* ── Main animated card ───────────────────────────────────── */
+.td-card {
+  width: 100%;
+  max-width: 800px;
+  border-radius: var(--radius-xl);      /* 24px ≈ MUI borderRadius 16 */
+  background-color: var(--bg-surface);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+  transition: var(--transition-default);
+}
+
+.td-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 70px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Color bar (gradient top strip) ──────────────────────── */
+.td-color-bar {
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--brand-primary) 0%,
+    #fc7a46 100%             /* secondary.main kept as-is — no token mapped */
+  );
+}
+
+/* ── Card inner padding box ──────────────────────────────── */
+.td-card-body {
+  padding: var(--spacing-lg);           /* 20px ≈ MUI p:3 */
+}
+
+.td-card-body--small {
+  padding: var(--spacing-md);           /* 16px ≈ MUI p:2 */
+}
+
+/* ── Header row (title + status chip) ────────────────────── */
+.td-header-row {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* ── "Test Details" label chip ───────────────────────────── */
+.td-label-chip {
+  background-color: rgba(12, 131, 200, 0.1);   /* alpha(primary, 0.1) */
+  color: var(--brand-primary-dark);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ── Test name heading ───────────────────────────────────── */
+.td-test-name {
+  font-family: var(--font-family);
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}
+
+/* ── Status chip (Active / Disabled) ─────────────────────── */
+.td-status-chip--active {
+  background-color: rgba(46, 125, 50, 0.1);    /* alpha(success, 0.1) */
+  color: var(--brand-success);
+  font-weight: var(--font-weight-medium);
+  border-radius: 6px;
+}
+
+.td-status-chip--disabled {
+  background-color: rgba(255, 68, 68, 0.1);    /* alpha(error, 0.1) */
+  color: var(--brand-danger);
+  font-weight: var(--font-weight-medium);
+  border-radius: 6px;
+}
+
+/* ── Info cards (Language, Total Score, MCQ, Coding) ─────── */
+.td-info-card {
+  padding: var(--spacing-md);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  border-radius: var(--radius-md);      /* 12px */
+  border: 1px solid rgba(12, 131, 200, 0.1);
+  background-color: rgba(12, 131, 200, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.td-info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(12, 131, 200, 0.1);
+}
+
+/* ── Icon wrappers ───────────────────────────────────────── */
+.td-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);    /* 50% */
+  background-color: rgba(12, 131, 200, 0.1);
+  color: var(--brand-primary-dark);
+  flex-shrink: 0;
+}
+
+.td-icon-wrapper--secondary {
+  background-color: rgba(252, 122, 70, 0.1);   /* alpha(secondary, 0.1) */
+  color: #fc7a46;                               /* secondary.main */
+}
+
+/* ── Section headings ────────────────────────────────────── */
+.td-section-heading {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+/* ── Overview text ───────────────────────────────────────── */
+.td-overview-text {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* ── Disabled test warning banner ────────────────────────── */
+.td-disabled-banner {
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 68, 68, 0.05);
+  border: 1px solid rgba(255, 68, 68, 0.2);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.td-disabled-banner-text {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--brand-danger);
+}
+
+/* ── Instruction hint text ───────────────────────────────── */
+.td-hint-text {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+}
+
+.td-hint-text--error {
+  color: var(--brand-danger);
+}
+
+/* ── Card actions footer ─────────────────────────────────── */
+.td-card-actions {
+  padding: var(--spacing-lg) var(--spacing-xl);   /* 20px 24px ≈ MUI p:3 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(245, 247, 250, 0.5);     /* alpha(bg.default, 0.5) */
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.td-card-actions--small {
+  padding: var(--spacing-md);
+}
+
+/* ── Animated buttons ────────────────────────────────────── */
+.td-btn {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-body);
+  border-radius: var(--radius-sm);       /* 8px */
+  padding: 10px var(--spacing-xl);       /* 10px 24px */
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-default);
+  letter-spacing: 0.02em;
+  box-shadow: none;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.td-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Back button (outlined / primary) */
+.td-btn--back {
+  background-color: transparent;
+  color: var(--brand-primary-dark);
+  border: 1px solid rgba(12, 131, 200, 0.5);
+}
+
+.td-btn--back:hover {
+  box-shadow: 0 6px 20px rgba(12, 131, 200, 0.2);
+}
+
+/* Proceed button (contained / secondary) */
+.td-btn--proceed {
+  background-color: #fc7a46;             /* secondary.main */
+  color: var(--color-text-on-brand);
+  padding: var(--spacing-sm) var(--spacing-2xl);  /* 12px 32px ≈ py:1.5 px:4 */
+}
+
+.td-btn--proceed:hover {
+  background-color: #e56a3a;             /* secondary.dark */
+  box-shadow: 0 6px 20px rgba(252, 122, 70, 0.4);
+}
+
+.td-btn--proceed:disabled {
+  background-color: var(--brand-disabled);
+  color: var(--color-text-on-brand);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Shimmer sweep on hover */
+.td-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  transform: translateX(-100%);
+}
+
+.td-btn:hover::after {
+  transition: transform 1s ease;
+  transform: translateX(100%);
+}
+
+/* Animated icon inside button */
+.td-btn .td-btn-end-icon,
+.td-btn .td-btn-start-icon {
+  transition: transform 0.2s ease;
+  display: inline-flex;
+}
+
+.td-btn:hover .td-btn-end-icon {
+  transform: translateX(4px);
+}
+
+.td-btn:hover .td-btn-start-icon {
+  transform: translateX(-4px);
+}
+
+/* ── Included / Not Included mini chips ──────────────────── */
+.td-chip--included {
+  background-color: rgba(46, 125, 50, 0.1);
+  color: var(--brand-success);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: 6px;
+}
+
+.td-chip--not-included {
+  background-color: rgba(107, 114, 128, 0.1);   /* grey[500] alpha */
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: 6px;
+}
+
+/* ── Loading container ───────────────────────────────────── */
+.td-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: var(--spacing-md);
+}
+
+.td-loading-text {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+  opacity: 0.8;
+  animation: td-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes td-pulse {
+  0%, 100% { opacity: 0.8; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── Error / no-data paper ───────────────────────────────── */
+.td-error-paper {
+  padding: var(--spacing-2xl);
+  max-width: 500px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  border: 1px solid rgba(255, 68, 68, 0.2);
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.td-error-title {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+}
+
+.td-error-body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* ── Snackbar / Alert font override ──────────────────────── */
+.td-alert {
+  font-family: var(--font-family) !important;
+  border-radius: var(--radius-sm) !important;
+  width: 100%;
+}
+
+/* ── Responsive overrides ────────────────────────────────── */
+@media (max-width: 600px) {
+  .td-page-wrapper {
+    padding: var(--spacing-md);
+  }
+
+  .td-card-body {
+    padding: var(--spacing-md);
+  }
+
+  .td-card-actions {
+    padding: var(--spacing-md);
+  }
+
+  .td-btn--proceed {
+    padding: var(--spacing-xs) var(--spacing-lg);
+  }
+}

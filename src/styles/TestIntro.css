@@ -1,0 +1,468 @@
+/* ============================================================
+   TestIntro.css
+   All styles for the TestIntro component.
+   Uses CSS custom properties from tokens.css as the single source of truth.
+   Import this file AFTER tokens.css in your app entry point.
+   ============================================================ */
+
+/* ── Loading Container ──────────────────────────────────── */
+.ti-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: var(--spacing-md);
+}
+
+.ti-loading-text {
+  opacity: 0.8;
+  animation: ti-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes ti-pulse {
+  0%, 100% { opacity: 0.8; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── Error State ────────────────────────────────────────── */
+.ti-error-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.ti-error-paper {
+  padding: var(--spacing-2xl);
+  max-width: 500px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  border: 1px solid rgba(255, 68, 68, 0.2); /* var(--brand-danger) at 0.2 */
+}
+
+.ti-error-icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 68, 68, 0.1); /* var(--brand-danger) at 0.1 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md) auto;
+}
+
+.ti-error-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+/* ── Page Wrapper ───────────────────────────────────────── */
+.ti-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing-2xl);
+  background-color: #f5f7fa; /* MUI theme background.default */
+}
+
+.ti-page-wrapper--small {
+  padding: var(--spacing-md);
+}
+
+.ti-page-wrapper--landscape {
+  min-height: auto;
+  padding-top: var(--spacing-3xl);
+  padding-bottom: var(--spacing-3xl);
+  overflow-y: auto;
+}
+
+/* ── Carousel Container ─────────────────────────────────── */
+.ti-carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(12, 131, 200, 0.05) 0%,
+    rgba(252, 122, 70, 0.05) 100%
+  );
+  border: 1px solid rgba(12, 131, 200, 0.1);
+  cursor: grab;
+}
+
+.ti-carousel-container:active {
+  cursor: grabbing;
+}
+
+/* ── Swipe Indicators ───────────────────────────────────── */
+.ti-swipe-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) scale(0.8);
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--brand-primary), #3a9bd7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-on-brand);
+  opacity: 0;
+  transition: var(--transition-default);
+  pointer-events: none;
+  box-shadow: 0 8px 25px rgba(12, 131, 200, 0.4);
+}
+
+.ti-swipe-indicator--left  { left: 20px; }
+.ti-swipe-indicator--right { right: 20px; }
+
+.ti-swipe-indicator--visible {
+  opacity: 0.9;
+  transform: translateY(-50%) scale(1);
+}
+
+/* ── Animated Card ──────────────────────────────────────── */
+.ti-animated-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+}
+
+.ti-animated-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 70px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* ── Color Bar (gradient stripe at top of card) ─────────── */
+.ti-color-bar {
+  height: 6px;
+  background: linear-gradient(90deg, var(--brand-primary) 0%, #fc7a46 100%);
+}
+
+/* ── Card Body Padding ──────────────────────────────────── */
+.ti-card-body {
+  padding: var(--spacing-2xl);
+}
+
+.ti-card-body--small {
+  padding: var(--spacing-md);
+}
+
+/* ── Card Top Row (chip + title left, nav right) ────────── */
+.ti-card-top-row {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ── Assessment Chip ────────────────────────────────────── */
+.ti-assessment-chip {
+  background-color: rgba(12, 131, 200, 0.1) !important;
+  color: var(--brand-primary) !important;
+  font-weight: var(--font-weight-medium) !important;
+  border-radius: 6px !important;
+  margin-bottom: var(--spacing-sm) !important;
+}
+
+/* ── Test Title ─────────────────────────────────────────── */
+.ti-test-title {
+  font-weight: var(--font-weight-bold) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* ── Nav Icon Buttons (Prev / Next) ─────────────────────── */
+.ti-nav-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.ti-icon-button {
+  border-radius: var(--radius-full) !important;
+  padding: var(--spacing-xs) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(12, 131, 200, 0.1) 0%,
+    rgba(252, 122, 70, 0.1) 100%
+  ) !important;
+  transition: var(--transition-default) !important;
+}
+
+.ti-icon-button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(
+    135deg,
+    rgba(12, 131, 200, 0.2) 0%,
+    rgba(252, 122, 70, 0.2) 100%
+  ) !important;
+  box-shadow: 0 4px 12px rgba(12, 131, 200, 0.3) !important;
+}
+
+.ti-icon-button.Mui-disabled {
+  background: rgba(0, 0, 0, 0.1) !important;
+  color: rgba(0, 0, 0, 0.3) !important;
+  pointer-events: none;
+}
+
+/* ── Info Cards (Language / Score) ──────────────────────── */
+.ti-info-card {
+  padding: var(--spacing-md) !important;
+  height: 100%;
+  display: flex !important;
+  align-items: center;
+  gap: var(--spacing-sm);
+  border-radius: var(--radius-md) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(12, 131, 200, 0.1) !important;
+  background-color: rgba(12, 131, 200, 0.03) !important;
+  box-shadow: none !important;
+}
+
+.ti-info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(12, 131, 200, 0.1) !important;
+}
+
+.ti-info-card--xs {
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding-top: var(--spacing-md) !important;
+  padding-bottom: var(--spacing-md) !important;
+}
+
+/* ── Icon Wrapper (circle housing card icons) ────────────── */
+.ti-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: rgba(12, 131, 200, 0.1);
+  color: var(--brand-primary);
+}
+
+.ti-icon-wrapper--mb {
+  margin-bottom: var(--spacing-xs);
+}
+
+/* ── Instructions Section ────────────────────────────────── */
+.ti-instructions-heading {
+  margin-bottom: var(--spacing-md) !important;
+  display: flex !important;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+/* ── Scrollable Instructions List ───────────────────────── */
+.ti-scrollable-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(12, 131, 200, 0.5) rgba(12, 131, 200, 0.1);
+}
+
+.ti-scrollable-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ti-scrollable-list::-webkit-scrollbar-track {
+  background: rgba(12, 131, 200, 0.1);
+  border-radius: 4px;
+}
+
+.ti-scrollable-list::-webkit-scrollbar-thumb {
+  background: rgba(12, 131, 200, 0.5);
+  border-radius: 4px;
+}
+
+.ti-scrollable-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(12, 131, 200, 0.7);
+}
+
+/* ── Instruction List Item ───────────────────────────────── */
+.ti-instruction-item {
+  padding: var(--spacing-xs) 0 !important;
+  transition: transform 0.2s ease;
+}
+
+.ti-instruction-item:hover {
+  transform: translateX(4px);
+}
+
+/* ── Instruction Number Badge ────────────────────────────── */
+.ti-instruction-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: rgba(252, 122, 70, 0.1);
+  color: #fc7a46;
+  font-weight: var(--font-weight-bold);
+  font-size: 14px;
+  margin-right: var(--spacing-md);
+}
+
+/* ── Card Actions Footer ─────────────────────────────────── */
+.ti-card-actions {
+  padding: var(--spacing-2xl) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background-color: rgba(245, 247, 250, 0.5) !important;
+}
+
+.ti-card-actions--small {
+  padding: var(--spacing-md) !important;
+  flex-direction: column !important;
+  gap: var(--spacing-md) !important;
+}
+
+/* ── Action Groups (left / right) ────────────────────────── */
+.ti-actions-left {
+  display: flex;
+  align-items: center;
+}
+
+.ti-actions-left--full {
+  width: 100%;
+}
+
+.ti-actions-right {
+  display: flex;
+  align-items: center;
+}
+
+.ti-actions-right--space-between {
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* ── Status Label ────────────────────────────────────────── */
+.ti-status-label {
+  display: flex;
+  align-items: center;
+}
+
+.ti-status-icon {
+  color: var(--brand-success) !important;
+  margin-right: var(--spacing-xs) !important;
+  opacity: 0.8;
+}
+
+/* ── Animated Buttons ────────────────────────────────────── */
+.ti-animated-btn {
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-default) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 10px 24px !important;
+  box-shadow: none !important;
+  font-weight: var(--font-weight-semibold) !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+}
+
+.ti-animated-btn:hover {
+  transform: translateY(-2px);
+}
+
+.ti-animated-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0)   30%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0)   70%
+  );
+  transform: translateX(-100%);
+}
+
+.ti-animated-btn:hover::after {
+  transition: transform 1s ease;
+  transform: translateX(100%);
+}
+
+.ti-animated-btn--primary:hover {
+  box-shadow: 0 6px 20px rgba(12, 131, 200, 0.4) !important;
+}
+
+/* Back button */
+.ti-back-btn {
+  margin-right: var(--spacing-xs) !important;
+}
+
+.ti-back-btn--full {
+  margin-right: 0 !important;
+  width: 100%;
+}
+
+/* Start button */
+.ti-start-btn {
+  margin-left: var(--spacing-md) !important;
+  padding-left: var(--spacing-2xl) !important;
+  padding-right: var(--spacing-2xl) !important;
+  padding-top: var(--spacing-sm) !important;
+  padding-bottom: var(--spacing-sm) !important;
+}
+
+.ti-start-btn--small {
+  padding-top: var(--spacing-xs) !important;
+  padding-bottom: var(--spacing-xs) !important;
+}
+
+/* ── Progress Dots Bar ───────────────────────────────────── */
+.ti-progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md) 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  margin-top: -8px; /* matches sx={{ mt: -1 }} */
+}
+
+/* ── Individual Progress Dot ─────────────────────────────── */
+.ti-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(158, 158, 158, 0.5);
+  transition: var(--transition-default);
+  cursor: pointer;
+}
+
+.ti-progress-dot:hover {
+  background: rgba(158, 158, 158, 0.8);
+}
+
+.ti-progress-dot--active {
+  width: 24px;
+  background: linear-gradient(90deg, var(--brand-primary) 0%, #fc7a46 100%);
+}
+
+.ti-progress-dot--active:hover {
+  background: linear-gradient(90deg, #3a9bd7 0%, #fd9469 100%);
+}

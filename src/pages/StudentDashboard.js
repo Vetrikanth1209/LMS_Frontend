@@ -1,3 +1,10 @@
+/**
+ * StudentDashboard.js
+ * Styles are now in StudentDashboard.css using CSS token variables.
+ * Only the conic-gradient (which needs the JS courseProgress value)
+ * remains as a partial inline style — everything else uses className.
+ */
+
 import React, { useState, useEffect, useRef } from "react";
 import { BookOpen, FileText } from "lucide-react";
 import AssessmentScores from "../components/StudentDashboard/AssessmentScores";
@@ -17,6 +24,13 @@ import Dash from "../components/StudentDashboard/dash";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress, Box } from "@mui/material";
 import CertificateGenerator from "../components/certificate";
+import "../styles/StudentDashboard.css";
+
+/* ─── Helper: read a CSS token value for JS-only usage ─────────────────────
+   Only needed for values that must live in JS (e.g. conic-gradient color). */
+const token = (name, fallback = "") =>
+  getComputedStyle(document.documentElement).getPropertyValue(name).trim() ||
+  fallback;
 
 export default function StudentDashboard() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -29,7 +43,7 @@ export default function StudentDashboard() {
   const [moduleName, setModuleName] = useState("Loading...");
   const [orgName, setOrgName] = useState("Loading...");
   const [testIds, setTestIds] = useState([]);
-  const [testStatuses, setTestStatuses] = useState({}); // { testId: boolean }
+  const [testStatuses, setTestStatuses] = useState({});
   const [userId, setUserId] = useState(null);
   const [courseProgress, setCourseProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,30 +53,23 @@ export default function StudentDashboard() {
 
   const navigate = useNavigate();
 
+  /* ─── Data fetching ─────────────────────────────────────────────────── */
   useEffect(() => {
-    // Clear localStorage except for 'true' and 'isLoggedIn'
     const preserveKeys = ["true", "isLoggedIn"];
     Object.keys(localStorage).forEach((key) => {
-      if (!preserveKeys.includes(key)) {
-        localStorage.removeItem(key);
-      }
+      if (!preserveKeys.includes(key)) localStorage.removeItem(key);
     });
 
-    // Clear browser history and clear current page as only entry
     window.history.replaceState(null, null, window.location.href);
 
     const storedUser = localStorage.getItem("true");
-
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
-        console.log("User data from localStorage:", userData);
-
         setStudentName(userData.user.full_name || "Student");
         setUserId(userData.user.user_id);
         setModId(userData.user.mod_poc_id.mod_id);
         setPocId(userData.user.mod_poc_id.mod_poc_id);
-        console.log("User Admin:", userData.user.admin);
 
         if (userData?.user?.user_id && userData?.user?.mod_poc_id?.mod_poc_id) {
           fetchDashboardData(
@@ -71,17 +78,14 @@ export default function StudentDashboard() {
             userData.user.mod_poc_id.mod_poc_id
           );
         } else {
-          console.warn("Incomplete user data in localStorage:", userData);
           setError("User session invalid");
           setIsLoading(false);
         }
-      } catch (error) {
-        console.error("Error parsing user from localStorage:", error);
+      } catch {
         setError("Failed to load user data");
         setIsLoading(false);
       }
     } else {
-      console.warn("No user found in localStorage");
       setError("Please log in");
       setIsLoading(false);
     }
@@ -90,15 +94,11 @@ export default function StudentDashboard() {
   const fetchDashboardData = async (userId, modId, modPocId) => {
     try {
       setIsLoading(true);
-
       const modulePocData = await fetchModuleAndPoc(userId);
-      console.log("Module and POC data:", modulePocData);
-
       setModId(modulePocData.mod_id || null);
       setPocId(modulePocData.mod_poc_id || null);
       setCoordinatorName(modulePocData.mod_poc_name || "Not assigned");
 
-      // Fetch certificate status
       const certStatus = await fetchPocCertStatus(modPocId);
       setCanDownloadCertificate(certStatus === true);
 
@@ -108,7 +108,6 @@ export default function StudentDashboard() {
           fetchModuleName(modulePocData.mod_id),
           fetchOrgName(modulePocData.mod_id),
         ]);
-
         setExpertName(expertData.mod_expert_name || "Not assigned");
         setModuleName(moduleData.mod_name || "Unknown module");
         setOrgName(orgData.org_name || "Unknown organization");
@@ -117,8 +116,7 @@ export default function StudentDashboard() {
       if (userId && modulePocData.mod_poc_id) {
         await fetchCourseProgress(userId, modulePocData.mod_poc_id);
       }
-    } catch (error) {
-      console.error("Error in fetchDashboardData:", error);
+    } catch {
       setError("Failed to load dashboard data");
     } finally {
       setIsLoading(false);
@@ -128,39 +126,28 @@ export default function StudentDashboard() {
   const fetchTodayTests = async (pocId, userId) => {
     try {
       const testsData = await fetchTestsToday(pocId);
-      console.log("Today's tests data:", testsData);
-
       const tests = testsData.test_ids || [];
       if (tests.length > 0) {
-        console.log("Test IDs for today:", tests);
         setTestIds(tests);
-
-        // Check status for all tests
         const statusPromises = tests.map(async (testId) => {
           try {
             const result = await checkIfTestTaken(userId, testId);
-            console.log(`Check Test Response for ${testId}:`, result);
             return { testId, hasTaken: result.length > 0 };
-          } catch (error) {
-            console.error(`Error checking test status for ${testId}:`, error);
+          } catch {
             return { testId, hasTaken: false };
           }
         });
-
         const statuses = await Promise.all(statusPromises);
         const statusMap = statuses.reduce((acc, { testId, hasTaken }) => {
           acc[testId] = hasTaken;
           return acc;
         }, {});
         setTestStatuses(statusMap);
-        console.log("Test statuses:", statusMap);
       } else {
-        console.warn("No tests available for today");
         setTestIds([]);
         setTestStatuses({});
       }
-    } catch (testError) {
-      console.error("Failed to fetch today's tests:", testError);
+    } catch {
       setError("Failed to load today's tests");
       setTestIds([]);
       setTestStatuses({});
@@ -170,173 +157,52 @@ export default function StudentDashboard() {
   const fetchCourseProgress = async (userId, modPocId) => {
     try {
       const response = await fetchAggregateScores(modPocId, userId);
-      console.log("Course progress data:", response);
-
-      if (response.response && response.response.average_percentage) {
-        const averagePercentage = response.response.average_percentage;
-        setCourseProgress(Math.floor(averagePercentage));
+      if (response.response?.average_percentage) {
+        setCourseProgress(Math.floor(response.response.average_percentage));
       } else {
         setCourseProgress(0);
       }
-    } catch (error) {
-      console.error("Error fetching course progress:", error);
+    } catch {
       setCourseProgress(0);
     }
   };
 
   useEffect(() => {
-    if (pocId && userId) {
-      console.log("Fetching tests for pocId:", pocId);
-      fetchTodayTests(pocId, userId);
-    }
+    if (pocId && userId) fetchTodayTests(pocId, userId);
   }, [pocId, userId]);
 
-  const styles = {
-    container: {
-      display: "grid",
-      gridTemplateRows: "auto 1fr",
-      minHeight: "100vh",
-      fontFamily: "'Inter', sans-serif",
-    },
-    mainContent: {
-      display: "grid",
-      gridTemplateColumns: "1fr",
-      padding: "24px",
-      maxWidth: "1400px",
-      margin: "0 auto",
-      width: "100%",
-      boxSizing: "border-box",
-    },
-    header: {
-      background: `linear-gradient(135deg, #38b6ff 0%, #2a8cc0 100%)`,
-      color: "white",
-      padding: "24px",
-      borderRadius: "0 0 20px 20px",
-      boxShadow: "0 4px 20px rgba(56, 182, 255, 0.2)",
-      marginBottom: "24px",
-    },
-    headerTitle: {
-      fontSize: "clamp(24px, 5vw, 28px)",
-      fontWeight: "700",
-      marginBottom: "8px",
-    },
-    headerSubtitle: {
-      fontSize: "clamp(14px, 3vw, 16px)",
-      opacity: "0.9",
-      marginBottom: "16px",
-    },
-    buttonContainer: {
-      display: "flex",
-      gap: "12px",
-      marginTop: "16px",
-      flexWrap: "wrap",
-    },
-    progressCircle: {
-      position: "relative",
-      width: "clamp(150px, 25vw, 200px)",
-      height: "clamp(150px, 25vw, 200px)",
-      borderRadius: "50%",
-      background: `conic-gradient(#ff66c4 ${courseProgress}%, rgba(255,255,255,0.2) 0)`,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      margin: "0 auto",
-    },
-    innerCircle: {
-      position: "absolute",
-      inset: "10px",
-      borderRadius: "50%",
-      background: "rgba(56, 182, 255, 0.8)",
-    },
-    progressText: {
-      position: "relative",
-      textAlign: "center",
-      zIndex: "1",
-    },
-    progressPercentage: {
-      fontSize: "clamp(28px, 6vw, 36px)",
-      fontWeight: "bold",
-    },
-    progressLabel: {
-      fontSize: "clamp(12px, 2.5vw, 14px)",
-    },
-    statCard: {
-      padding: "12px",
-      borderRadius: "12px",
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      minHeight: "70px",
-      transition: "transform 0.3s ease, box-shadow 0.3s ease",
-    },
-    iconWrapper: {
-      width: "36px",
-      height: "36px",
-      borderRadius: "50%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    statTitle: {
-      fontSize: "clamp(10px, 2vw, 12px)",
-      color: "#6b7280",
-      marginBottom: "4px",
-    },
-    statValue: {
-      fontSize: "clamp(14px, 2.5vw, 16px)",
-      fontWeight: "600",
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-    },
-    sectionSpacing: {
-      marginBottom: "24px",
-    },
-    loadingContainer: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "100vh",
-      width: "100%",
-    },
-  };
-
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
+  /* ─── Styles passed down to CourseInfoCards ─────────────────────────────
+     CourseInfoCards receives a styles prop — keep these as objects so the
+     child component works without changes. Tokens are still used here.   */
+  const cardStyles = {
+    statCard: { },         /* picks up .sd-stat-card via className in child  */
+    iconWrapper: { },      /* picks up .sd-icon-wrapper                       */
+    statTitle: { },        /* picks up .sd-stat-title                         */
+    statValue: { },        /* picks up .sd-stat-value                         */
   };
+
+  /* ─── Handlers ──────────────────────────────────────────────────────── */
+  const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
   const handleTestModuleClick = () => {
     if (testIds.length === 0) {
-      console.warn("No test IDs available");
       alert("No tests are scheduled for today. Please check back tomorrow or contact your coordinator.");
       return;
     }
-
-    // Check if all tests are taken
-    const allTestsTaken = testIds.every((testId) => testStatuses[testId] === true);
-    if (allTestsTaken) {
-      console.log("All tests completed for today");
+    const allDone = testIds.every((id) => testStatuses[id] === true);
+    if (allDone) {
       alert("You have completed all tests scheduled for today.");
       return;
     }
-
-    // Find the first uncompleted test
-    const firstUncompletedTestId = testIds.find((testId) => !testStatuses[testId]);
-    console.log("Navigating to test:", firstUncompletedTestId);
-    navigate(`/test-intro/${firstUncompletedTestId}`);
+    const firstUncompleted = testIds.find((id) => !testStatuses[id]);
+    navigate(`/test-intro/${firstUncompleted}`);
   };
 
   const handleDownloadCertificate = async () => {
@@ -346,119 +212,77 @@ export default function StudentDashboard() {
       } else {
         throw new Error("Certificate generator not initialized");
       }
-    } catch (error) {
-      console.error("Certificate generation failed:", error);
+    } catch {
       alert("Failed to generate certificate.");
     }
   };
 
+  /* ─── Loading ───────────────────────────────────────────────────────── */
   if (isLoading) {
     return (
-      <div style={styles.container}>
-        <Box style={styles.loadingContainer}>
+      <div className="sd-container">
+        <Box className="sd-loading-container">
           <CircularProgress
             size={isMobile ? "60px" : "80px"}
-            sx={{ color: "#38b6ff" }}
+            sx={{ color: "var(--brand-primary, #38b6ff)" }}
           />
         </Box>
       </div>
     );
   }
 
+  /* ─── Error ─────────────────────────────────────────────────────────── */
   if (error) {
     return (
-      <div style={styles.container}>
-        <Box style={styles.loadingContainer}>
-          <p style={{ color: "#ff4444", textAlign: "center", fontSize: "clamp(14px, 3vw, 16px)" }}>
-            {error}
-          </p>
+      <div className="sd-container">
+        <Box className="sd-loading-container">
+          <p className="sd-error-text">{error}</p>
         </Box>
       </div>
     );
   }
 
-  const allTestsTaken = testIds.length > 0 && testIds.every((testId) => testStatuses[testId] === true);
+  const allTestsTaken =
+    testIds.length > 0 && testIds.every((id) => testStatuses[id] === true);
+  const testBtnDisabled = testIds.length === 0 || allTestsTaken;
 
+  /* ─── Render ────────────────────────────────────────────────────────── */
   return (
-    <div style={styles.container}>
+    <div className="sd-container">
       <Dash certificateRef={certificateRef} />
       <CertificateGenerator ref={certificateRef} />
-      <div style={styles.mainContent}>
-        <div style={{ ...styles.header, ...styles.sectionSpacing }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : "7fr 5fr",
-              gap: "16px",
-              alignItems: "center",
-            }}
-          >
+
+      <div className="sd-main-content">
+
+        {/* ── Header banner ── */}
+        <div className="sd-header">
+          <div className={`sd-header-grid ${isMobile ? "sd-header-grid--mobile" : ""}`}>
+
+            {/* Left: greeting + buttons */}
             <div>
-              <h1 style={styles.headerTitle}>Welcome back, {studentName}!</h1>
-              <p style={styles.headerSubtitle}>
+              <h1 className="sd-header-title">
+                Welcome back, {studentName}!
+              </h1>
+              <p className="sd-header-subtitle">
                 Continue your learning journey with {moduleName}
               </p>
-              <div style={styles.buttonContainer}>
+
+              <div className="sd-button-container">
+                {/* Take Tests */}
                 <button
-                  style={{
-                    backgroundColor: testIds.length === 0 || allTestsTaken ? "#cccccc" : "#ff66c4",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "8px",
-                    fontWeight: "600",
-                    padding: "10px 20px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    cursor: testIds.length === 0 || allTestsTaken ? "not-allowed" : "pointer",
-                    transition: "all 0.3s ease",
-                  }}
+                  className="sd-btn-test"
                   onClick={handleTestModuleClick}
-                  disabled={testIds.length === 0 || allTestsTaken}
-                  onMouseOver={(e) => {
-                    if (testIds.length > 0 && !allTestsTaken) {
-                      e.currentTarget.style.backgroundColor = "#e55ab2";
-                      e.currentTarget.style.boxShadow = "inset 0 2px 4px rgba(0, 0, 0, 0.2)";
-                      e.currentTarget.style.transform = "scale(1.05)";
-                    }
-                  }}
-                  onMouseOut={(e) => {
-                    if (testIds.length > 0 && !allTestsTaken) {
-                      e.currentTarget.style.backgroundColor = "#ff66c4";
-                      e.currentTarget.style.boxShadow = "none";
-                      e.currentTarget.style.transform = "scale(1)";
-                    }
-                  }}
+                  disabled={testBtnDisabled}
                 >
                   <FileText size={18} />
                   Take Tests
                 </button>
+
+                {/* Download Certificate */}
                 {canDownloadCertificate && (
                   <button
-                    style={{
-                      backgroundColor: "transparent",
-                      color: "white",
-                      border: "1px solid white",
-                      borderRadius: "8px",
-                      fontWeight: "600",
-                      padding: "10px 20px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      cursor: "pointer",
-                      transition: "all 0.3s ease",
-                    }}
+                    className="sd-btn-certificate"
                     onClick={handleDownloadCertificate}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.backgroundColor = "#2a8cc0";
-                      e.currentTarget.style.boxShadow = "inset 0 2px 4px rgba(0, 0, 0, 0.2)";
-                      e.currentTarget.style.transform = "scale(1.05)";
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                      e.currentTarget.style.boxShadow = "none";
-                      e.currentTarget.style.transform = "scale(1)";
-                    }}
                   >
                     <BookOpen size={18} />
                     Download Certificate
@@ -466,44 +290,46 @@ export default function StudentDashboard() {
                 )}
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                paddingTop: isMobile ? "16px" : "0",
-              }}
-            >
-              <div style={styles.progressCircle}>
-                <div style={styles.innerCircle}></div>
-                <div style={styles.progressText}>
-                  <div style={styles.progressPercentage}>{courseProgress}%</div>
-                  <div style={styles.progressLabel}>Course Progress</div>
+
+            {/* Right: circular progress */}
+            <div className={`sd-progress-wrapper ${isMobile ? "sd-progress-wrapper--mobile" : ""}`}>
+              <div
+                className="sd-progress-circle"
+                style={{
+                  /* Only the dynamic JS value stays inline.
+                     Color token is read at render time via token(). */
+                  background: `conic-gradient(
+                    ${token("--brand-accent", "#ff66c4")} ${courseProgress}%,
+                    rgba(255,255,255,0.2) 0
+                  )`,
+                }}
+              >
+                <div className="sd-progress-inner" />
+                <div className="sd-progress-text">
+                  <div className="sd-progress-percentage">{courseProgress}%</div>
+                  <div className="sd-progress-label">Course Progress</div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
+        {/* ── Course info stat cards ── */}
         <CourseInfoCards
           orgName={orgName}
           moduleName={moduleName}
           expertName={expertName}
           coordinatorName={coordinatorName}
-          styles={styles}
+          styles={cardStyles}
         />
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "2fr 1fr",
-            gap: "20px",
-            marginBottom: "20px",
-          }}
-        >
+        {/* ── Assessment scores + upcoming deadlines ── */}
+        <div className={`sd-bottom-grid ${isMobile ? "sd-bottom-grid--mobile" : ""}`}>
           <AssessmentScores />
           <UpcomingDeadlines />
         </div>
+
       </div>
     </div>
   );

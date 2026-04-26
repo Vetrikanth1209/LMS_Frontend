@@ -5,28 +5,23 @@ import DashboardHeader from '../components/StudentDashboard/dash';
 import { useNavigate } from 'react-router-dom';
 
 const TestResultPage = () => {
-  const [resultData, setResultData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [timeTaken, setTimeTaken] = useState(0);
-  const [showDialog, setShowDialog] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState('');
+  const [resultData,     setResultData]     = useState(null);
+  const [loading,        setLoading]        = useState(true);
+  const [error,          setError]          = useState(null);
+  const [timeTaken,      setTimeTaken]      = useState(0);
+  const [showDialog,     setShowDialog]     = useState(false);
+  const [dialogMessage,  setDialogMessage]  = useState('');
 
   const navigate = useNavigate();
 
-  // Prevent back navigation by manipulating history
+  // ── Prevent browser back navigation ──────────────────────
   useEffect(() => {
-    // Clear history by pushing multiple states
     const clearHistory = () => {
-      for (let i = 0; i < 50; i++) {
-        window.history.pushState(null, '', window.location.href);
-      }
+      for (let i = 0; i < 50; i++) window.history.pushState(null, '', window.location.href);
       window.history.replaceState(null, '', window.location.href);
     };
-
     clearHistory();
 
-    // Add popstate listener to prevent back navigation
     const handlePopState = (event) => {
       event.preventDefault();
       window.history.pushState(null, '', window.location.href);
@@ -34,28 +29,26 @@ const TestResultPage = () => {
     };
 
     window.addEventListener('popstate', handlePopState);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
+    return () => window.removeEventListener('popstate', handlePopState);
   }, [navigate]);
 
+  // ── Helpers ───────────────────────────────────────────────
   const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
+    const hours   = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    if (hours > 0) return `${hours}h ${minutes}m ${secs}s`;
-    else if (minutes > 0) return `${minutes}m ${secs}s`;
-    else return `${secs}s`;
+    const secs    = seconds % 60;
+    if (hours > 0)   return `${hours}h ${minutes}m ${secs}s`;
+    if (minutes > 0) return `${minutes}m ${secs}s`;
+    return `${secs}s`;
   };
 
+  // ── Load result from localStorage ────────────────────────
   useEffect(() => {
     const fetchResult = () => {
       try {
         setLoading(true);
         const savedResult = localStorage.getItem('test_result');
-        const savedTimer = localStorage.getItem('test_timer');
+        const savedTimer  = localStorage.getItem('test_timer');
 
         if (!savedResult) {
           setError('No test result found. Please take a test first.');
@@ -76,19 +69,15 @@ const TestResultPage = () => {
 
         // Calculate total time: 60s per MCQ, 600s per coding question
         const totalMcqs =
-          (parsedResult.mcqAnswered || 0) +
+          (parsedResult.mcqAnswered    || 0) +
           (parsedResult.mcqNotAnswered || 0) +
-          (parsedResult.mcqNotVisited || 0);
+          (parsedResult.mcqNotVisited  || 0);
         const totalCoding = parsedResult.codingIds?.length || 0;
-        const totalTime = totalMcqs * 60 + totalCoding * 600;
+        const totalTime   = totalMcqs * 60 + totalCoding * 600;
 
-        // Time taken = total time - remaining time
-        if (savedTimer) {
-          const remainingTime = parseInt(savedTimer);
-          setTimeTaken(totalTime - remainingTime);
-        }
-      } catch (error) {
-        console.error('Error fetching test result:', error);
+        if (savedTimer) setTimeTaken(totalTime - parseInt(savedTimer));
+      } catch (err) {
+        console.error('Error fetching test result:', err);
         setError('Failed to load test result.');
         setDialogMessage('Failed to load test result.');
         setShowDialog(true);
@@ -99,21 +88,17 @@ const TestResultPage = () => {
     fetchResult();
   }, []);
 
+  // ── Navigation ────────────────────────────────────────────
   const handleBackToDashboard = () => {
-    // Clear localStorage
     localStorage.removeItem('test_result');
     localStorage.removeItem('test_progress');
     localStorage.removeItem('test_timer');
 
-    // Clear history before navigating to landing page
     const targetRoute = '/dashboard';
     if (targetRoute === '/' || targetRoute.includes('landing')) {
-      for (let i = 0; i < 50; i++) {
-        window.history.pushState(null, '', window.location.href);
-      }
+      for (let i = 0; i < 50; i++) window.history.pushState(null, '', window.location.href);
       window.history.replaceState(null, '', window.location.href);
     }
-
     navigate(targetRoute);
   };
 
@@ -122,6 +107,8 @@ const TestResultPage = () => {
     handleBackToDashboard();
   };
 
+  // ── Score colour / label helpers ──────────────────────────
+  // Returns a CSS modifier class name used in TestResultStyle.css
   const getScoreColor = (percentage) => {
     if (percentage >= 80) return 'success';
     if (percentage >= 60) return 'warning';
@@ -134,12 +121,13 @@ const TestResultPage = () => {
     return 'Needs Improvement';
   };
 
+  // ── Loading state ─────────────────────────────────────────
   if (loading) {
     return (
       <div className="container">
         <div className="card">
           <div className="card-content loading-container">
-            <div className="circular-progress"></div>
+            <div className="circular-progress" />
             <p className="loading-text">Loading results...</p>
           </div>
         </div>
@@ -147,6 +135,7 @@ const TestResultPage = () => {
     );
   }
 
+  // ── Error state ───────────────────────────────────────────
   if (error || !resultData) {
     return (
       <div className="container">
@@ -164,9 +153,7 @@ const TestResultPage = () => {
         {showDialog && (
           <div className="dialog-overlay" onClick={handleDialogClose}>
             <div className="dialog" onClick={(e) => e.stopPropagation()}>
-              <div className="dialog-header">
-                <h3>Error</h3>
-              </div>
+              <div className="dialog-header"><h3>Error</h3></div>
               <div className="dialog-content">
                 <AlertTriangle className="dialog-icon" size={48} />
                 <p>{dialogMessage}</p>
@@ -181,6 +168,7 @@ const TestResultPage = () => {
     );
   }
 
+  // ── Main render ───────────────────────────────────────────
   const percentage = Math.round((resultData.result_score / resultData.result_total_score) * 100);
 
   return (
@@ -189,7 +177,8 @@ const TestResultPage = () => {
       <div className="container">
         <div className="card">
           <div className="card-content">
-            {/* Test Info */}
+
+            {/* ── Test info header ──────────────────────────── */}
             <div className="test-info">
               <div className="test-info-main">
                 <h2 className="test-name">{resultData.testName}</h2>
@@ -204,10 +193,14 @@ const TestResultPage = () => {
               </button>
             </div>
 
-            {/* Score Overview */}
+            {/* ── Score overview ────────────────────────────── */}
             <div className="score-overview">
+
+              {/* Score card */}
               <div className="score-card">
-                <div className={`score-percentage ${getScoreColor(percentage)}`}>{percentage}%</div>
+                <div className={`score-percentage ${getScoreColor(percentage)}`}>
+                  {percentage}%
+                </div>
                 <p className="score-details">
                   {resultData.result_score} / {resultData.result_total_score} points
                 </p>
@@ -216,6 +209,7 @@ const TestResultPage = () => {
                 </div>
               </div>
 
+              {/* Overall statistics */}
               <div className="stats-card">
                 <div className="card-header">
                   <ChartBar size={20} className="icon" />
@@ -225,10 +219,10 @@ const TestResultPage = () => {
                   <div className="stat-item">
                     <span>Total Questions</span>
                     <span className="stat-value">
-                      {(resultData.mcqAnswered || 0) +
-                        (resultData.mcqNotAnswered || 0) +
-                        (resultData.mcqNotVisited || 0) +
-                        (resultData.codingIds?.length || 0)}
+                      {(resultData.mcqAnswered    || 0) +
+                       (resultData.mcqNotAnswered || 0) +
+                       (resultData.mcqNotVisited  || 0) +
+                       (resultData.codingIds?.length || 0)}
                     </span>
                   </div>
                   <div className="stat-item">
@@ -246,14 +240,16 @@ const TestResultPage = () => {
                 </div>
               </div>
 
+              {/* Time card (placeholder kept for layout) */}
               <div className="time-card">
-                <div className="stats-list"></div>
+                <div className="stats-list" />
               </div>
             </div>
 
-            {/* Detailed Breakdown */}
+            {/* ── Detailed breakdown ────────────────────────── */}
             <div className="detailed-breakdown">
-              {/* MCQ Section */}
+
+              {/* MCQ section */}
               <div className="section-card">
                 <div className="section-header">
                   <ChartBar size={24} className="icon" />
@@ -283,7 +279,7 @@ const TestResultPage = () => {
                 </div>
               </div>
 
-              {/* Coding Section */}
+              {/* Coding section */}
               {resultData.codingIds?.length > 0 && (
                 <div className="section-card">
                   <div className="section-header">
@@ -318,12 +314,11 @@ const TestResultPage = () => {
           </div>
         </div>
 
+        {/* ── Error dialog ──────────────────────────────────── */}
         {showDialog && (
           <div className="dialog-overlay" onClick={handleDialogClose}>
             <div className="dialog" onClick={(e) => e.stopPropagation()}>
-              <div className="dialog-header">
-                <h3>Error</h3>
-              </div>
+              <div className="dialog-header"><h3>Error</h3></div>
               <div className="dialog-content">
                 <AlertTriangle className="dialog-icon" size={48} />
                 <p>{dialogMessage}</p>

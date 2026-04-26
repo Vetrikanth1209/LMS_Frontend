@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
+  DialogTitle,
   Divider,
   FormControl,
   FormControlLabel,
@@ -32,39 +33,51 @@ import {
   List,
   ListItem,
   ListItemText,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import { Editor } from "@monaco-editor/react";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import CodeIcon from "@mui/icons-material/Code";
-import JavaIcon from "@mui/icons-material/DeveloperMode";
-import PythonIcon from "@mui/icons-material/Memory";
-import CppIcon from "@mui/icons-material/IntegrationInstructions";
-import CIcon from "@mui/icons-material/SettingsEthernet";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import SaveIcon from "@mui/icons-material/Save";
-import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
-import JavascriptIcon from "@mui/icons-material/Code" // Using Code icon for JavaScript
-import TerminalIcon from "@mui/icons-material/Terminal";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import DoneIcon from "@mui/icons-material/Done";
-import InfoIcon from "@mui/icons-material/Info";
+import PlayArrowIcon             from "@mui/icons-material/PlayArrow";
+import CodeIcon                  from "@mui/icons-material/Code";
+import JavaIcon                  from "@mui/icons-material/DeveloperMode";
+import PythonIcon                from "@mui/icons-material/Memory";
+import CppIcon                   from "@mui/icons-material/IntegrationInstructions";
+import CIcon                     from "@mui/icons-material/SettingsEthernet";
+import RefreshIcon               from "@mui/icons-material/Refresh";
+import SaveIcon                  from "@mui/icons-material/Save";
+import FormatListNumberedIcon    from "@mui/icons-material/FormatListNumbered";
+import JavascriptIcon            from "@mui/icons-material/Code";
+import TerminalIcon              from "@mui/icons-material/Terminal";
+import KeyboardArrowUpIcon       from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon     from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowLeftIcon     from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon    from "@mui/icons-material/KeyboardArrowRight";
+import NavigateNextIcon          from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon        from "@mui/icons-material/NavigateBefore";
+import DoneIcon                  from "@mui/icons-material/Done";
+import InfoIcon                  from "@mui/icons-material/Info";
+import WarningAmberIcon          from "@mui/icons-material/WarningAmber";
+import CheckCircleOutlineIcon    from "@mui/icons-material/CheckCircleOutline";
+import CancelOutlinedIcon        from "@mui/icons-material/CancelOutlined";
+import BugReportIcon             from "@mui/icons-material/BugReport";
 import { fetchCodeById, fetchTestCaseById, compileCode, submitTestResult, getTestById } from "../axios";
+import "../styles/CodePage.css";
 
-// Language mapping for backend
+// ── Language mapping ──────────────────────────────────────────────────────────
 const languageApiMap = {
-  python: "python",
-  java: "java",
-  cpp: "cpp",
-  c: "c",
+  python:     "python",
+  java:       "java",
+  cpp:        "cpp",
+  c:          "c",
   javascript: "javascript",
 };
 
-// Material UI Switch for theme toggle
+// ── Theme toggle switch ───────────────────────────────────────────────────────
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
@@ -112,26 +125,26 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-// Create themes with updated color palette
-const createAppTheme = (mode) => {
-  return createTheme({
+// ── MUI theme ─────────────────────────────────────────────────────────────────
+const createAppTheme = (mode) =>
+  createTheme({
     palette: {
       mode,
-      primary: { main: "#0c83c8" },
-      secondary: { main: "#fc7a46" },
+      primary:    { main: "#0c83c8" },
+      secondary:  { main: "#fc7a46" },
       background: {
         default: mode === "dark" ? "#111827" : "#f9fafb",
-        paper: mode === "dark" ? "#1f2937" : "#ffffff",
+        paper:   mode === "dark" ? "#1f2937" : "#ffffff",
       },
       text: {
-        primary: mode === "dark" ? "#f3f4f6" : "#1f2937",
+        primary:   mode === "dark" ? "#f3f4f6" : "#1f2937",
         secondary: mode === "dark" ? "#9ca3af" : "#6b7280",
       },
-      success: { main: "#0c83c8" },
-      error: { main: "#ef4444" },
+      success: { main: "#22c55e" },
+      error:   { main: "#ef4444" },
       warning: { main: "#f59e0b" },
-      info: { main: "#3b82f6" },
-      divider: mode === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)",
+      info:    { main: "#3b82f6" },
+      divider: mode === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
     },
     typography: {
       h2: { fontWeight: 700 },
@@ -147,32 +160,6 @@ const createAppTheme = (mode) => {
         styleOverrides: `
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
           @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
-          
-          ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-          }
-          ::-webkit-scrollbar-track {
-            background: ${mode === "dark" ? "#1f2937" : "#f1f5f9"};
-          }
-          ::-webkit-scrollbar-thumb {
-            background: ${mode === "dark" ? "#4b5563" : "#cbd5e1"};
-            borderRadius: 4px;
-          }
-          ::-webkit-scrollbar-thumb:hover {
-            background: ${mode === "dark" ? "#6b7280" : "#94a3b8"};
-          }
-          
-          .resize-active * {
-            user-select: none !important;
-          }
-          
-          @media (max-width: 600px) {
-            .monaco-editor .inputarea {
-              font-size: 16px !important;
-              line-height: normal !important;
-            }
-          }
         `,
       },
       MuiButton: {
@@ -182,17 +169,13 @@ const createAppTheme = (mode) => {
             boxShadow: "none",
             "&:hover": {
               boxShadow:
-                mode === "dark" ? "0 4px 12px rgba(12, 131, 200, 0.25)" : "0 4px 12px rgba(12, 131, 200, 0.15)",
+                mode === "dark"
+                  ? "0 4px 12px rgba(12,131,200,0.25)"
+                  : "0 4px 12px rgba(12,131,200,0.15)",
             },
           },
-          containedPrimary: {
-            background: "#0c83c8",
-            "&:hover": { background: "#095e8f" },
-          },
-          containedSecondary: {
-            background: "#fc7a46",
-            "&:hover": { background: "#e55e2c" },
-          },
+          containedPrimary:   { background: "#0c83c8", "&:hover": { background: "#095e8f" } },
+          containedSecondary: { background: "#fc7a46", "&:hover": { background: "#e55e2c" } },
           outlined: { borderWidth: 1.5 },
         },
       },
@@ -200,7 +183,10 @@ const createAppTheme = (mode) => {
         styleOverrides: {
           root: {
             backgroundImage: "none",
-            boxShadow: mode === "dark" ? "0 4px 6px -1px rgba(0, 0, 0, 0.2)" : "0 4px 6px -1px rgba(0, 0, 0, 0.05)",
+            boxShadow:
+              mode === "dark"
+                ? "0 4px 6px -1px rgba(0,0,0,0.2)"
+                : "0 4px 6px -1px rgba(0,0,0,0.05)",
           },
         },
       },
@@ -209,174 +195,213 @@ const createAppTheme = (mode) => {
           root: {
             borderRadius: 12,
             overflow: "hidden",
-            border: `1px solid ${mode === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.05)"}`,
-          },
-        },
-      },
-      MuiTextField: {
-        styleOverrides: {
-          root: {
-            "& .MuiOutlinedInput-root": {
-              borderRadius: 8,
-              "& fieldset": { borderColor: mode === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)" },
-              "&:hover fieldset": { borderColor: "#0c83c8" },
-              "&.Mui-focused fieldset": { borderColor: "#0c83c8" },
-            },
+            border: `1px solid ${mode === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.05)"}`,
           },
         },
       },
       MuiIconButton: {
-        styleOverrides: {
-          root: {
-            transition: "all 0.2s ease-in-out",
-          },
-        },
+        styleOverrides: { root: { transition: "all 0.2s ease-in-out" } },
       },
       MuiChip: {
-        styleOverrides: {
-          root: {
-            borderRadius: 6,
-            fontWeight: 500,
-          },
-        },
+        styleOverrides: { root: { borderRadius: 6, fontWeight: 500 } },
       },
       MuiDivider: {
         styleOverrides: {
-          root: { borderColor: mode === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)" },
+          root: {
+            borderColor:
+              mode === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
+          },
         },
       },
       MuiSelect: {
-        styleOverrides: {
-          root: {
-            borderRadius: 8,
-          },
-        },
+        styleOverrides: { root: { borderRadius: 8 } },
       },
       MuiAlert: {
         styleOverrides: {
-          root: {
-            fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-            borderRadius: 8,
-          },
+          root: { fontFamily: "'Inter','Helvetica','Arial',sans-serif !important", borderRadius: 8 },
         },
       },
       MuiSnackbar: {
         styleOverrides: {
           root: {
             "& .MuiAlert-root": {
-              fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
+              fontFamily: "'Inter','Helvetica','Arial',sans-serif !important",
             },
           },
         },
       },
     },
   });
+
+// ── Terminal line renderer ────────────────────────────────────────────────────
+// type: "info" | "success" | "error" | "warn" | "plain"
+const TerminalLine = ({ line }) => {
+  const colours = {
+    info:    "#60a5fa",
+    success: "#4ade80",
+    error:   "#f87171",
+    warn:    "#fbbf24",
+    plain:   "#e5e7eb",
+  };
+  return (
+    <div style={{
+      color: colours[line.type] || colours.plain,
+      fontFamily: "'Fira Code', monospace",
+      fontSize: 13,
+      lineHeight: "1.65",
+      whiteSpace: "pre-wrap",
+      wordBreak: "break-word",
+    }}>
+      {line.text}
+    </div>
+  );
 };
 
+// ── parseRunResponse ──────────────────────────────────────────────────────────
+// Inspects actualOutput from the backend result to classify error type.
+const parseRunResponse = (apiResult) => {
+  const actual = (apiResult.actualOutput || "").trim();
+
+  const compilePatterns = [
+    /error:/i, /SyntaxError/i, /IndentationError/i, /NameError/i,
+    /cannot find symbol/i, /error: expected/i, /undefined reference/i,
+    /fatal error/i, /compilation failed/i, /javac/i, /\^~/, /\^/,
+  ];
+  const runtimePatterns = [
+    /Traceback \(most recent call last\)/i, /Exception in thread/i,
+    /RuntimeError/i, /SegmentationFault/i, /Segmentation fault/i,
+    /java\.lang\./i, /SIGSEGV/i, /killed/i, /ZeroDivisionError/i,
+    /AttributeError/i, /IndexError/i, /KeyError/i, /ValueError/i,
+    /OverflowError/i, /RecursionError/i, /MemoryError/i, /core dumped/i,
+  ];
+
+  const hasCompileError = compilePatterns.some((p) => p.test(actual));
+  const hasRuntimeError = !hasCompileError && runtimePatterns.some((p) => p.test(actual));
+
+  return { hasCompileError, hasRuntimeError, cleanOutput: actual };
+};
+
+// ── CodingPage ────────────────────────────────────────────────────────────────
 const CodingPage = () => {
-  const { codeId } = useParams();
-  const { state } = useLocation();
-  const navigate = useNavigate();
+  const { codeId }    = useParams();
+  const { state }     = useLocation();
+  const navigate      = useNavigate();
   const [mode, setMode] = useState(localStorage.getItem("themeMode") || "dark");
-  const theme = createAppTheme(mode);
+  const theme   = createAppTheme(mode);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Initialize from localStorage
-  const [testId, setTestId] = useState(localStorage.getItem("test_id") || "");
-  const [userId, setUserId] = useState("");
-  const [pocId, setPocId] = useState("");
-  const [studentName, setStudentName] = useState("");
-  const [timer, setTimer] = useState(parseInt(localStorage.getItem("test_timer")) || 0);
+  // ── State ────────────────────────────────────────────────────────────────
+  const [testId,       setTestId]       = useState(localStorage.getItem("test_id") || "");
+  const [userId,       setUserId]       = useState("");
+  const [pocId,        setPocId]        = useState("");
+  const [studentName,  setStudentName]  = useState("");
+  const [timer,        setTimer]        = useState(parseInt(localStorage.getItem("test_timer")) || 0);
   const timerRef = useRef(null);
 
-  // Test context from localStorage or state
   const savedTestResult = JSON.parse(localStorage.getItem("test_result")) || {};
   const [testResult, setTestResult] = useState({
-    result_user_id: savedTestResult.result_user_id || state?.result_user_id || "",
-    codingAnswered: savedTestResult.codingAnswered || state?.codingAnswered || 0,
-    codingCorrect: savedTestResult.codingCorrect || state?.codingCorrect || 0,
-    codingIds: savedTestResult.codingIds || state?.codingIds || [],
+    result_user_id:    savedTestResult.result_user_id    || state?.result_user_id    || "",
+    codingAnswered:    savedTestResult.codingAnswered    || state?.codingAnswered    || 0,
+    codingCorrect:     savedTestResult.codingCorrect     || state?.codingCorrect     || 0,
+    codingIds:         savedTestResult.codingIds         || state?.codingIds         || [],
     codingNotAnswered: savedTestResult.codingNotAnswered || state?.codingNotAnswered || 0,
-    codingNotVisited: savedTestResult.codingNotVisited || state?.codingNotVisited || 0,
-    codingWrong: savedTestResult.codingWrong || state?.codingWrong || 0,
-    marked: savedTestResult.marked || state?.marked || 0,
-    mcqAnswered: savedTestResult.mcqAnswered || state?.mcqAnswered || 0,
-    mcqCorrect: savedTestResult.mcqCorrect || state?.mcqCorrect || 0,
-    mcqNotAnswered: savedTestResult.mcqNotAnswered || state?.mcqNotAnswered || 0,
-    mcqNotVisited: savedTestResult.mcqNotVisited || state?.mcqNotVisited || 0,
-    mcqWrong: savedTestResult.mcqWrong || state?.mcqWrong || 0,
-    result_poc_id: savedTestResult.result_poc_id || state?.result_poc_id || "",
-    result_score: savedTestResult.result_score || state?.result_score || 0,
-    result_total_score: savedTestResult.result_total_score || state?.result_total_score || 0,
-    studentName: savedTestResult.studentName || state?.studentName || "",
-    testLanguage: savedTestResult.testLanguage || state?.testLanguage || "",
-    testName: savedTestResult.testName || state?.testName || "",
-    currentCodingIndex: savedTestResult.currentCodingIndex || state?.currentCodingIndex || 0,
-    codingResults: savedTestResult.codingResults || state?.codingResults || [],
-    testInstructions: savedTestResult.testInstructions || state?.testInstructions || [],
+    codingNotVisited:  savedTestResult.codingNotVisited  || state?.codingNotVisited  || 0,
+    codingWrong:       savedTestResult.codingWrong       || state?.codingWrong       || 0,
+    marked:            savedTestResult.marked            || state?.marked            || 0,
+    mcqAnswered:       savedTestResult.mcqAnswered       || state?.mcqAnswered       || 0,
+    mcqCorrect:        savedTestResult.mcqCorrect        || state?.mcqCorrect        || 0,
+    mcqNotAnswered:    savedTestResult.mcqNotAnswered    || state?.mcqNotAnswered    || 0,
+    mcqNotVisited:     savedTestResult.mcqNotVisited     || state?.mcqNotVisited     || 0,
+    mcqWrong:          savedTestResult.mcqWrong          || state?.mcqWrong          || 0,
+    result_poc_id:     savedTestResult.result_poc_id     || state?.result_poc_id     || "",
+    result_score:      savedTestResult.result_score      || state?.result_score      || 0,
+    result_total_score:savedTestResult.result_total_score|| state?.result_total_score|| 0,
+    studentName:       savedTestResult.studentName       || state?.studentName       || "",
+    testLanguage:      savedTestResult.testLanguage      || state?.testLanguage      || "",
+    testName:          savedTestResult.testName          || state?.testName          || "",
+    currentCodingIndex:savedTestResult.currentCodingIndex|| state?.currentCodingIndex|| 0,
+    codingResults:     savedTestResult.codingResults     || state?.codingResults     || [],
+    testInstructions:  savedTestResult.testInstructions  || state?.testInstructions  || [],
   });
 
-  // Component state
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
-  const [language, setLanguage] = useState("python");
-  const [loading, setLoading] = useState(false);
-  const [selectedCode, setSelectedCode] = useState(null);
-  const [testCases, setTestCases] = useState([]);
-  const [showOutput, setShowOutput] = useState(true);
-  const [outputMinimized, setOutputMinimized] = useState(false);
-  const [openProgressDialog, setOpenProgressDialog] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [showTestCases, setShowTestCases] = useState(!isMobile);
-  const [testCasesCollapsed, setTestCasesCollapsed] = useState(false);
-  const [editorWidth, setEditorWidth] = useState(60);
-  const [outputHeight, setOutputHeight] = useState(30);
-  const [resetDialogOpen, setResetDialogOpen] = useState(false);
-  const [submitConfirmDialogOpen, setSubmitConfirmDialogOpen] = useState(false);
-  const [fetchedTestCodingIds, setFetchedTestCodingIds] = useState([]);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [instructionsOpen, setInstructionsOpen] = useState(false);
-  const [isFullScreen, setIsFullScreen] = useState(true);
-  const [showFullScreenPrompt, setShowFullScreenPrompt] = useState(true);
+  // ── Terminal lines: [{ type, text }] ─────────────────────────────────────
+  const [terminalLines,          setTerminalLines]          = useState([]);
+  const [runLoading,             setRunLoading]             = useState(false);
 
-  const isDraggingRef = useRef(false);
-  const dividerRef = useRef(null);
-  const outputDividerRef = useRef(null);
-  const resizeTimeoutRef = useRef(null);
-  const editorRef = useRef(null);
-  const resizeObserverRef = useRef(null);
+  const [input,                  setInput]                  = useState("");
+  const inputRef                                            = useRef("");
+  const [language,               setLanguage]               = useState("python");
+  const [loading,                setLoading]                = useState(false);
+  const [selectedCode,           setSelectedCode]           = useState(null);
+  const [testCases,              setTestCases]              = useState([]);
+  const [showOutput,             setShowOutput]             = useState(true);
+  const [outputMinimized,        setOutputMinimized]        = useState(false);
+  const [openProgressDialog,     setOpenProgressDialog]     = useState(false);
+  const [snackbarOpen,           setSnackbarOpen]           = useState(false);
+  const [snackbarMessage,        setSnackbarMessage]        = useState("");
+  const [snackbarSeverity,       setSnackbarSeverity]       = useState("success");
+  const [showTestCases,          setShowTestCases]          = useState(!isMobile);
+  const [testCasesCollapsed,     setTestCasesCollapsed]     = useState(false);
+  const [editorWidth,            setEditorWidth]            = useState(60);
+  const [outputHeight,           setOutputHeight]           = useState(30);
+  const [resetDialogOpen,        setResetDialogOpen]        = useState(false);
+  const [submitConfirmDialogOpen,setSubmitConfirmDialogOpen]= useState(false);
+  const [fetchedTestCodingIds,   setFetchedTestCodingIds]   = useState([]);
+  const [hasSubmitted,           setHasSubmitted]           = useState(false);
+  const [instructionsOpen,       setInstructionsOpen]       = useState(false);
+  const [isFullScreen,           setIsFullScreen]           = useState(true);
+  const [showFullScreenPrompt,   setShowFullScreenPrompt]   = useState(true);
+
+  // ── Run Test Cases dialog ─────────────────────────────────────────────────
+  const [testCaseDialogOpen,   setTestCaseDialogOpen]   = useState(false);
+  const [testCaseResults,      setTestCaseResults]      = useState([]);
+  const [runTestCasesLoading,  setRunTestCasesLoading]  = useState(false);
+
+  // ── Fullscreen warning state ──────────────────────────────────────────────
+  const MAX_FULLSCREEN_WARNINGS = 5;
+  const [fullScreenExitCount,    setFullScreenExitCount]    = useState(
+    () => parseInt(localStorage.getItem("fs_exit_count") || "0")
+  );
+  const [fullScreenWarningOpen,  setFullScreenWarningOpen]  = useState(false);
+  const fullScreenExitCountRef = useRef(
+    parseInt(localStorage.getItem("fs_exit_count") || "0")
+  );
+
+  const isDraggingRef      = useRef(false);
+  const dividerRef         = useRef(null);
+  const outputDividerRef   = useRef(null);
+  const resizeTimeoutRef   = useRef(null);
+  const editorRef          = useRef(null);
+  const resizeObserverRef  = useRef(null);
   const autoSaveTimeoutRef = useRef(null);
 
-  // Language templates
+  // Keep inputRef in sync for use inside callbacks that capture stale closures
+  const handleSetInput = (val) => {
+    inputRef.current = val;
+    setInput(val);
+  };
+
+  // ── Language data ─────────────────────────────────────────────────────────
   const templates = {
-    python: `print("Hello World")`,
-    java: `import java.util.*;\npublic class Progman {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello World");\n\t}\n}`,
-    c: `#include <stdio.h>\nint main() {\n\tprintf("Hello World");\n\treturn 0;\n}`,
-    cpp: `#include <iostream>\nusing namespace std;\nint main() {\n\tcout << "Hello World";\n\treturn 0;\n}`,
+    python:     `print("Hello World")`,
+    java:       `import java.util.*;\npublic class Progman {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello World");\n\t}\n}`,
+    c:          `#include <stdio.h>\nint main() {\n\tprintf("Hello World");\n\treturn 0;\n}`,
+    cpp:        `#include <iostream>\nusing namespace std;\nint main() {\n\tcout << "Hello World";\n\treturn 0;\n}`,
     javascript: `console.log("Hello World");`,
   };
 
-  // Language icon mapping
   const languageIcons = {
-    python: <PythonIcon fontSize="small" />,
-    java: <JavaIcon fontSize="small" />,
-    cpp: <CppIcon fontSize="small" />,
-    c: <CIcon fontSize="small" />,
-    javascript: <JavascriptIcon fontSize="small" />
+    python:     <PythonIcon fontSize="small" />,
+    java:       <JavaIcon fontSize="small" />,
+    cpp:        <CppIcon fontSize="small" />,
+    c:          <CIcon fontSize="small" />,
+    javascript: <JavascriptIcon fontSize="small" />,
   };
 
-  // Language display names
   const languageNames = {
-    python: "Python",
-    java: "Java",
-    cpp: "C++",
-    c: "C",
-    javascript: "JavaScript",
+    python: "Python", java: "Java", cpp: "C++", c: "C", javascript: "JavaScript",
   };
 
-  // Default instructions
   const defaultInstructions = [
     "Read each problem statement carefully and ensure you understand the requirements before coding.",
     "Write your solution in the provided code editor using the selected programming language.",
@@ -387,16 +412,13 @@ const CodingPage = () => {
     "Malpractice Warning: Rapid code input or suspicious keyboard shortcuts (e.g., Ctrl+V, Alt+/) will be flagged as potential malpractice.",
     "Submit your test only when you are ready to finalize all answers. Once submitted, no further changes can be made.",
     "Ensure you are in full-screen mode during the test to maintain a secure testing environment.",
-    "Contact the test administrator for any technical issues or clarifications during the test."
+    "Contact the test administrator for any technical issues or clarifications during the test.",
   ];
 
-  // Prevent browser back/forward navigation
+  // ── Effects ────────────────────────────────────────────────────────────────
   useEffect(() => {
     window.history.pushState(null, null, window.location.href);
-    for (let i = 0; i < 10; i++) {
-      window.history.pushState(null, null, window.location.href);
-    }
-
+    for (let i = 0; i < 10; i++) window.history.pushState(null, null, window.location.href);
     const handlePopState = (event) => {
       event.preventDefault();
       if (!hasSubmitted) {
@@ -407,15 +429,10 @@ const CodingPage = () => {
       }
       window.history.pushState(null, null, window.location.href);
     };
-
     window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
+    return () => window.removeEventListener("popstate", handlePopState);
   }, [hasSubmitted]);
 
-  // Fetch user data and test instructions
   useEffect(() => {
     const storedUser = localStorage.getItem("true");
     if (storedUser) {
@@ -427,9 +444,9 @@ const CodingPage = () => {
         setTestResult((prev) => {
           const updatedTestResult = {
             ...prev,
-            studentName: user.user.full_name || prev.studentName,
-            result_user_id: user.user.user_id || prev.result_user_id,
-            result_poc_id: user.user.mod_poc_id?.mod_poc_id || prev.result_poc_id,
+            studentName:    user.user.full_name             || prev.studentName,
+            result_user_id: user.user.user_id               || prev.result_user_id,
+            result_poc_id:  user.user.mod_poc_id?.mod_poc_id|| prev.result_poc_id,
           };
           localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
           return updatedTestResult;
@@ -453,51 +470,33 @@ const CodingPage = () => {
       if (savedPayload) {
         try {
           const parsedPayload = JSON.parse(savedPayload);
-          const savedLanguage = Object.keys(languageApiMap).find(
-            (key) => languageApiMap[key] === parsedPayload.language
-          ) || "python";
-          console.log("Loading saved language:", savedLanguage); // Debug log
-          // Only update language if it hasn't been set by user interaction
-          setLanguage((currentLanguage) => {
-            if (currentLanguage === "python" || !currentLanguage) {
-              return savedLanguage;
-            }
-            return currentLanguage;
-          });
-          setInput(parsedPayload.code || templates[savedLanguage]);
+          const savedLanguage = Object.keys(languageApiMap).find((key) => languageApiMap[key] === parsedPayload.language) || "python";
+          setLanguage((cur) => (cur === "python" || !cur ? savedLanguage : cur));
+          handleSetInput(parsedPayload.code || templates[savedLanguage]);
         } catch (error) {
           console.error("Error parsing saved payload:", error);
-          setInput(templates[language]);
+          handleSetInput(templates[language]);
         }
       } else {
-        console.log("No saved payload, using default template for language:", language); // Debug log
-        setInput(templates[language]);
+        handleSetInput(templates[language]);
       }
     }
-  }, [codeId]); // Remove `language` from dependencies
+  }, [codeId]);
 
-  // Fetch test data
   useEffect(() => {
     const fetchTestData = async () => {
-      if (!testId) {
-        setSnackbarMessage("No test ID found in localStorage.");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-        setLoading(false);
-        return;
-      }
-
+      if (!testId) { setSnackbarMessage("No test ID found in localStorage."); setSnackbarSeverity("error"); setSnackbarOpen(true); setLoading(false); return; }
       try {
         const res = await getTestById(testId);
         setFetchedTestCodingIds(res.test_coding_id || []);
         setTestResult((prev) => {
           const updatedTestResult = {
             ...prev,
-            codingIds: res.test_coding_id || prev.codingIds,
-            testName: res.test_name || prev.testName,
-            testLanguage: res.test_language || prev.testLanguage,
-            result_total_score: (res.test_mcq_id?.length || 0) + (res.test_coding_id?.length || 0) * 10,
-            testInstructions: res.test_instructions || defaultInstructions, // Use defaultInstructions if none provided
+            codingIds:         res.test_coding_id || prev.codingIds,
+            testName:          res.test_name       || prev.testName,
+            testLanguage:      res.test_language   || prev.testLanguage,
+            result_total_score:(res.test_mcq_id?.length || 0) + (res.test_coding_id?.length || 0) * 10,
+            testInstructions:  res.test_instructions || defaultInstructions,
           };
           localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
           return updatedTestResult;
@@ -506,1829 +505,1079 @@ const CodingPage = () => {
         setLoading(false);
       } catch (err) {
         console.error("Failed to fetch test:", err);
-        setSnackbarMessage("Failed to fetch test data.");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-        setLoading(false);
+        setSnackbarMessage("Failed to fetch test data."); setSnackbarSeverity("error"); setSnackbarOpen(true); setLoading(false);
       }
     };
     fetchTestData();
   }, [testId]);
 
-  // Timer countdown and auto-submit
   useEffect(() => {
     if (!timer || timer <= 0 || hasSubmitted) {
       if (timer <= 0 && !hasSubmitted) handleFinalSubmit(true);
       return;
     }
     timerRef.current = setInterval(() => {
-      setTimer((prev) => {
-        const newTime = prev - 1;
-        localStorage.setItem("test_timer", newTime);
-        return newTime;
-      });
+      setTimer((prev) => { const n = prev - 1; localStorage.setItem("test_timer", n); return n; });
     }, 1000);
     return () => clearInterval(timerRef.current);
   }, [timer, hasSubmitted]);
 
-  // Full-screen logic
+  // ── Fullscreen 5-warning logic ────────────────────────────────────────────
   useEffect(() => {
     const handleFullScreenChange = () => {
-      if (
-        !document.fullscreenElement &&
-        !document.webkitFullscreenElement &&
-        !document.mozFullScreenElement &&
-        !document.msFullscreenElement
-      ) {
-        if (isFullScreen && !hasSubmitted) {
-          handleFinalSubmit(true);
-        }
+      const full = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+      if (!full) {
         setIsFullScreen(false);
+        if (!hasSubmitted) {
+          const n = fullScreenExitCountRef.current + 1;
+          fullScreenExitCountRef.current = n;
+          setFullScreenExitCount(n);
+          localStorage.setItem("fs_exit_count", String(n));
+          if (n >= MAX_FULLSCREEN_WARNINGS) {
+            setSnackbarMessage("Fullscreen exited 5 times. Test submitted automatically."); setSnackbarSeverity("error"); setSnackbarOpen(true);
+            handleFinalSubmit(true);
+          } else {
+            setFullScreenWarningOpen(true);
+          }
+        }
       } else {
-        setIsFullScreen(true);
-        setShowFullScreenPrompt(false);
+        setIsFullScreen(true); setShowFullScreenPrompt(false); setFullScreenWarningOpen(false);
       }
     };
-
-    document.addEventListener("fullscreenchange", handleFullScreenChange);
+    document.addEventListener("fullscreenchange",       handleFullScreenChange);
     document.addEventListener("webkitfullscreenchange", handleFullScreenChange);
-    document.addEventListener("mozfullscreenchange", handleFullScreenChange);
-    document.addEventListener("MSFullscreenChange", handleFullScreenChange);
-
+    document.addEventListener("mozfullscreenchange",    handleFullScreenChange);
+    document.addEventListener("MSFullscreenChange",     handleFullScreenChange);
     return () => {
-      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+      document.removeEventListener("fullscreenchange",       handleFullScreenChange);
       document.removeEventListener("webkitfullscreenchange", handleFullScreenChange);
-      document.removeEventListener("mozfullscreenchange", handleFullScreenChange);
-      document.removeEventListener("MSFullscreenChange", handleFullScreenChange);
-    };
-  }, [isFullScreen, hasSubmitted]);
-
-
-  // Malpractice detection
-  useEffect(() => {
-    const handleMalpractice = (reason) => {
-      if (!hasSubmitted) {
-        setSnackbarMessage(`Malpractice detected: ${reason}. Test submitted automatically.`);
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-        handleFinalSubmit(true);
-      }
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        handleMalpractice("Tab switching or minimizing browser");
-      }
-    };
-
-    const handleContextMenu = (e) => {
-      e.preventDefault();
-      handleMalpractice("Right-click attempt");
-    };
-
-    const handleCopy = (e) => {
-      e.preventDefault();
-      handleMalpractice("Copy attempt");
-    };
-
-    const handlePaste = (e) => {
-      e.preventDefault();
-      handleMalpractice("Paste attempt");
-    };
-
-    const handleKeyDown = (e) => {
-      // Block Windows key (left: 91, right: 92)
-      if (e.keyCode === 91 || e.keyCode === 92) {
-        e.preventDefault();
-        handleMalpractice("Windows key usage");
-      }
-      // Block screenshot shortcuts
-      if (e.key === "PrintScreen" || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "s")) {
-        e.preventDefault();
-        handleMalpractice("Screenshot attempt");
-      }
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "v") {
-        e.preventDefault();
-        handleMalpractice("Clipboard shortcut attempt (Win+V or Cmd+V)");
-      }
-      if ((e.altKey && e.key === "/") || (e.ctrlKey && e.key.toLowerCase() === "i")) {
-        e.preventDefault();
-        handleMalpractice("Suspected AI tool shortcut");
-      }
-    };
-
-    let lastInputTime = Date.now();
-    const handleEditorInput = (e) => {
-      const currentTime = Date.now();
-      const timeDiff = currentTime - lastInputTime;
-      lastInputTime = currentTime;
-
-      if (e.target.value && e.target.value.length > 100 && timeDiff < 500) {
-        handleMalpractice("Rapid code input detected (possible AI paste)");
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    document.addEventListener("contextmenu", handleContextMenu);
-    document.addEventListener("copy", handleCopy);
-    document.addEventListener("paste", handlePaste);
-    document.addEventListener("keydown", handleKeyDown);
-    const editorElement = document.querySelector(".monaco-editor .inputarea");
-    if (editorElement) {
-      editorElement.addEventListener("input", handleEditorInput);
-    }
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      document.removeEventListener("contextmenu", handleContextMenu);
-      document.removeEventListener("copy", handleCopy);
-      document.removeEventListener("paste", handlePaste);
-      document.removeEventListener("keydown", handleKeyDown);
-      if (editorElement) {
-        editorElement.removeEventListener("input", handleEditorInput);
-      }
+      document.removeEventListener("mozfullscreenchange",    handleFullScreenChange);
+      document.removeEventListener("MSFullscreenChange",     handleFullScreenChange);
     };
   }, [hasSubmitted]);
 
-  // Auto-save function
+  useEffect(() => {
+    const handleMalpractice = (reason) => {
+      if (!hasSubmitted) {
+        setSnackbarMessage(`Malpractice detected: ${reason}. Test submitted automatically.`); setSnackbarSeverity("error"); setSnackbarOpen(true);
+        handleFinalSubmit(true);
+      }
+    };
+    const handleVisibilityChange = () => { if (document.hidden) handleMalpractice("Tab switching or minimizing browser"); };
+    const handleContextMenu = (e) => { e.preventDefault(); handleMalpractice("Right-click attempt"); };
+    const handleCopy  = (e) => { e.preventDefault(); handleMalpractice("Copy attempt"); };
+    const handlePaste = (e) => { e.preventDefault(); handleMalpractice("Paste attempt"); };
+    const handleKeyDown = (e) => {
+      if (e.keyCode === 91 || e.keyCode === 92) { e.preventDefault(); handleMalpractice("Windows key usage"); }
+      if (e.key === "PrintScreen" || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "s")) { e.preventDefault(); handleMalpractice("Screenshot attempt"); }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "v") { e.preventDefault(); handleMalpractice("Clipboard shortcut attempt"); }
+      if ((e.altKey && e.key === "/") || (e.ctrlKey && e.key.toLowerCase() === "i")) { e.preventDefault(); handleMalpractice("Suspected AI tool shortcut"); }
+    };
+    let lastInputTime = Date.now();
+    const handleEditorInput = (e) => {
+      const now = Date.now(); const diff = now - lastInputTime; lastInputTime = now;
+      if (e.target.value && e.target.value.length > 100 && diff < 500) handleMalpractice("Rapid code input detected (possible AI paste)");
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    document.addEventListener("contextmenu",      handleContextMenu);
+    document.addEventListener("copy",             handleCopy);
+    document.addEventListener("paste",            handlePaste);
+    document.addEventListener("keydown",          handleKeyDown);
+    const editorElement = document.querySelector(".monaco-editor .inputarea");
+    if (editorElement) editorElement.addEventListener("input", handleEditorInput);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.removeEventListener("contextmenu",      handleContextMenu);
+      document.removeEventListener("copy",             handleCopy);
+      document.removeEventListener("paste",            handlePaste);
+      document.removeEventListener("keydown",          handleKeyDown);
+      if (editorElement) editorElement.removeEventListener("input", handleEditorInput);
+    };
+  }, [hasSubmitted]);
+
   const saveSubmissionPayload = useCallback(() => {
-    const formattedTestCases = testCases.map((testCase) => ({
-      input: Array.isArray(testCase.testcase_input)
-        ? testCase.testcase_input.join("\n")
-        : testCase.testcase_input || "",
-      expectedOutput: Array.isArray(testCase.testcase_output)
-        ? testCase.testcase_output.join("\n")
-        : testCase.testcase_output || "",
+    const formattedTestCases = testCases.map((tc) => ({
+      input: Array.isArray(tc.testcase_input) ? tc.testcase_input.join("\n") : tc.testcase_input || "",
+      expectedOutput: Array.isArray(tc.testcase_output) ? tc.testcase_output.join("\n") : tc.testcase_output || "",
     }));
+    localStorage.setItem(`code_${codeId}`, JSON.stringify({ language: languageApiMap[language], code: inputRef.current, testCases: formattedTestCases }));
+  }, [codeId, language, testCases]);
 
-    const submissionPayload = {
-      language: languageApiMap[language],
-      code: input,
-      testCases: formattedTestCases,
-    };
-
-    localStorage.setItem(`code_${codeId}`, JSON.stringify(submissionPayload));
-  }, [codeId, language, input, testCases]);
-
-  // Debounce function for auto-save
-  const debounce = (func, delay) => {
-    return (...args) => {
-      clearTimeout(autoSaveTimeoutRef.current);
-      autoSaveTimeoutRef.current = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
+  const debounce = (func, delay) => (...args) => {
+    clearTimeout(autoSaveTimeoutRef.current);
+    autoSaveTimeoutRef.current = setTimeout(() => func(...args), delay);
   };
 
-  // Debounced auto-save
   const debouncedSave = useCallback(debounce(saveSubmissionPayload, 1000), [saveSubmissionPayload]);
+  useEffect(() => { if (codeId && input) debouncedSave(); }, [input, language, codeId, debouncedSave]);
+  useEffect(() => () => clearTimeout(autoSaveTimeoutRef.current), []);
 
-  // Auto-save on input or language change
   useEffect(() => {
-    if (codeId && input) {
-      debouncedSave();
-    }
-  }, [input, language, codeId, debouncedSave]);
-
-  // Cleanup auto-save timeout on unmount
-  useEffect(() => {
-    return () => {
-      clearTimeout(autoSaveTimeoutRef.current);
-    };
-  }, []);
-
-  // Effect to handle responsive layout and cleanup
-  useEffect(() => {
-    if (isMobile) {
-      setShowTestCases(true);
-      setTestCasesCollapsed(false);
-    } else {
-      setEditorWidth(60);
-      setTestCasesCollapsed(false);
-    }
-
+    if (isMobile) { setShowTestCases(true); setTestCasesCollapsed(false); }
+    else { setEditorWidth(60); setTestCasesCollapsed(false); }
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mouseup",   handleMouseUp);
       document.removeEventListener("mousemove", handleOutputMouseMove);
-      document.removeEventListener("mouseup", handleOutputMouseUp);
+      document.removeEventListener("mouseup",   handleOutputMouseUp);
       document.body.classList.remove("resize-active");
       clearTimeout(resizeTimeoutRef.current);
-      if (resizeObserverRef.current) {
-        resizeObserverRef.current.disconnect();
-      }
+      if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
     };
   }, [isMobile]);
 
-  // Fix for ResizeObserver loop error
   useEffect(() => {
     if (typeof ResizeObserver !== "undefined") {
-      const resizeCallback = (entries) => {
-        window.requestAnimationFrame(() => {
-          if (!Array.isArray(entries) || !entries.length) {
-            return;
-          }
-          if (editorRef.current) {
-            editorRef.current.layout();
-          }
-        });
-      };
-      resizeObserverRef.current = new ResizeObserver(resizeCallback);
-      const container = document.querySelector(".monaco-editor");
-      if (container) {
-        resizeObserverRef.current.observe(container);
-      }
+      const cb = (entries) => { window.requestAnimationFrame(() => { if (!Array.isArray(entries) || !entries.length) return; if (editorRef.current) editorRef.current.layout(); }); };
+      resizeObserverRef.current = new ResizeObserver(cb);
+      const c = document.querySelector(".monaco-editor");
+      if (c) resizeObserverRef.current.observe(c);
     }
-    return () => {
-      if (resizeObserverRef.current) {
-        resizeObserverRef.current.disconnect();
-      }
-    };
+    return () => { if (resizeObserverRef.current) resizeObserverRef.current.disconnect(); };
   }, []);
 
-  // Handle horizontal divider drag (editor vs test cases)
+  // ── Drag handlers ─────────────────────────────────────────────────────────
   const handleMouseDown = (e) => {
-    if (!isMobile) {
-      e.preventDefault();
-      isDraggingRef.current = true;
-      document.body.classList.add("resize-active");
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-    }
+    if (!isMobile) { e.preventDefault(); isDraggingRef.current = true; document.body.classList.add("resize-active"); document.addEventListener("mousemove", handleMouseMove); document.addEventListener("mouseup", handleMouseUp); }
   };
-
   const handleMouseMove = useCallback((e) => {
     if (isDraggingRef.current && dividerRef.current) {
-      const container = dividerRef.current.parentElement;
-      const containerRect = container.getBoundingClientRect();
-      const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
-      setEditorWidth(Math.max(30, Math.min(80, newWidth)));
+      const r = dividerRef.current.parentElement.getBoundingClientRect();
+      setEditorWidth(Math.max(30, Math.min(80, ((e.clientX - r.left) / r.width) * 100)));
     }
   }, []);
+  const handleMouseUp = () => { isDraggingRef.current = false; document.body.classList.remove("resize-active"); document.removeEventListener("mousemove", handleMouseMove); document.removeEventListener("mouseup", handleMouseUp); if (editorRef.current) setTimeout(() => editorRef.current.layout(), 10); };
 
-  const handleMouseUp = () => {
-    isDraggingRef.current = false;
-    document.body.classList.remove("resize-active");
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-    if (editorRef.current) {
-      setTimeout(() => {
-        editorRef.current.layout();
-      }, 10);
-    }
-  };
-
-  // Handle vertical divider drag (output height)
-  const handleOutputMouseDown = (e) => {
-    e.preventDefault();
-    isDraggingRef.current = true;
-    document.body.classList.add("resize-active");
-    document.addEventListener("mousemove", handleOutputMouseMove);
-    document.addEventListener("mouseup", handleOutputMouseUp);
-  };
-
+  const handleOutputMouseDown = (e) => { e.preventDefault(); isDraggingRef.current = true; document.body.classList.add("resize-active"); document.addEventListener("mousemove", handleOutputMouseMove); document.addEventListener("mouseup", handleOutputMouseUp); };
   const handleOutputMouseMove = useCallback((e) => {
     if (isDraggingRef.current && outputDividerRef.current) {
-      const container = outputDividerRef.current.parentElement;
-      const containerRect = container.getBoundingClientRect();
-      const newHeight = ((containerRect.bottom - e.clientY) / containerRect.height) * 100;
-      setOutputHeight(Math.max(20, Math.min(50, newHeight)));
+      const r = outputDividerRef.current.parentElement.getBoundingClientRect();
+      setOutputHeight(Math.max(20, Math.min(50, ((r.bottom - e.clientY) / r.height) * 100)));
     }
   }, []);
+  const handleOutputMouseUp = () => { isDraggingRef.current = false; document.body.classList.remove("resize-active"); document.removeEventListener("mousemove", handleOutputMouseMove); document.removeEventListener("mouseup", handleOutputMouseUp); if (editorRef.current) setTimeout(() => editorRef.current.layout(), 10); };
 
-  const handleOutputMouseUp = () => {
-    isDraggingRef.current = false;
-    document.body.classList.remove("resize-active");
-    document.removeEventListener("mousemove", handleOutputMouseMove);
-    document.removeEventListener("mouseup", handleOutputMouseUp);
-    if (editorRef.current) {
-      setTimeout(() => {
-        editorRef.current.layout();
-      }, 10);
-    }
-  };
-
-  // Handle editor mount
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
-    if (isMobile) {
-      const textarea = document.querySelector(".monaco-editor .inputarea");
-      if (textarea) {
-        textarea.style.fontSize = "16px";
-        textarea.style.lineHeight = "normal";
-      }
-    }
+    if (isMobile) { const t = document.querySelector(".monaco-editor .inputarea"); if (t) { t.style.fontSize = "16px"; t.style.lineHeight = "normal"; } }
   };
 
-  // Toggle theme
+  // ── UI handlers ───────────────────────────────────────────────────────────
   const toggleTheme = () => {
-    const newMode = mode === "dark" ? "light" : "dark";
-    setMode(newMode);
-    localStorage.setItem("themeMode", newMode);
-    setTimeout(() => {
-      if (editorRef.current) {
-        editorRef.current.updateOptions({ theme: newMode === "dark" ? "vs-dark" : "vs" });
-      }
-    }, 10);
+    const n = mode === "dark" ? "light" : "dark"; setMode(n); localStorage.setItem("themeMode", n);
+    setTimeout(() => { if (editorRef.current) editorRef.current.updateOptions({ theme: n === "dark" ? "vs-dark" : "vs" }); }, 10);
   };
-
-  // Toggle output console
-  const toggleOutput = () => {
-    if (outputMinimized) {
-      setOutputMinimized(false);
-      setShowOutput(true);
-    } else {
-      setOutputMinimized(!outputMinimized);
-    }
-  };
-
-  // Toggle test cases panel
-  const toggleTestCases = () => {
-    setTestCasesCollapsed(!testCasesCollapsed);
-  };
-
-  // Handle editor input changes
-  const handleEditorChange = (value) => {
-    setInput(value || "");
-  };
+  const toggleOutput    = () => { if (outputMinimized) { setOutputMinimized(false); setShowOutput(true); } else setOutputMinimized(!outputMinimized); };
+  const toggleTestCases = () => setTestCasesCollapsed(!testCasesCollapsed);
+  const handleEditorChange = (value) => handleSetInput(value || "");
 
   const handleLanguageChange = (event) => {
-    const newLanguage = event.target.value;
-    console.log("Language change triggered. New language:", newLanguage); // Debug log
-
-    // Update language state
-    setLanguage((prevLanguage) => {
-      console.log("Previous language:", prevLanguage, "New language:", newLanguage); // Debug log
-      return newLanguage;
-    });
-
-    // Load saved code for the new language, if it exists
-    const savedPayload = localStorage.getItem(`code_${codeId}`);
-    let newCode = templates[newLanguage];
-
-    if (savedPayload) {
-      try {
-        const parsedPayload = JSON.parse(savedPayload);
-        console.log("Saved payload found:", parsedPayload); // Debug log
-        if (parsedPayload.language === languageApiMap[newLanguage]) {
-          newCode = parsedPayload.code || templates[newLanguage];
-          console.log("Using saved code for language:", newLanguage); // Debug log
-        }
-      } catch (error) {
-        console.error("Error parsing saved payload:", error);
-      }
-    } else {
-      console.log("No saved payload, using template for:", newLanguage); // Debug log
-    }
-
-    // Update editor content
-    setInput(newCode);
-    console.log("Editor input set to:", newCode); // Debug log
-
-    // Update editor language model
-    if (editorRef.current && editorRef.current.getModel()) {
-      window.monaco.editor.setModelLanguage(editorRef.current.getModel(), newLanguage);
-      console.log("Editor language model updated to:", newLanguage); // Debug log
-    } else {
-      console.warn("Editor or model not available during language change"); // Debug log
-    }
-
-    // Save the new language and code
+    const nl = event.target.value; setLanguage(() => nl);
+    const saved = localStorage.getItem(`code_${codeId}`);
+    let newCode = templates[nl];
+    if (saved) { try { const p = JSON.parse(saved); if (p.language === languageApiMap[nl]) newCode = p.code || templates[nl]; } catch (e) { console.error(e); } }
+    handleSetInput(newCode);
+    if (editorRef.current && editorRef.current.getModel()) window.monaco.editor.setModelLanguage(editorRef.current.getModel(), nl);
     saveSubmissionPayload();
-    console.log("Submission payload saved for language:", newLanguage); // Debug log
-
-  };
-  // Reset editor to template
-  const resetEditor = () => {
-    setResetDialogOpen(true);
   };
 
-  // Confirm editor reset
+  const resetEditor       = () => setResetDialogOpen(true);
+  const cancelResetEditor = () => setResetDialogOpen(false);
   const confirmResetEditor = () => {
-    setInput(templates[language] || "");
-    localStorage.removeItem(`code_${codeId}`);
-    setSnackbarMessage("Editor reset to template");
-    setSnackbarSeverity("info");
-    setSnackbarOpen(true);
-    setResetDialogOpen(false);
+    handleSetInput(templates[language] || ""); localStorage.removeItem(`code_${codeId}`);
+    setSnackbarMessage("Editor reset to template"); setSnackbarSeverity("info"); setSnackbarOpen(true); setResetDialogOpen(false);
   };
 
-  // Cancel editor reset
-  const cancelResetEditor = () => {
-    setResetDialogOpen(false);
-  };
-
-  // Manual save
   const handleSave = () => {
-    const formattedTestCases = testCases.map((testCase) => ({
-      input: Array.isArray(testCase.testcase_input)
-        ? testCase.testcase_input.join("\n")
-        : testCase.testcase_input || "",
-      expectedOutput: Array.isArray(testCase.testcase_output)
-        ? testCase.testcase_output.join("\n")
-        : testCase.testcase_output || "",
-    }));
-
-    const submissionPayload = {
-      language: languageApiMap[language],
-      code: input,
-      testCases: formattedTestCases,
-    };
-
-    localStorage.setItem(`code_${codeId}`, JSON.stringify(submissionPayload));
-    setSnackbarMessage("Progress saved manually");
-    setSnackbarSeverity("success");
-    setSnackbarOpen(true);
+    const f = testCases.map((tc) => ({ input: Array.isArray(tc.testcase_input) ? tc.testcase_input.join("\n") : tc.testcase_input || "", expectedOutput: Array.isArray(tc.testcase_output) ? tc.testcase_output.join("\n") : tc.testcase_output || "" }));
+    localStorage.setItem(`code_${codeId}`, JSON.stringify({ language: languageApiMap[language], code: input, testCases: f }));
+    setSnackbarMessage("Progress saved manually"); setSnackbarSeverity("success"); setSnackbarOpen(true);
   };
 
-  // Fetch code and test cases
+  const handleReEnterFullScreen = async () => {
+    try {
+      if (document.documentElement.requestFullscreen)            await document.documentElement.requestFullscreen();
+      else if (document.documentElement.mozRequestFullScreen)    await document.documentElement.mozRequestFullScreen();
+      else if (document.documentElement.webkitRequestFullscreen) await document.documentElement.webkitRequestFullscreen();
+      else if (document.documentElement.msRequestFullscreen)     await document.documentElement.msRequestFullscreen();
+      setFullScreenWarningOpen(false);
+    } catch (err) { console.error("Failed to re-enter fullscreen:", err); }
+  };
+
+  // ── Fetch code and test cases ─────────────────────────────────────────────
   const fetchCodeAndTestCases = async (id) => {
     try {
       setLoading(true);
       const code = await fetchCodeById(id);
       setSelectedCode(code);
-
       if (!code.code_test_cases_id || code.code_test_cases_id.length === 0) {
-        setTestCases([]);
-        setSnackbarMessage("No test cases found for this problem.");
-        setSnackbarSeverity("warning");
-        setSnackbarOpen(true);
-        return;
+        setTestCases([]); setSnackbarMessage("No test cases found for this problem."); setSnackbarSeverity("warning"); setSnackbarOpen(true); return;
       }
-
-      const testCasePromises = code.code_test_cases_id.map(async (testcase_id) => {
-        try {
-          return await fetchTestCaseById(testcase_id);
-        } catch (err) {
-          console.error(`Error fetching test case ${testcase_id}:`, err);
-          return null;
-        }
-      });
-      const responses = await Promise.all(testCasePromises);
-      const validTestCases = responses.filter((tc) => tc && tc.testcase_input && tc.testcase_output);
-      setTestCases(validTestCases);
-
-      if (validTestCases.length === 0) {
-        setTestCases([{ testcase_input: "", testcase_output: "" }]);
-        setSnackbarMessage("No valid test cases retrieved.");
-        setSnackbarSeverity("warning");
-        setSnackbarOpen(true);
-      }
+      const promises = code.code_test_cases_id.map(async (tid) => { try { return await fetchTestCaseById(tid); } catch (e) { return null; } });
+      const responses = await Promise.all(promises);
+      const valid = responses.filter((tc) => tc && tc.testcase_input && tc.testcase_output);
+      setTestCases(valid.length ? valid : [{ testcase_input: "", testcase_output: "" }]);
+      if (!valid.length) { setSnackbarMessage("No valid test cases retrieved."); setSnackbarSeverity("warning"); setSnackbarOpen(true); }
     } catch (err) {
       console.error("Fetch error:", err);
       setTestCases([{ testcase_input: "", testcase_output: "" }]);
-      setOutput(`Error fetching problem: ${err.message}.`);
-      setShowOutput(true);
-      setSnackbarMessage(`Error fetching problem: ${err.message}.`);
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      setTerminalLines([{ type: "error", text: `Error fetching problem: ${err.message}.` }]);
+      setShowOutput(true); setSnackbarMessage(`Error fetching problem: ${err.message}.`); setSnackbarSeverity("error"); setSnackbarOpen(true);
+    } finally { setLoading(false); }
+  };
+
+  useEffect(() => {
+    if (codeId) { fetchCodeAndTestCases(codeId); setTerminalLines([]); }
+    else { setTerminalLines([{ type: "error", text: "Error: No code ID provided in URL" }]); setShowOutput(true); setSnackbarMessage("No code ID provided in URL."); setSnackbarSeverity("error"); setSnackbarOpen(true); }
+  }, [codeId]);
+
+  // ── RUN button: terminal-only, shows errors or "no errors" ───────────────
+  const handleRun = async (e) => {
+    e.preventDefault();
+    setRunLoading(true);
+    setShowOutput(true);
+    setOutputMinimized(false);
+
+    const lines = [{ type: "info", text: `$ Executing ${languageNames[language]} code...` }];
+    setTerminalLines([...lines]);
+
+    try {
+      // Use first test case input as stdin so the code gets realistic input
+      const firstTc = testCases[0];
+      const stdinInput = firstTc
+        ? (Array.isArray(firstTc.testcase_input) ? firstTc.testcase_input.join("\n") : firstTc.testcase_input || "")
+        : "";
+
+      const payload = {
+        language: languageApiMap[language] || language,
+        code: input,
+        // Use "__RUN_ONLY__" as sentinel expected output — backend still runs code
+        testCases: [{ input: stdinInput, expectedOutput: "__RUN_ONLY__" }],
+      };
+
+      const { results } = await compileCode(payload);
+
+      if (!results || results.length === 0) {
+        lines.push({ type: "error", text: "No output received from compiler." });
+        setTerminalLines([...lines]);
+        return;
+      }
+
+      const result = results[0];
+      const { hasCompileError, hasRuntimeError, cleanOutput } = parseRunResponse(result);
+
+      if (hasCompileError) {
+        lines.push({ type: "error", text: "╔══════════════════════════════════════╗" });
+        lines.push({ type: "error", text: "║          COMPILE ERROR               ║" });
+        lines.push({ type: "error", text: "╚══════════════════════════════════════╝" });
+        cleanOutput.split("\n").forEach((l) => lines.push({ type: "error", text: l }));
+      } else if (hasRuntimeError) {
+        lines.push({ type: "warn", text: "╔══════════════════════════════════════╗" });
+        lines.push({ type: "warn", text: "║           RUNTIME ERROR              ║" });
+        lines.push({ type: "warn", text: "╚══════════════════════════════════════╝" });
+        cleanOutput.split("\n").forEach((l) => lines.push({ type: "warn", text: l }));
+      } else {
+        lines.push({ type: "success", text: "✔  No syntax or runtime errors detected." });
+        if (cleanOutput) {
+          lines.push({ type: "plain", text: "──────────────── Output ────────────────" });
+          cleanOutput.split("\n").forEach((l) => lines.push({ type: "plain", text: l }));
+          lines.push({ type: "plain", text: "────────────────────────────────────────" });
+        } else {
+          lines.push({ type: "plain", text: "(Program produced no output)" });
+        }
+      }
+
+      setTerminalLines([...lines]);
+    } catch (error) {
+      lines.push({ type: "error", text: `Execution failed: ${error.message}` });
+      setTerminalLines([...lines]);
+      setSnackbarMessage("Error running code."); setSnackbarSeverity("error"); setSnackbarOpen(true);
     } finally {
-      setLoading(false);
+      setRunLoading(false);
     }
   };
 
-  // Fetch code on mount or codeId change
-  useEffect(() => {
-    if (codeId) {
-      fetchCodeAndTestCases(codeId);
-      setOutput("");
-    } else {
-      setOutput("Error: No code ID provided in URL");
-      setShowOutput(true);
-      setSnackbarMessage("No code ID provided in URL.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+  // ── RUN TEST CASES: compare against ALL test cases, open dialog ───────────
+  const handleRunTestCases = async () => {
+    if (testCases.length === 0) {
+      setSnackbarMessage("No test cases available for this problem."); setSnackbarSeverity("warning"); setSnackbarOpen(true);
+      return;
     }
-  }, [codeId]);
+    setRunTestCasesLoading(true);
+    setTestCaseResults([]);
+    setTestCaseDialogOpen(true);
 
-  const compileAndEvaluate = async (currentCodeId, codeInput, codeLanguage, codeTestCases) => {
-    setShowOutput(true);
-    setOutputMinimized(false);
-    setLoading(true);
-    setOpenProgressDialog(true);
-    setOutput("Running code against test cases...\n");
-  
     try {
-      // Validate and format test cases
-      const formattedTestCases = codeTestCases
-        .filter(tc => tc?.testcase_input != null && tc?.testcase_output != null)
-        .map(testCase => ({
-          input: Array.isArray(testCase.testcase_input)
-            ? testCase.testcase_input.join("\n")
-            : testCase.testcase_input || "",
-          expectedOutput: Array.isArray(testCase.testcase_output)
-            ? testCase.testcase_output.join("\n")
-            : testCase.testcase_output || "",
-        }));
-  
-      // Ensure at least one test case
-      if (formattedTestCases.length === 0) {
-        console.warn(`⚠️ No valid test cases for ${currentCodeId}, using default empty test case`);
-        formattedTestCases.push({ input: "", expectedOutput: "" });
-      }
-  
-      const submissionPayload = {
-        language: languageApiMap[codeLanguage] || codeLanguage,
-        code: codeInput || templates[codeLanguage] || "",
-        testCases: formattedTestCases,
-      };
-  
-      // Save payload to localStorage
-      localStorage.setItem(`code_${currentCodeId}`, JSON.stringify(submissionPayload));
-      console.log(`💾 Saved code payload for ${currentCodeId}:`, {
-        codeLength: submissionPayload.code.length,
-        language: submissionPayload.language,
-        testCases: submissionPayload.testCases.length,
+      const formattedTestCases = testCases.map((tc) => ({
+        input: Array.isArray(tc.testcase_input) ? tc.testcase_input.join("\n") : tc.testcase_input || "",
+        expectedOutput: Array.isArray(tc.testcase_output) ? tc.testcase_output.join("\n") : tc.testcase_output || "",
+      }));
+
+      const payload = { language: languageApiMap[language] || language, code: input, testCases: formattedTestCases };
+      const { results } = await compileCode(payload);
+
+      const displayResults = results.map((res, idx) => {
+        const { hasCompileError, hasRuntimeError, cleanOutput } = parseRunResponse(res);
+        let status = "passed";
+        let statusLabel = "Passed";
+        if (hasCompileError)  { status = "compile_error"; statusLabel = "Compile Error"; }
+        else if (hasRuntimeError) { status = "runtime_error"; statusLabel = "Runtime Error"; }
+        else if (!res.passed) { status = "failed";        statusLabel = "Failed"; }
+
+        return {
+          index: idx + 1,
+          passed: res.passed,
+          status,
+          statusLabel,
+          input: res.input,
+          expectedOutput: res.expectedOutput,
+          actualOutput: cleanOutput,
+          // First 3 test cases show full detail; rest show only pass/fail (hidden)
+          isHidden: idx >= 3,
+        };
       });
-  
-      // Compile code
-      const { results } = await compileCode(submissionPayload);
-      const formattedOutput = results.map(
-        (res, index) => {
-          if (index < 2) {
-            return `Test Case #${index + 1}:\nInput:\n${res.input}\nExpected Output:\n${res.expectedOutput}\nActual Output:\n${res.actualOutput}\nPassed: ${res.passed ? "✅" : "❌"}\n`;
-          } else {
-            return `Hidden Test Case #${index + 1}: ${res.passed ? "Passed ✅" : "Failed ❌"}\n`;
-          }
-        }
-      ).join("\n");
-      setOutput(formattedOutput);
-  
-      // Calculate score
-      const allPassed = results.length > 0 && results.every(res => res.passed);
+
+      setTestCaseResults(displayResults);
+
+      // Terminal summary
+      const passedCount = displayResults.filter(r => r.passed).length;
+      setTerminalLines([
+        { type: "info",    text: `$ Ran ${results.length} test case(s)...` },
+        { type: passedCount === results.length ? "success" : "warn", text: `Result: ${passedCount}/${results.length} test cases passed.` },
+      ]);
+      setShowOutput(true); setOutputMinimized(false);
+
+      // Update scoring
+      const allPassed = results.every(r => r.passed);
       const codingScore = allPassed ? 10 : 0;
-  
-      const newCodingResult = { codeId: currentCodeId, score: codingScore, total: 10 };
-      console.log(`📊 New coding result for ${currentCodeId}:`, newCodingResult);
-  
-      // Get current test result
+      const newCodingResult = { codeId, score: codingScore, total: 10 };
       let currentTestResult = testResult;
-      try {
-        const storedResult = localStorage.getItem("test_result");
-        if (storedResult) {
-          currentTestResult = JSON.parse(storedResult);
-        }
-      } catch (error) {
-        console.error("Error parsing stored test result:", error);
-      }
-  
-      // Initialize codingResults if undefined
+      try { const stored = localStorage.getItem("test_result"); if (stored) currentTestResult = JSON.parse(stored); } catch (e) { console.error(e); }
       currentTestResult.codingResults = currentTestResult.codingResults || [];
-  
-      // Update coding results
-      const existingIndex = currentTestResult.codingResults.findIndex(result => result.codeId === currentCodeId);
+      const existingIndex = currentTestResult.codingResults.findIndex(r => r.codeId === codeId);
       let updatedCodingResults = [...currentTestResult.codingResults];
-      if (existingIndex !== -1) {
-        updatedCodingResults[existingIndex] = newCodingResult;
-        console.log(`🔄 Updated existing result for ${currentCodeId} at index ${existingIndex}`);
-      } else {
-        updatedCodingResults.push(newCodingResult);
-        console.log(`➕ Added new result for ${currentCodeId}. Total results: ${updatedCodingResults.length}`);
-      }
-  
-      // Ensure codingIds is initialized
+      if (existingIndex !== -1) updatedCodingResults[existingIndex] = newCodingResult;
+      else updatedCodingResults.push(newCodingResult);
       const effectiveCodingIds = fetchedTestCodingIds.length > 0 ? fetchedTestCodingIds : (currentTestResult.codingIds || []);
-  
-      // Update test result
       const updatedTestResult = {
         ...currentTestResult,
         codingResults: updatedCodingResults,
         result_user_id: userId || currentTestResult.result_user_id || "",
         result_test_id: testId || currentTestResult.result_test_id || "",
-        result_score: (currentTestResult.mcqCorrect || 0) + updatedCodingResults.reduce((sum, result) => sum + result.score, 0),
+        result_score: (currentTestResult.mcqCorrect || 0) + updatedCodingResults.reduce((sum, r) => sum + r.score, 0),
         result_total_score: currentTestResult.result_total_score || effectiveCodingIds.length * 10,
         result_poc_id: pocId || currentTestResult.result_poc_id || "",
         codingAnswered: updatedCodingResults.length,
         codingNotAnswered: effectiveCodingIds.length - updatedCodingResults.length,
-        codingNotVisited : Math.max(0, effectiveCodingIds.length - updatedCodingResults.length),
+        codingNotVisited: Math.max(0, effectiveCodingIds.length - updatedCodingResults.length),
         codingCorrect: updatedCodingResults.filter(r => r.score > 0).length,
         codingWrong: updatedCodingResults.filter(r => r.score === 0).length,
         studentName: studentName || currentTestResult.studentName || "",
       };
-  
-      // Save and verify localStorage
       localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
-      const verifyResult = JSON.parse(localStorage.getItem("test_result") || "{}");
-      if (verifyResult.codingResults?.length !== updatedCodingResults.length) {
-        throw new Error(`Verification failed: Expected ${updatedCodingResults.length} results, got ${verifyResult.codingResults?.length || 0}`);
-      }
-      console.log(`✅ Successfully saved test result with ${verifyResult.codingResults.length} coding results`);
-  
       setTestResult(updatedTestResult);
-      setSnackbarMessage("Code compiled and evaluated successfully!");
-      setSnackbarSeverity("success");
+      localStorage.setItem(`code_${codeId}`, JSON.stringify({ language: languageApiMap[language], code: input, testCases: formattedTestCases }));
+    } catch (error) {
+      console.error("Run test cases error:", error);
+      setTestCaseResults([]);
+      setSnackbarMessage(`Error running test cases: ${error.message}`); setSnackbarSeverity("error"); setSnackbarOpen(true);
+      setTestCaseDialogOpen(false);
+    } finally {
+      setRunTestCasesLoading(false);
+    }
+  };
+
+  // ── compileAndEvaluate (used by submit flow) ──────────────────────────────
+  const compileAndEvaluate = async (currentCodeId, codeInput, codeLanguage, codeTestCases) => {
+    setShowOutput(true); setOutputMinimized(false); setLoading(true); setOpenProgressDialog(true);
+    setTerminalLines([{ type: "info", text: "Running code against test cases..." }]);
+    try {
+      const formattedTestCases = codeTestCases
+        .filter(tc => tc?.testcase_input != null && tc?.testcase_output != null)
+        .map(tc => ({
+          input: Array.isArray(tc.testcase_input) ? tc.testcase_input.join("\n") : tc.testcase_input || "",
+          expectedOutput: Array.isArray(tc.testcase_output) ? tc.testcase_output.join("\n") : tc.testcase_output || "",
+        }));
+      if (!formattedTestCases.length) formattedTestCases.push({ input: "", expectedOutput: "" });
+      const payload = { language: languageApiMap[codeLanguage] || codeLanguage, code: codeInput || templates[codeLanguage] || "", testCases: formattedTestCases };
+      localStorage.setItem(`code_${currentCodeId}`, JSON.stringify(payload));
+      const { results } = await compileCode(payload);
+      const lines = [];
+      results.forEach((res, i) => {
+        if (i < 3) {
+          lines.push({ type: "info",  text: `Test Case #${i + 1}:` });
+          lines.push({ type: "plain", text: `  Input:    ${res.input}` });
+          lines.push({ type: "plain", text: `  Expected: ${res.expectedOutput}` });
+          lines.push({ type: "plain", text: `  Actual:   ${res.actualOutput}` });
+          lines.push({ type: res.passed ? "success" : "error", text: `  Status:   ${res.passed ? "✅ Passed" : "❌ Failed"}` });
+        } else {
+          lines.push({ type: res.passed ? "success" : "error", text: `Hidden Test Case #${i + 1}: ${res.passed ? "✅ Passed" : "❌ Failed"}` });
+        }
+      });
+      setTerminalLines(lines);
+      const allPassed = results.length > 0 && results.every(r => r.passed);
+      const codingScore = allPassed ? 10 : 0;
+      const newCodingResult = { codeId: currentCodeId, score: codingScore, total: 10 };
+      let currentTestResult = testResult;
+      try { const stored = localStorage.getItem("test_result"); if (stored) currentTestResult = JSON.parse(stored); } catch (e) { console.error(e); }
+      currentTestResult.codingResults = currentTestResult.codingResults || [];
+      const existingIndex = currentTestResult.codingResults.findIndex(r => r.codeId === currentCodeId);
+      let updatedCodingResults = [...currentTestResult.codingResults];
+      if (existingIndex !== -1) updatedCodingResults[existingIndex] = newCodingResult; else updatedCodingResults.push(newCodingResult);
+      const effectiveCodingIds = fetchedTestCodingIds.length > 0 ? fetchedTestCodingIds : (currentTestResult.codingIds || []);
+      const updatedTestResult = {
+        ...currentTestResult, codingResults: updatedCodingResults,
+        result_user_id: userId || currentTestResult.result_user_id || "",
+        result_test_id: testId || currentTestResult.result_test_id || "",
+        result_score: (currentTestResult.mcqCorrect || 0) + updatedCodingResults.reduce((sum, r) => sum + r.score, 0),
+        result_total_score: currentTestResult.result_total_score || effectiveCodingIds.length * 10,
+        result_poc_id: pocId || currentTestResult.result_poc_id || "",
+        codingAnswered: updatedCodingResults.length,
+        codingNotAnswered: effectiveCodingIds.length - updatedCodingResults.length,
+        codingNotVisited: Math.max(0, effectiveCodingIds.length - updatedCodingResults.length),
+        codingCorrect: updatedCodingResults.filter(r => r.score > 0).length,
+        codingWrong: updatedCodingResults.filter(r => r.score === 0).length,
+        studentName: studentName || currentTestResult.studentName || "",
+      };
+      localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
+      setTestResult(updatedTestResult);
+      setSnackbarMessage("Code compiled and evaluated successfully!"); setSnackbarSeverity("success");
       return { success: true, testResult: updatedTestResult };
     } catch (error) {
       console.error("Compile error:", error);
-      setOutput(`Error running code: ${error.message}`);
-      setSnackbarMessage("Error during code compilation.");
-      setSnackbarSeverity("warning");
+      setTerminalLines([{ type: "error", text: `Error running code: ${error.message}` }]);
+      setSnackbarMessage("Error during code compilation."); setSnackbarSeverity("warning");
       return { success: false, error: error.message };
-    } finally {
-      setLoading(false);
-      setOpenProgressDialog(false);
-      setSnackbarOpen(true);
-    }
+    } finally { setLoading(false); setOpenProgressDialog(false); setSnackbarOpen(true); }
   };
-  
-  // Handle code run
-  const handleRun = async e => {
-    e.preventDefault();
-    return (await compileAndEvaluate(codeId, input, language, testCases)).success;
-  };
-  
-  // Compile all programs
+
   const compileAllPrograms = async () => {
     const effectiveCodingIds = fetchedTestCodingIds.length > 0 ? fetchedTestCodingIds : (testResult.codingIds || []);
-    setLoading(true);
-    setOpenProgressDialog(true);
-    setOutput("Processing results...\nCompiling all programs...\n");
-  
-    console.log(`🚀 Starting compilation for ${effectiveCodingIds.length} coding problems:`, effectiveCodingIds);
-  
-    let compilationErrors = 0;
-    let processedResults = [];
-  
+    setLoading(true); setOpenProgressDialog(true);
+    setTerminalLines([{ type: "info", text: "Processing results...\nCompiling all programs..." }]);
+    let compilationErrors = 0, processedResults = [];
     try {
       for (const [index, id] of effectiveCodingIds.entries()) {
-        console.log(`\n🔄 Processing program ${index + 1}/${effectiveCodingIds.length} - ID: ${id}`);
-        setOutput(prev => `${prev}\n📝 Processing program ${index + 1}/${effectiveCodingIds.length} (ID: ${id})...`);
-  
-        // Initialize defaults
-        let codeInput = templates[language] || "";
-        let codeLanguage = language;
-        let codeTestCases = [{ testcase_input: "", testcase_output: "" }];
-  
-        // Load saved payload
+        setTerminalLines(prev => [...prev, { type: "info", text: `📝 Processing program ${index + 1}/${effectiveCodingIds.length} (ID: ${id})...` }]);
+        let codeInput = templates[language] || "", codeLanguage = language, codeTestCases = [{ testcase_input: "", testcase_output: "" }];
         const savedPayload = localStorage.getItem(`code_${id}`);
         if (savedPayload) {
           try {
-            const parsedPayload = JSON.parse(savedPayload);
-            codeInput = parsedPayload.code || templates[language] || "";
-            codeLanguage = Object.keys(languageApiMap).find(key => languageApiMap[key] === parsedPayload.language) || language;
-            console.log(`📂 Found saved payload for ${id}:`, {
-              codeLength: codeInput.length,
-              language: codeLanguage,
-            });
-            setOutput(prev => `${prev}\n   ✅ Using saved code (${codeInput.length} chars)`);
-          } catch (error) {
-            console.error(`❌ Error parsing saved payload for ${id}:`, error);
-            setOutput(prev => `${prev}\n   ⚠️ Error parsing saved code, using default`);
-          }
+            const p = JSON.parse(savedPayload);
+            codeInput = p.code || templates[language] || "";
+            codeLanguage = Object.keys(languageApiMap).find(k => languageApiMap[k] === p.language) || language;
+            setTerminalLines(prev => [...prev, { type: "success", text: `   ✅ Using saved code (${codeInput.length} chars)` }]);
+          } catch (e) { setTerminalLines(prev => [...prev, { type: "warn", text: "   ⚠️ Error parsing saved code" }]); }
         } else {
-          console.log(`⚠️ No saved payload for ${id}, using default template`);
-          setOutput(prev => `${prev}\n   ⚠️ No saved code found, using default template`);
-          localStorage.setItem(`code_${id}`, JSON.stringify({
-            language: languageApiMap[language] || language,
-            code: templates[language] || "",
-            testCases: [{ input: "", expectedOutput: "" }],
-          }));
+          setTerminalLines(prev => [...prev, { type: "warn", text: "   ⚠️ No saved code found, using default template" }]);
+          localStorage.setItem(`code_${id}`, JSON.stringify({ language: languageApiMap[language] || language, code: templates[language] || "", testCases: [{ input: "", expectedOutput: "" }] }));
         }
-  
-        // Fetch test cases
         try {
           const code = await fetchCodeById(id);
           if (code?.code_test_cases_id?.length > 0) {
-            const testCasePromises = code.code_test_cases_id.map(async testcase_id => {
-              try {
-                const testCase = await fetchTestCaseById(testcase_id);
-                return testCase?.testcase_input && testCase?.testcase_output ? testCase : null;
-              } catch (err) {
-                console.error(`Error fetching test case ${testcase_id}:`, err);
-                return null;
-              }
-            });
-            const responses = await Promise.all(testCasePromises);
+            const tcPromises = code.code_test_cases_id.map(async tid => { try { const tc = await fetchTestCaseById(tid); return tc?.testcase_input && tc?.testcase_output ? tc : null; } catch (e) { return null; } });
+            const responses = await Promise.all(tcPromises);
             codeTestCases = responses.filter(tc => tc !== null);
-            console.log(`📋 Found ${codeTestCases.length} test cases for ${id}`);
-            setOutput(prev => `${prev}\n   📋 Found ${codeTestCases.length} test cases`);
-          } else {
-            console.warn(`⚠️ No test cases for ${id}, using default`);
-            setOutput(prev => `${prev}\n   ⚠️ No test cases found, using default`);
-          }
-        } catch (err) {
-          console.error(`Error fetching code ${id}:`, err);
-          setOutput(prev => `${prev}\n   ⚠️ Error fetching test cases, using default`);
-        }
-  
-        // Compile and evaluate
-        setOutput(prev => `${prev}\n   ⚙️ Compiling...`);
-        const compilationResult = await compileAndEvaluate(id, codeInput, codeLanguage, codeTestCases);
-  
-        if (!compilationResult.success) {
-          compilationErrors++;
-          console.error(`❌ Compilation failed for ${id}:`, compilationResult.error);
-          setOutput(prev => `${prev}\n   ❌ Compilation failed: ${compilationResult.error}`);
-        } else {
-          processedResults.push(compilationResult);
-          console.log(`✅ Successfully compiled ${id} with score:`, compilationResult.testResult.codingResults.find(r => r.codeId === id)?.score || 0);
-          setOutput(prev => `${prev}\n   ✅ Compilation successful`);
-        }
+            setTerminalLines(prev => [...prev, { type: "info", text: `   📋 Found ${codeTestCases.length} test cases` }]);
+          } else setTerminalLines(prev => [...prev, { type: "warn", text: "   ⚠️ No test cases found" }]);
+        } catch (e) { setTerminalLines(prev => [...prev, { type: "warn", text: "   ⚠️ Error fetching test cases" }]); }
+        setTerminalLines(prev => [...prev, { type: "info", text: "   ⚙️ Compiling..." }]);
+        const result = await compileAndEvaluate(id, codeInput, codeLanguage, codeTestCases);
+        if (!result.success) { compilationErrors++; setTerminalLines(prev => [...prev, { type: "error", text: `   ❌ Failed: ${result.error}` }]); }
+        else { processedResults.push(result); setTerminalLines(prev => [...prev, { type: "success", text: "   ✅ Success" }]); }
       }
-  
-      // Final verification
-      console.log(`\n🔍 Final verification started`);
-      setOutput(prev => `${prev}\n\n🔄 Finalizing all results...`);
-  
+      setTerminalLines(prev => [...prev, { type: "info", text: "🔄 Finalizing..." }]);
       let finalTestResult = testResult;
-      try {
-        const storedResult = localStorage.getItem("test_result");
-        if (storedResult) {
-          finalTestResult = JSON.parse(storedResult);
-        }
-      } catch (error) {
-        console.error("❌ Error getting final test result:", error);
-      }
-  
-      // Ensure all coding IDs have results
+      try { const stored = localStorage.getItem("test_result"); if (stored) finalTestResult = JSON.parse(stored); } catch (e) { console.error(e); }
       finalTestResult.codingResults = finalTestResult.codingResults || [];
-      const missingIds = effectiveCodingIds.filter(id => !finalTestResult.codingResults.some(result => result.codeId === id));
-      for (const missingId of missingIds) {
-        console.log(`🔧 Processing missing ID: ${missingId}`);
-        setOutput(prev => `${prev}\n🔧 Processing missing result for ${missingId}...`);
-  
-        const savedCode = localStorage.getItem(`code_${missingId}`);
-        let score = 0;
-        if (savedCode) {
-          try {
-            const parsedCode = JSON.parse(savedCode);
-            if (parsedCode.code && parsedCode.code !== templates[language] && parsedCode.code.trim().length > (templates[language]?.length || 0)) {
-              score = 5; // Partial credit for attempted code
-              console.log(`💡 Giving partial credit (${score}) for attempted solution`);
-            }
-          } catch (error) {
-            console.error(`Error parsing saved code for ${missingId}:`, error);
-          }
-        }
-  
-        finalTestResult.codingResults.push({
-          codeId: missingId,
-          score,
-          total: 10,
-        });
-        console.log(`➕ Added missing result:`, { codeId: missingId, score, total: 10 });
+      const missingIds = effectiveCodingIds.filter(id => !finalTestResult.codingResults.some(r => r.codeId === id));
+      for (const mid of missingIds) {
+        const sc = localStorage.getItem(`code_${mid}`); let score = 0;
+        if (sc) { try { const p = JSON.parse(sc); if (p.code && p.code !== templates[language] && p.code.trim().length > (templates[language]?.length || 0)) score = 5; } catch (e) { console.error(e); } }
+        finalTestResult.codingResults.push({ codeId: mid, score, total: 10 });
       }
-  
-      // Update counts
-     finalTestResult.codingAnswered = finalTestResult.codingResults.length;
-  finalTestResult.codingCorrect = finalTestResult.codingResults.filter(r => r.score > 0).length;
-  finalTestResult.codingWrong = finalTestResult.codingResults.filter(r => r.score === 0).length;
-  finalTestResult.codingNotAnswered = Math.max(0, effectiveCodingIds.length - finalTestResult.codingAnswered);
-  finalTestResult.codingNotVisited = Math.max(0, effectiveCodingIds.length - finalTestResult.codingAnswered);
-  finalTestResult.result_score = (finalTestResult.mcqCorrect || 0) + finalTestResult.codingResults.reduce((sum, result) => sum + result.score, 0);
-  
-      // Save updated result
+      finalTestResult.codingAnswered    = finalTestResult.codingResults.length;
+      finalTestResult.codingCorrect     = finalTestResult.codingResults.filter(r => r.score > 0).length;
+      finalTestResult.codingWrong       = finalTestResult.codingResults.filter(r => r.score === 0).length;
+      finalTestResult.codingNotAnswered = Math.max(0, effectiveCodingIds.length - finalTestResult.codingAnswered);
+      finalTestResult.codingNotVisited  = Math.max(0, effectiveCodingIds.length - finalTestResult.codingAnswered);
+      finalTestResult.result_score      = (finalTestResult.mcqCorrect || 0) + finalTestResult.codingResults.reduce((sum, r) => sum + r.score, 0);
       localStorage.setItem("test_result", JSON.stringify(finalTestResult));
       setTestResult(finalTestResult);
-  
-      console.log(`✅ Compilation completed with ${compilationErrors} error(s)`, {
-        codingResults: finalTestResult.codingResults.length,
-        totalScore: finalTestResult.result_score,
-      });
-      setOutput(prev => `${prev}\n✅ Compilation completed with ${compilationErrors} error(s)`);
-      setOutput(prev => `${prev}\n📈 Final coding results: ${finalTestResult.codingResults.length}/${effectiveCodingIds.length} programs processed`);
-      setOutput(prev => `${prev}\n🏆 Total score: ${finalTestResult.result_score}/${finalTestResult.result_total_score}`);
-  
-      setSnackbarMessage(`Compilation completed. ${finalTestResult.codingResults.length}/${effectiveCodingIds.length} programs processed.`);
+      setTerminalLines(prev => [...prev,
+        { type: "success", text: `✅ Done — ${compilationErrors} error(s)` },
+        { type: "info",    text: `📈 ${finalTestResult.codingResults.length}/${effectiveCodingIds.length} programs processed` },
+        { type: "success", text: `🏆 Score: ${finalTestResult.result_score}/${finalTestResult.result_total_score}` },
+      ]);
+      setSnackbarMessage(`Compilation completed. ${finalTestResult.codingResults.length}/${effectiveCodingIds.length} processed.`);
       setSnackbarSeverity(compilationErrors > 0 ? "warning" : "success");
-  
-      return {
-        success: true,
-        errors: compilationErrors,
-        processedCount: finalTestResult.codingResults.length,
-        expectedCount: effectiveCodingIds.length,
-        finalResult: finalTestResult,
-      };
+      return { success: true, errors: compilationErrors, finalResult: finalTestResult };
     } catch (error) {
-      console.error("❌ Error compiling all programs:", error);
-      setOutput(prev => `${prev}\n❌ Error compiling programs: ${error.message}`);
-      setSnackbarMessage("Error compiling all programs.");
-      setSnackbarSeverity("error");
+      setTerminalLines(prev => [...prev, { type: "error", text: `❌ Error: ${error.message}` }]);
+      setSnackbarMessage("Error compiling all programs."); setSnackbarSeverity("error");
       return { success: false, error: error.message };
-    } finally {
-      setLoading(false);
-      setOpenProgressDialog(false);
-      setSnackbarOpen(true);
-    }
+    } finally { setLoading(false); setOpenProgressDialog(false); setSnackbarOpen(true); }
   };
-  
-  // Handle final submission
+
   const handleFinalSubmit = async (isMalpractice = false) => {
-    if (hasSubmitted) {
-      console.log(`⏹️ Submission already completed, ignoring duplicate call`);
-      return;
-    }
-  
-    console.log(`🚀 Starting final submission process (malpractice: ${isMalpractice})`);
-    setLoading(true);
-    setOpenProgressDialog(true);
-    setOutput("🚀 Starting final submission process...\n");
-  
+    if (hasSubmitted) return;
+    setLoading(true); setOpenProgressDialog(true);
+    setTerminalLines([{ type: "info", text: "🚀 Starting final submission process..." }]);
     try {
-      // Step 1: Compile all programs
-      setOutput(prev => `${prev}\n📝 Step 1: Compiling all programs...`);
-      console.log(`📝 Step 1: Starting compilation process`);
-  
+      setTerminalLines(prev => [...prev, { type: "info", text: "📝 Step 1: Compiling all programs..." }]);
       const compilationResult = await compileAllPrograms();
-      if (!compilationResult.success) {
-        throw new Error(`Compilation failed: ${compilationResult.error}`);
-      }
-  
-      console.log(`✅ Compilation completed:`, {
-        success: compilationResult.success,
-        errors: compilationResult.errors,
-        processed: compilationResult.processedCount,
-        expected: compilationResult.expectedCount,
-      });
-  
-      // Step 2: Show confirmation dialog if not malpractice
-      if (!isMalpractice) {
-        console.log(`💬 Showing confirmation dialog`);
-        setSubmitConfirmDialogOpen(true);
-        setLoading(false);
-        setOpenProgressDialog(false);
-        return;
-      }
-  
-      // Step 3: Prepare submission data
-      setOutput(prev => `${prev}\n📤 Step 2: Preparing final submission...`);
-      console.log(`📤 Step 3: Preparing submission data`);
-  
+      if (!compilationResult.success) throw new Error(`Compilation failed: ${compilationResult.error}`);
+      if (!isMalpractice) { setSubmitConfirmDialogOpen(true); setLoading(false); setOpenProgressDialog(false); return; }
+      setTerminalLines(prev => [...prev, { type: "info", text: "📤 Step 2: Preparing submission..." }]);
       let finalTestResult = compilationResult.finalResult;
-      try {
-        const storedTestResult = localStorage.getItem("test_result");
-        if (storedTestResult) {
-          finalTestResult = JSON.parse(storedTestResult);
-        }
-      } catch (error) {
-        console.error("❌ Error retrieving final test result:", error);
-      }
-  
+      try { const stored = localStorage.getItem("test_result"); if (stored) finalTestResult = JSON.parse(stored); } catch (e) { console.error(e); }
       const resultData = {
         result_user_id: finalTestResult.result_user_id || userId || "",
         result_test_id: finalTestResult.result_test_id || testId || "",
-        result_poc_id: finalTestResult.result_poc_id || pocId || "",
-        result_score: finalTestResult.result_score || 0,
+        result_poc_id:  finalTestResult.result_poc_id  || pocId  || "",
+        result_score:   finalTestResult.result_score   || 0,
         result_total_score: finalTestResult.result_total_score || 0,
         codingAnswered: finalTestResult.codingAnswered || 0,
-        codingCorrect: finalTestResult.codingCorrect || 0,
-        codingIds: finalTestResult.codingIds || [],
+        codingCorrect:  finalTestResult.codingCorrect  || 0,
+        codingIds:      finalTestResult.codingIds      || [],
         codingNotAnswered: finalTestResult.codingNotAnswered || 0,
-        codingNotVisited: finalTestResult.codingNotVisited || 0,
-        codingWrong: finalTestResult.codingWrong || 0,
-        marked: finalTestResult.marked || 0,
-        mcqAnswered: finalTestResult.mcqAnswered || 0,
-        mcqCorrect: finalTestResult.mcqCorrect || 0,
+        codingNotVisited:  finalTestResult.codingNotVisited  || 0,
+        codingWrong:    finalTestResult.codingWrong    || 0,
+        marked:         finalTestResult.marked         || 0,
+        mcqAnswered:    finalTestResult.mcqAnswered    || 0,
+        mcqCorrect:     finalTestResult.mcqCorrect     || 0,
         mcqNotAnswered: finalTestResult.mcqNotAnswered || 0,
-        mcqNotVisited: finalTestResult.mcqNotVisited || 0,
-        mcqWrong: finalTestResult.mcqWrong || 0,
-        studentName: finalTestResult.studentName || studentName || "",
-        testLanguage: finalTestResult.testLanguage || "",
-        testName: finalTestResult.testName || "",
-        codingResults: finalTestResult.codingResults || [],
+        mcqNotVisited:  finalTestResult.mcqNotVisited  || 0,
+        mcqWrong:       finalTestResult.mcqWrong       || 0,
+        studentName:    finalTestResult.studentName    || studentName || "",
+        testLanguage:   finalTestResult.testLanguage   || "",
+        testName:       finalTestResult.testName       || "",
+        codingResults:  finalTestResult.codingResults  || [],
       };
-  
-      // Log submission data
-      console.log(`📋 Final submission data:`, {
-        codingResults: resultData.codingResults.length,
-        totalScore: resultData.result_score,
-        codingIds: resultData.codingIds.length,
-      });
-      setOutput(prev => `${prev}\n📋 Final submission data:`);
-      setOutput(prev => `${prev}\n   - Coding Problems: ${resultData.codingIds.length}`);
-      setOutput(prev => `${prev}\n   - Coding Results: ${resultData.codingResults.length}`);
-      setOutput(prev => `${prev}\n   - Total Score: ${resultData.result_score}/${resultData.result_total_score}`);
-  
-      // Step 4: Submit test
-      setOutput(prev => `${prev}\n🚀 Step 3: Submitting test...`);
-      console.log(`🚀 Submitting test result to server`);
+      setTerminalLines(prev => [...prev, { type: "info", text: "🚀 Step 3: Submitting..." }]);
       await submitTestResult(resultData);
-      console.log(`✅ Test submitted successfully`);
-  
-      // Step 5: Cleanup
-      setOutput(prev => `${prev}\n🧹 Step 4: Cleaning up...`);
-      console.log(`🧹 Cleaning up localStorage`);
-  
       const effectiveCodingIds = fetchedTestCodingIds.length > 0 ? fetchedTestCodingIds : (testResult.codingIds || []);
-      effectiveCodingIds.forEach(id => {
-        try {
-          localStorage.removeItem(`code_${id}`);
-          console.log(`🗑️ Removed code_${id} from localStorage`);
-        } catch (error) {
-          console.error(`❌ Error removing code_${id}:`, error);
-        }
-      });
-  
-      // Success
+      effectiveCodingIds.forEach(id => { try { localStorage.removeItem(`code_${id}`); } catch (e) { console.error(e); } });
+      localStorage.removeItem("fs_exit_count");
       setHasSubmitted(true);
-      setOutput(prev => `${prev}\n🎉 Test submitted successfully!`);
-      console.log(`🎉 Final submission completed successfully`);
-  
-      setSnackbarMessage("Test submitted successfully!");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-  
-      // Navigate to results
+      setTerminalLines(prev => [...prev, { type: "success", text: "🎉 Test submitted successfully!" }]);
+      setSnackbarMessage("Test submitted successfully!"); setSnackbarSeverity("success"); setSnackbarOpen(true);
       navigate("/test-result", { state: { resultData } });
     } catch (error) {
-      console.error("💥 Final submit error:", error);
-      setOutput(prev => `${prev}\n💥 Error submitting test: ${error.message}`);
-      setSnackbarMessage(`Error during test submission: ${error.message}`);
-      setSnackbarSeverity("error");
-    } finally {
-      setLoading(false);
-      setOpenProgressDialog(false);
-      setSnackbarOpen(true);
-    }
+      console.error(error);
+      setTerminalLines(prev => [...prev, { type: "error", text: `💥 Error: ${error.message}` }]);
+      setSnackbarMessage(`Error during test submission: ${error.message}`); setSnackbarSeverity("error");
+    } finally { setLoading(false); setOpenProgressDialog(false); setSnackbarOpen(true); }
   };
-  // Confirm final submission
-  const confirmFinalSubmit = async () => {
-    setSubmitConfirmDialogOpen(false);
-    setLoading(true);
-    setOpenProgressDialog(true);
-    setOutput("Processing results...\nSubmitting test for final evaluation...\n");
 
+  const confirmFinalSubmit = async () => {
+    setSubmitConfirmDialogOpen(false); setLoading(true); setOpenProgressDialog(true);
+    setTerminalLines([{ type: "info", text: "Submitting test for final evaluation..." }]);
     try {
       const resultData = {
         result_user_id: testResult.result_user_id || userId || "",
         result_test_id: testResult.result_test_id || testId || "",
-        result_poc_id: testResult.result_poc_id || pocId || "",
-        result_score: testResult.result_score || 0,
+        result_poc_id:  testResult.result_poc_id  || pocId  || "",
+        result_score:   testResult.result_score   || 0,
         result_total_score: testResult.result_total_score || 0,
         codingAnswered: testResult.codingAnswered || 0,
-        codingCorrect: testResult.codingCorrect || 0,
-        codingIds: testResult.codingIds || [],
+        codingCorrect:  testResult.codingCorrect  || 0,
+        codingIds:      testResult.codingIds      || [],
         codingNotAnswered: testResult.codingNotAnswered || 0,
-        codingNotVisited: testResult.codingNotVisited || 0,
-        codingWrong: testResult.codingWrong || 0,
-        marked: testResult.marked || 0,
-        mcqAnswered: testResult.mcqAnswered || 0,
-        mcqCorrect: testResult.mcqCorrect || 0,
+        codingNotVisited:  testResult.codingNotVisited  || 0,
+        codingWrong:    testResult.codingWrong    || 0,
+        marked:         testResult.marked         || 0,
+        mcqAnswered:    testResult.mcqAnswered    || 0,
+        mcqCorrect:     testResult.mcqCorrect     || 0,
         mcqNotAnswered: testResult.mcqNotAnswered || 0,
-        mcqNotVisited: testResult.mcqNotVisited || 0,
-        mcqWrong: testResult.mcqWrong || 0,
-        studentName: testResult.studentName || studentName || "",
-        testLanguage: testResult.testLanguage || "",
-        testName: testResult.testName || "",
-        codingResults: testResult.codingResults || [],
+        mcqNotVisited:  testResult.mcqNotVisited  || 0,
+        mcqWrong:       testResult.mcqWrong       || 0,
+        studentName:    testResult.studentName    || studentName || "",
+        testLanguage:   testResult.testLanguage   || "",
+        testName:       testResult.testName       || "",
+        codingResults:  testResult.codingResults  || [],
       };
-
       await submitTestResult(resultData);
-
       const effectiveCodingIds = fetchedTestCodingIds.length > 0 ? fetchedTestCodingIds : testResult.codingIds;
       effectiveCodingIds.forEach((id) => localStorage.removeItem(`code_${id}`));
-
+      localStorage.removeItem("fs_exit_count");
       setHasSubmitted(true);
-      setOutput((prev) => `${prev}\nTest submitted successfully!`);
-      setSnackbarMessage("Test submitted successfully!");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-
+      setTerminalLines(prev => [...prev, { type: "success", text: "Test submitted successfully!" }]);
+      setSnackbarMessage("Test submitted successfully!"); setSnackbarSeverity("success"); setSnackbarOpen(true);
       navigate("/test-result", { state: { resultData } });
     } catch (error) {
-      console.error("Final submit error:", error);
-      setOutput((prev) => `${prev}\nError submitting test: ${error.message}`);
-      setSnackbarMessage(`Error during test submission: ${error.message}`);
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
-    } finally {
-      setLoading(false);
-      setOpenProgressDialog(false);
-    }
+      console.error(error);
+      setTerminalLines(prev => [...prev, { type: "error", text: `Error: ${error.message}` }]);
+      setSnackbarMessage(`Error: ${error.message}`); setSnackbarSeverity("error"); setSnackbarOpen(true);
+    } finally { setLoading(false); setOpenProgressDialog(false); }
   };
 
-  // Cancel final submission
-  const cancelFinalSubmit = () => {
-    setSubmitConfirmDialogOpen(false);
-    setSnackbarMessage("Submission cancelled. You can continue coding.");
-    setSnackbarSeverity("info");
-    setSnackbarOpen(true);
-  };
+  const cancelFinalSubmit = () => { setSubmitConfirmDialogOpen(false); setSnackbarMessage("Submission cancelled."); setSnackbarSeverity("info"); setSnackbarOpen(true); };
 
-  // Handle navigation to the previous problem
   const handlePrevious = async () => {
     saveSubmissionPayload();
     await compileAndEvaluate(codeId, input, language, testCases);
-
     const effectiveCodingIds = fetchedTestCodingIds.length > 0 ? fetchedTestCodingIds : testResult.codingIds;
     if (testResult.currentCodingIndex > 0) {
       const prevCodeId = effectiveCodingIds[testResult.currentCodingIndex - 1];
-      setTestResult((prev) => {
-        const updatedTestResult = {
-          ...prev,
-          currentCodingIndex: prev.currentCodingIndex - 1,
-        };
-        localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
-        return updatedTestResult;
-      });
-      navigate(`/coding/${prevCodeId}`, {
-        state: {
-          ...testResult,
-          currentCodingIndex: testResult.currentCodingIndex - 1,
-        },
-      });
+      setTestResult((prev) => { const u = { ...prev, currentCodingIndex: prev.currentCodingIndex - 1 }; localStorage.setItem("test_result", JSON.stringify(u)); return u; });
+      navigate(`/coding/${prevCodeId}`, { state: { ...testResult, currentCodingIndex: testResult.currentCodingIndex - 1 } });
       window.history.pushState(null, null, window.location.href);
-      setSnackbarMessage("Compiled and moved to previous program.");
-      setSnackbarSeverity("info");
-      setSnackbarOpen(true);
+      setSnackbarMessage("Compiled and moved to previous program."); setSnackbarSeverity("info"); setSnackbarOpen(true);
     }
   };
 
-  // Handle navigation to the next problem
   const handleNext = async () => {
     saveSubmissionPayload();
     await compileAndEvaluate(codeId, input, language, testCases);
-
     const effectiveCodingIds = fetchedTestCodingIds.length > 0 ? fetchedTestCodingIds : testResult.codingIds;
     if (testResult.currentCodingIndex < effectiveCodingIds.length - 1) {
       const nextCodeId = effectiveCodingIds[testResult.currentCodingIndex + 1];
-      setTestResult((prev) => {
-        const updatedTestResult = {
-          ...prev,
-          currentCodingIndex: prev.currentCodingIndex + 1,
-        };
-        localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
-        return updatedTestResult;
-      });
-      navigate(`/coding/${nextCodeId}`, {
-        state: {
-          ...testResult,
-          currentCodingIndex: testResult.currentCodingIndex + 1,
-        },
-      });
+      setTestResult((prev) => { const u = { ...prev, currentCodingIndex: prev.currentCodingIndex + 1 }; localStorage.setItem("test_result", JSON.stringify(u)); return u; });
+      navigate(`/coding/${nextCodeId}`, { state: { ...testResult, currentCodingIndex: testResult.currentCodingIndex + 1 } });
       window.history.pushState(null, null, window.location.href);
-      setSnackbarMessage("Compiled and moved to next program.");
-      setSnackbarSeverity("info");
-      setSnackbarOpen(true);
+      setSnackbarMessage("Compiled and moved to next program."); setSnackbarSeverity("info"); setSnackbarOpen(true);
     }
   };
 
-  // Format timer
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  const formatTime = (s) => `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
+
+  const effectiveCodingIds   = fetchedTestCodingIds.length > 0 ? fetchedTestCodingIds : testResult.codingIds;
+  const isFirstProgram       = testResult.currentCodingIndex === 0;
+  const isLastProgram        = testResult.currentCodingIndex >= effectiveCodingIds.length - 1;
+  const visibleTestCases     = testCases.slice(0, 3);   // Show only 3 to user
+  const hiddenTestCasesCount = testCases.length - 3;
+  const warningsRemaining    = MAX_FULLSCREEN_WARNINGS - fullScreenExitCount;
+
+  const difficultyChipClass = (d) => d === "Easy" ? "cp-chip-easy" : d === "Hard" ? "cp-chip-hard" : "cp-chip-medium";
+
+  // Status colour for test case dialog
+  const statusColour = (status) => {
+    if (status === "passed")        return { color: "#16a34a", bg: "#f0fdf4" };
+    if (status === "compile_error") return { color: "#dc2626", bg: "#fff1f2" };
+    if (status === "runtime_error") return { color: "#d97706", bg: "#fffbeb" };
+    return { color: "#dc2626", bg: "#fff1f2" };
   };
 
-  // Determine effective coding IDs
-  const effectiveCodingIds = fetchedTestCodingIds.length > 0 ? fetchedTestCodingIds : testResult.codingIds;
-  const isFirstProgram = testResult.currentCodingIndex === 0;
-  const isLastProgram = testResult.currentCodingIndex >= effectiveCodingIds.length - 1;
-
-  const visibleTestCases = testCases.slice(0, 2);
-  const hiddenTestCasesCount = testCases.length - 2;
-
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Dialog open={openProgressDialog} PaperProps={{ sx: { borderRadius: 3, bgcolor: "background.paper" } }}>
-        <DialogContent sx={{ display: "flex", alignItems: "center", gap: 2, p: 4 }}>
-          <CircularProgress sx={{ color: "#0c83c8" }} />
-          <Typography
-            variant="h6"
-            color="text.primary"
-            sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important" }}
-          >
+
+      {/* ── Progress dialog ─────────────────────────────────────── */}
+      <Dialog open={openProgressDialog} PaperProps={{ className: "cp-dialog-paper" }}>
+        <DialogContent className="cp-progress-dialog__inner">
+          <CircularProgress className="cp-loading-spinner" />
+          <Typography variant="h6" color="text.primary" className="cp-progress-dialog__text">
             Processing your code...
           </Typography>
         </DialogContent>
       </Dialog>
-      <Dialog open={submitConfirmDialogOpen} PaperProps={{ sx: { borderRadius: 3, bgcolor: "background.paper" } }}>
-        <DialogContent sx={{ p: 4 }}>
-          <Typography
-            variant="h6"
-            color="text.primary"
-            sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important", mb: 2 }}
-          >
-            Are you sure you want to submit the test?
+
+      {/* ── Fullscreen warning dialog ────────────────────────────── */}
+      <Dialog open={fullScreenWarningOpen} disableEscapeKeyDown PaperProps={{ className: "cp-dialog-paper" }}>
+        <DialogContent className="cp-dialog-content">
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+            <WarningAmberIcon sx={{ color: "#f59e0b", fontSize: 32 }} />
+            <Typography variant="h6" color="text.primary" className="cp-dialog-title">
+              Fullscreen Exited — Warning {fullScreenExitCount} of {MAX_FULLSCREEN_WARNINGS}
+            </Typography>
+          </Box>
+          <Typography variant="body2" color="text.secondary" className="cp-dialog-body">
+            You have exited fullscreen mode. This is warning <strong>{fullScreenExitCount}</strong> of <strong>{MAX_FULLSCREEN_WARNINGS}</strong>.
           </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important" }}
-          >
-            This action will finalize your test and you won't be able to make further changes.
+          <Typography variant="body2" sx={{ color: "#ef4444", mt: 1, fontWeight: 600 }}>
+            {warningsRemaining > 0
+              ? `You have ${warningsRemaining} warning${warningsRemaining !== 1 ? "s" : ""} remaining before the test is automatically submitted.`
+              : "This is your final warning. The test will be submitted on next exit."}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            Please return to fullscreen mode immediately to continue the test.
           </Typography>
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button
-            onClick={cancelFinalSubmit}
-            variant="outlined"
-            sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important" }}
-          >
-            Continue Coding
-          </Button>
-          <Button
-            onClick={confirmFinalSubmit}
-            variant="contained"
-            color="error"
-            sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important" }}
-          >
-            Submit Test
+        <DialogActions className="cp-dialog-actions">
+          <Button onClick={handleReEnterFullScreen} variant="contained" color="warning" className="cp-dialog-btn" sx={{ background: "#f59e0b", "&:hover": { background: "#d97706" } }}>
+            Return to Fullscreen
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={instructionsOpen} onClose={() => setInstructionsOpen(false)} PaperProps={{ sx: { borderRadius: 3, bgcolor: "background.paper" } }}>
-        <DialogContent sx={{ p: 4 }}>
-          <Typography
-            variant="h6"
-            color="text.primary"
-            sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important", mb: 2 }}
-          >
-            Test Instructions
-          </Typography>
-          <List sx={{ pl: 2 }}>
-            {defaultInstructions.map((instruction, index) => (
-              <ListItem key={index} disablePadding>
-                <ListItemText
-                  primary={
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important" }}
-                    >
-                      {`${index + 1}. ${instruction}`}
-                    </Typography>
-                  }
-                />
+
+      {/* ── Submit confirm dialog ────────────────────────────────── */}
+      <Dialog open={submitConfirmDialogOpen} PaperProps={{ className: "cp-dialog-paper" }}>
+        <DialogContent className="cp-dialog-content">
+          <Typography variant="h6" color="text.primary" className="cp-dialog-title">Are you sure you want to submit the test?</Typography>
+          <Typography variant="body2" color="text.secondary" className="cp-dialog-body">This action will finalize your test and you won't be able to make further changes.</Typography>
+        </DialogContent>
+        <DialogActions className="cp-dialog-actions">
+          <Button onClick={cancelFinalSubmit}  variant="outlined"   className="cp-dialog-btn">Continue Coding</Button>
+          <Button onClick={confirmFinalSubmit} variant="contained" color="error" className="cp-dialog-btn">Submit Test</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ── Instructions dialog ──────────────────────────────────── */}
+      <Dialog open={instructionsOpen} onClose={() => setInstructionsOpen(false)} PaperProps={{ className: "cp-dialog-paper" }}>
+        <DialogContent className="cp-dialog-content">
+          <Typography variant="h6" color="text.primary" className="cp-dialog-title">Test Instructions</Typography>
+          <List className="cp-instructions-list">
+            {defaultInstructions.map((ins, i) => (
+              <ListItem key={i} disablePadding>
+                <ListItemText primary={<Typography variant="body2" color="text.secondary" className="cp-instructions-item">{`${i + 1}. ${ins}`}</Typography>} />
               </ListItem>
             ))}
           </List>
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button
-            onClick={() => setInstructionsOpen(false)}
-            variant="contained"
-            color="primary"
-            sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important" }}
-          >
+        <DialogActions className="cp-dialog-actions">
+          <Button onClick={() => setInstructionsOpen(false)} variant="contained" color="primary" className="cp-dialog-btn">Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ── Run Test Cases result dialog ─────────────────────────── */}
+      <Dialog
+        open={testCaseDialogOpen}
+        onClose={() => !runTestCasesLoading && setTestCaseDialogOpen(false)}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{ className: "cp-dialog-paper" }}
+      >
+        <DialogTitle sx={{ fontFamily: "Inter, sans-serif", fontWeight: 600, display: "flex", alignItems: "center", gap: 1, pb: 1 }}>
+          <BugReportIcon sx={{ color: "#0c83c8" }} />
+          Test Case Results
+          {!runTestCasesLoading && testCaseResults.length > 0 && (
+            <Chip
+              label={`${testCaseResults.filter(r => r.passed).length} / ${testCaseResults.length} Passed`}
+              size="small"
+              sx={{ ml: 1, background: testCaseResults.every(r => r.passed) ? "#22c55e" : "#ef4444", color: "#fff", fontWeight: 700 }}
+            />
+          )}
+        </DialogTitle>
+
+        <DialogContent sx={{ p: 0, maxHeight: "65vh", overflowY: "auto" }}>
+          {runTestCasesLoading ? (
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2, p: 4, justifyContent: "center" }}>
+              <CircularProgress size={26} sx={{ color: "#0c83c8" }} />
+              <Typography variant="body1" sx={{ fontFamily: "Inter, sans-serif" }}>Running all test cases...</Typography>
+            </Box>
+          ) : testCaseResults.length === 0 ? (
+            <Box sx={{ p: 4, textAlign: "center" }}>
+              <Typography variant="body2" color="text.secondary">No results available.</Typography>
+            </Box>
+          ) : (
+            <TableContainer component={Paper} sx={{ boxShadow: "none", borderRadius: 0 }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow sx={{ background: mode === "dark" ? "#1f2937" : "#f1f5f9" }}>
+                    <TableCell sx={{ fontWeight: 700, fontFamily: "Inter, sans-serif", width: 130 }}>Test Case</TableCell>
+                    <TableCell sx={{ fontWeight: 700, fontFamily: "Inter, sans-serif", width: 150 }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 700, fontFamily: "Inter, sans-serif" }}>Details</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {testCaseResults.map((result) => {
+                    const sc = statusColour(result.status);
+                    return (
+                      <TableRow key={result.index} sx={{ "&:hover": { background: mode === "dark" ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)" } }}>
+                        {/* Test Case # */}
+                        <TableCell sx={{ fontFamily: "Inter, sans-serif", fontWeight: 600, verticalAlign: "top", pt: 1.5 }}>
+                          {result.isHidden
+                            ? <span style={{ color: "#9ca3af" }}>Hidden #{result.index}</span>
+                            : `Test Case #${result.index}`}
+                        </TableCell>
+
+                        {/* Status badge */}
+                        <TableCell sx={{ verticalAlign: "top", pt: 1.5 }}>
+                          <Box sx={{ display: "inline-flex", alignItems: "center", gap: 0.5, px: 1.2, py: 0.4, borderRadius: 1.5, background: sc.bg, color: sc.color, fontWeight: 700, fontSize: "0.78rem", fontFamily: "Inter, sans-serif" }}>
+                            {result.passed
+                              ? <CheckCircleOutlineIcon sx={{ fontSize: 15 }} />
+                              : <CancelOutlinedIcon    sx={{ fontSize: 15 }} />}
+                            {result.statusLabel}
+                          </Box>
+                        </TableCell>
+
+                        {/* Detail */}
+                        <TableCell sx={{ verticalAlign: "top", pt: 1.5 }}>
+                          {result.isHidden ? (
+                            <Typography variant="caption" color="text.secondary" sx={{ fontFamily: "'Fira Code', monospace", fontStyle: "italic" }}>
+                              Details hidden for this test case
+                            </Typography>
+                          ) : (result.status === "compile_error" || result.status === "runtime_error") ? (
+                            <Typography variant="caption" sx={{ fontFamily: "'Fira Code', monospace", color: sc.color, whiteSpace: "pre-wrap", display: "block" }}>
+                              {result.actualOutput}
+                            </Typography>
+                          ) : (
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.4 }}>
+                              <Typography variant="caption" sx={{ fontFamily: "'Fira Code', monospace", color: "text.secondary" }}>
+                                <strong>Input:</strong> {result.input || "(none)"}
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: "'Fira Code', monospace", color: "text.secondary" }}>
+                                <strong>Expected:</strong> {result.expectedOutput}
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: "'Fira Code', monospace", color: result.passed ? "#16a34a" : "#dc2626" }}>
+                                <strong>Got:</strong> {result.actualOutput || "(no output)"}
+                              </Typography>
+                            </Box>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </DialogContent>
+
+        <DialogActions className="cp-dialog-actions">
+          <Button onClick={() => setTestCaseDialogOpen(false)} disabled={runTestCasesLoading} variant="contained" color="primary" className="cp-dialog-btn">
             Close
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={4000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={() => setSnackbarOpen(false)}
-          severity={snackbarSeverity}
-          variant="filled"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-          }}
-        >
+      {/* ── Main snackbar ────────────────────────────────────────── */}
+      <Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={() => setSnackbarOpen(false)} anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} variant="filled" className="cp-snackbar-alert">
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={resetDialogOpen}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          severity="warning"
-          variant="filled"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-          }}
-          action={
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <Button
-                color="inherit"
-                size="small"
-                onClick={confirmResetEditor}
-                sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important" }}
-              >
-                Reset
-              </Button>
-              <Button
-                color="inherit"
-                size="small"
-                onClick={cancelResetEditor}
-                sx={{ fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important" }}
-              >
-                Cancel
-              </Button>
-            </Box>
-          }
-        >
+
+      {/* ── Reset snackbar ───────────────────────────────────────── */}
+      <Snackbar open={resetDialogOpen} anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+        <Alert severity="warning" variant="filled" className="cp-snackbar-alert"
+          action={<Box sx={{ display: "flex", gap: 1 }}><Button color="inherit" size="small" onClick={confirmResetEditor}>Reset</Button><Button color="inherit" size="small" onClick={cancelResetEditor}>Cancel</Button></Box>}>
           Reset editor to template? This will clear your current code.
         </Alert>
       </Snackbar>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100vh",
-          overflow: "hidden",
-          bgcolor: "background.default",
-        }}
-      >
-        <Box
-          sx={{
-            p: { xs: 1, sm: 1.5 },
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            borderBottom: 1,
-            borderColor: "divider",
-            bgcolor: "background.paper",
-            flexWrap: "wrap",
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", minWidth: 0 }}>
-            <CodeIcon sx={{ color: "#0c83c8", mr: 1, fontSize: { xs: 20, sm: 28 } }} />
-            <Typography
-              variant="h5"
-              color="text.primary"
-              sx={{
-                fontWeight: 700,
-                fontSize: { xs: "1rem", sm: "1.5rem" },
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-              }}
-            >
-              {testResult.testName} - Coding Program {testResult.currentCodingIndex + 1} of {effectiveCodingIds.length || 1}
+
+      {/* ── Page root ───────────────────────────────────────────── */}
+      <div className="cp-root">
+
+        {/* ── Toolbar ─────────────────────────────────────────────── */}
+        <div className="cp-toolbar">
+          <div className="cp-toolbar__left">
+            <CodeIcon className="cp-toolbar__logo-icon" />
+            <Typography variant="h5" color="text.primary" className="cp-toolbar__title">
+              {testResult.testName} — Coding Program {testResult.currentCodingIndex + 1} of {effectiveCodingIds.length || 1}
             </Typography>
             <Tooltip title="View Instructions">
-              <IconButton size="small" onClick={() => setInstructionsOpen(true)} sx={{ ml: 1 }}>
-                <InfoIcon fontSize="small" />
-              </IconButton>
+              <IconButton size="small" onClick={() => setInstructionsOpen(true)} sx={{ ml: 1 }}><InfoIcon fontSize="small" /></IconButton>
             </Tooltip>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, sm: 1 }, flexShrink: 0 }}>
-            <Box sx={{ display: "flex", alignItems: "center", bgcolor: alpha(theme.palette.primary.main, 0.1), p: 1, borderRadius: 1 }}>
-              <Typography variant="subtitle1" sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}>
-                 Time Left: {formatTime(timer)}
-              </Typography>
-            </Box>
-                        <Box sx={{ display: "flex", alignItems: "center", bgcolor: alpha(theme.palette.primary.main, 0.1), p: 1, borderRadius: 1 }}>
-              <Typography variant="subtitle1" sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}>
-                {studentName || "User"} 
-              </Typography>
-            </Box>
-            <FormControl size="small" sx={{ minWidth: { xs: 100, sm: 140 }, mr: { xs: 0.5, sm: 1 } }}>
-              <Select
-                value={language}
-                onChange={handleLanguageChange}
-                sx={{
-                  height: { xs: 32, sm: 40 },
-                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                  "& .MuiSelect-select": { display: "flex", alignItems: "center", py: 0.5 },
-                }}
-                renderValue={(selected) => (
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                    {languageIcons[selected]}
-                    <Typography
-                      sx={{
-                        fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                        fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                      }}
-                    >
-                      {languageNames[selected]}
-                    </Typography>
-                  </Box>
-                )}
-              >
-                <MenuItem value="python">
-                  <PythonIcon sx={{ mr: 1, fontSize: "small" }} /> Python
-                </MenuItem>
-                <MenuItem value="java">
-                  <JavaIcon sx={{ mr: 1, fontSize: "small" }} /> Java
-                </MenuItem>
-                <MenuItem value="cpp">
-                  <CppIcon sx={{ mr: 1, fontSize: "small" }} /> C++
-                </MenuItem>
-                <MenuItem value="c">
-                  <CIcon sx={{ mr: 1, fontSize: "small" }} /> C
-                </MenuItem>
-                                <MenuItem value="javascript">
-                  <JavascriptIcon sx={{ mr: 1, fontSize: "small" }} /> JavaScript
-                </MenuItem>
+          </div>
+
+          <div className="cp-toolbar__right">
+            {fullScreenExitCount > 0 && (
+              <Tooltip title={`Fullscreen exits: ${fullScreenExitCount}/${MAX_FULLSCREEN_WARNINGS}`}>
+                <Chip icon={<WarningAmberIcon fontSize="small" />} label={`FS Warnings: ${fullScreenExitCount}/${MAX_FULLSCREEN_WARNINGS}`} size="small"
+                  sx={{ background: fullScreenExitCount >= 4 ? "#ef4444" : "#f59e0b", color: "#fff", fontWeight: 600, mr: 1 }} />
+              </Tooltip>
+            )}
+            <div className="cp-badge"><Typography variant="subtitle1" className="cp-badge__text">Time Left: {formatTime(timer)}</Typography></div>
+            <div className="cp-badge"><Typography variant="subtitle1" className="cp-badge__text">{studentName || "User"}</Typography></div>
+            <FormControl size="small" className="cp-lang-select">
+              <Select value={language} onChange={handleLanguageChange}
+                renderValue={(sel) => (<Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>{languageIcons[sel]}<Typography className="cp-lang-select__label">{languageNames[sel]}</Typography></Box>)}>
+                <MenuItem value="python">     <PythonIcon    sx={{ mr: 1, fontSize: "small" }} /> Python     </MenuItem>
+                <MenuItem value="java">       <JavaIcon      sx={{ mr: 1, fontSize: "small" }} /> Java       </MenuItem>
+                <MenuItem value="cpp">        <CppIcon       sx={{ mr: 1, fontSize: "small" }} /> C++        </MenuItem>
+                <MenuItem value="c">          <CIcon         sx={{ mr: 1, fontSize: "small" }} /> C          </MenuItem>
+                <MenuItem value="javascript"> <JavascriptIcon sx={{ mr: 1, fontSize: "small" }} /> JavaScript </MenuItem>
               </Select>
             </FormControl>
             <FormGroup>
-              <FormControlLabel
-                control={<MaterialUISwitch sx={{ m: { xs: 0.5, sm: 1 } }} checked={mode === "dark"} onChange={toggleTheme} />}
-                label=""
-              />
+              <FormControlLabel control={<MaterialUISwitch sx={{ m: 0.5 }} checked={mode === "dark"} onChange={toggleTheme} />} label="" />
             </FormGroup>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            flex: 1,
-            overflow: "hidden",
-          }}
-        >
-          <Box
-            sx={{
-              width: isMobile ? "100%" : testCasesCollapsed ? "90%" : `${editorWidth}%`,
-              height: isMobile ? "50%" : "auto",
-              display: "flex",
-              flexDirection: "column",
-              overflow: "hidden",
-              transition: "width 0.2s ease-out",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                p: 1,
-                borderBottom: 1,
-                borderColor: "divider",
-                bgcolor: "background.paper",
-              }}
-            >
-              <Typography
-                variant="subtitle1"
-                fontWeight="medium"
-                sx={{
-                  fontSize: { xs: "0.85rem", sm: "1rem" },
-                  fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                }}
-              >
-                Code Editor
-              </Typography>
-              <Box sx={{ display: "flex", gap: { xs: 0.5, sm: 1 }, alignItems: "center", flexShrink: 0 }}>
-                <Tooltip title="Reset Code">
-                  <IconButton size="small" onClick={resetEditor}>
-                    <RefreshIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Save Code">
-                  <IconButton size="small" onClick={handleSave}>
-                    <SaveIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
+          </div>
+        </div>
+
+        {/* ── Body ───────────────────────────────────────────────── */}
+        <div className={`cp-body${isMobile ? " cp-body--mobile" : ""}`}>
+
+          {/* Editor column */}
+          <div className="cp-editor-col" style={{ width: isMobile ? "100%" : testCasesCollapsed ? "90%" : `${editorWidth}%`, height: isMobile ? "50%" : "auto" }}>
+
+            {/* Editor toolbar */}
+            <div className="cp-editor-bar">
+              <Typography variant="subtitle1" className="cp-editor-bar__title">Code Editor</Typography>
+              <div className="cp-editor-bar__actions">
+                <Tooltip title="Reset Code"><IconButton size="small" onClick={resetEditor}><RefreshIcon fontSize="small" /></IconButton></Tooltip>
+                <Tooltip title="Save Code"><IconButton size="small" onClick={handleSave}><SaveIcon fontSize="small" /></IconButton></Tooltip>
+
+                {/* Run button — terminal only */}
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant="contained" color="primary" size="small" className="cp-btn-run"
                   onClick={handleRun}
-                  disabled={loading}
-                  startIcon={loading ? <CircularProgress size={12} color="inherit" /> : <PlayArrowIcon />}
-                  size="small"
-                  sx={{
-                    fontSize: { xs: "0.65rem", sm: "0.75rem" },
-                    px: { xs: 1, sm: 2 },
-                    fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                  }}
+                  disabled={runLoading || loading}
+                  startIcon={runLoading ? <CircularProgress size={12} color="inherit" /> : <PlayArrowIcon />}
                 >
                   Run
                 </Button>
-              </Box>
-            </Box>
-            <Box sx={{ flex: 1, overflow: "hidden" }}>
-              <Editor
-                className="monaco-editor"
-                height="100%"
-                language={language}
-                value={input}
-                onChange={handleEditorChange}
-                onMount={handleEditorDidMount}
-                theme={mode === "dark" ? "vs-dark" : "vs"}
-                options={{
-                  fontSize: 18,
-                  minimap: { enabled: !isMobile },
-                  scrollBeyondLastLine: false,
-                  lineNumbers: "on",
-                  padding: { top: 8 },
-                  smoothScrolling: true,
-                  automaticLayout: true,
-                  tabIndex: 0,
-                  wordWrap: "on",
-                  fixedOverflowWidgets: true,
-                  ...(isMobile && {
-                    fontSize: 16,
-                    lineHeight: 24,
-                    quickSuggestions: false,
-                  }),
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                height: outputMinimized ? "auto" : `${outputHeight}%`,
-                borderTop: 1,
-                borderColor: "divider",
-                bgcolor: "background.paper",
-                display: "flex",
-                flexDirection: "column",
-                overflow: "hidden",
-                transition: "height 0.2s ease-out",
-              }}
-            >
-              <Box
-                ref={outputDividerRef}
-                sx={{
-                  height: 8,
-                  backgroundColor: theme.palette.divider,
-                  cursor: "row-resize",
-                  "&:hover": { backgroundColor: "#0c83c8" },
-                }}
-                onMouseDown={handleOutputMouseDown}
-              />
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  p: 1,
-                  borderBottom: 1,
-                  borderColor: "divider",
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <TerminalIcon sx={{ mr: 1, fontSize: { xs: 16, sm: 20 }, color: "#0c83c8" }} />
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight="medium"
-                    sx={{
-                      fontSize: { xs: "0.85rem", sm: "1rem" },
-                      fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                    }}
-                  >
-                    Output Console
-                  </Typography>
-                </Box>
-                <IconButton
-                  size="small"
-                  onClick={toggleOutput}
-                  aria-label={outputMinimized ? "Expand output" : "Minimize output"}
+
+                {/* Run Test Cases button */}
+                <Button
+                  variant="outlined" size="small" className="cp-btn-run"
+                  onClick={handleRunTestCases}
+                  disabled={runTestCasesLoading || loading || testCases.length === 0}
+                  startIcon={runTestCasesLoading ? <CircularProgress size={12} color="inherit" /> : <BugReportIcon />}
+                  sx={{ borderColor: "#fc7a46", color: "#fc7a46", "&:hover": { borderColor: "#e55e2c", color: "#e55e2c", background: "rgba(252,122,70,0.06)" } }}
                 >
+                  Run Test Cases
+                </Button>
+              </div>
+            </div>
+
+            {/* Monaco editor */}
+            <div className="cp-editor-area">
+              <Editor
+                className="monaco-editor" height="100%" language={language} value={input}
+                onChange={handleEditorChange} onMount={handleEditorDidMount}
+                theme={mode === "dark" ? "vs-dark" : "vs"}
+                options={{ fontSize: 18, minimap: { enabled: !isMobile }, scrollBeyondLastLine: false, lineNumbers: "on", padding: { top: 8 }, smoothScrolling: true, automaticLayout: true, tabIndex: 0, wordWrap: "on", fixedOverflowWidgets: true, ...(isMobile && { fontSize: 16, lineHeight: 24, quickSuggestions: false }) }}
+              />
+            </div>
+
+            {/* ── Terminal output ── */}
+            <div className="cp-output" style={{ height: outputMinimized ? "auto" : `${outputHeight}%` }}>
+              <div ref={outputDividerRef} className="cp-output-resize-handle" onMouseDown={handleOutputMouseDown} />
+              <div className="cp-output-bar">
+                <div className="cp-output-bar__left">
+                  <TerminalIcon className="cp-output-bar__icon" />
+                  <Typography variant="subtitle1" className="cp-output-bar__title">Terminal</Typography>
+                </div>
+                <IconButton size="small" onClick={toggleOutput} aria-label={outputMinimized ? "Expand" : "Minimize"}>
                   {outputMinimized ? <KeyboardArrowDownIcon fontSize="small" /> : <KeyboardArrowUpIcon fontSize="small" />}
                 </IconButton>
-              </Box>
-              {!outputMinimized && showOutput && (
-                <Box
-                  sx={{
-                    flex: 1,
-                    p: 1,
-                    overflow: "auto",
-                    fontFamily: "'Fira Code', monospace",
-                    fontSize: { xs: "0.65rem", sm: "0.75rem" },
-                    color: "text.primary",
-                    bgcolor: alpha(theme.palette.background.default, 0.9),
-                    whiteSpace: "pre-wrap",
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {output || "Run your code to see the output here."}
-                </Box>
+              </div>
+              {!outputMinimized && (
+                <div style={{
+                  flex: 1,
+                  padding: "10px 14px",
+                  overflowY: "auto",
+                  background: "#0d1117",
+                  minHeight: 0,
+                }}>
+                  {terminalLines.length === 0 ? (
+                    <span style={{ color: "#4b5563", fontFamily: "'Fira Code', monospace", fontSize: 13 }}>
+                      Press <span style={{ color: "#60a5fa" }}>Run</span> to execute your code,
+                      or <span style={{ color: "#fc7a46" }}>Run Test Cases</span> to check all test cases.
+                    </span>
+                  ) : (
+                    terminalLines.map((line, i) => <TerminalLine key={i} line={line} />)
+                  )}
+                </div>
               )}
-            </Box>
-          </Box>
+            </div>
+          </div>
+
+          {/* Vertical resize divider */}
           {!isMobile && !testCasesCollapsed && (
-            <Box
-              ref={dividerRef}
-              sx={{
-                width: 8,
-                backgroundColor: theme.palette.divider,
-                cursor: "col-resize",
-                "&:hover": { backgroundColor: "#0c83c8" },
-              }}
-              onMouseDown={handleMouseDown}
-            />
+            <div ref={dividerRef} className="cp-col-divider" onMouseDown={handleMouseDown} />
           )}
-          <Box
-            sx={{
-              width: isMobile
-                ? "100%"
-                : testCasesCollapsed
-                ? "10%"
-                : `${100 - editorWidth - (testCasesCollapsed ? 0 : 1)}%`,
-              height: isMobile ? "50%" : "auto",
-              display: "flex",
-              flexDirection: "column",
-              overflow: "hidden",
-              borderLeft: isMobile ? 0 : 1,
-              borderTop: isMobile ? 1 : 0,
-              borderColor: "divider",
-              transition: "width 0.2s ease-out",
-            }}
+
+          {/* Problem / test cases column */}
+          <div
+            className={`cp-problem-col${isMobile ? " cp-problem-col--mobile" : ""}`}
+            style={{ width: isMobile ? "100%" : testCasesCollapsed ? "10%" : `${100 - editorWidth - 1}%`, height: isMobile ? "50%" : "auto" }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                p: 1,
-                borderBottom: 1,
-                borderColor: "divider",
-                bgcolor: "background.paper",
-              }}
-            >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <FormatListNumberedIcon sx={{ mr: 1, fontSize: { xs: 16, sm: 20 }, color: "#fc7a46" }} />
-                <Typography
-                  variant="subtitle1"
-                  fontWeight="medium"
-                  sx={{
-                    fontSize: { xs: "0.85rem", sm: "1rem" },
-                    fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                  }}
-                >
-                  Problem & Test Cases
-                </Typography>
-                {!testCasesCollapsed && (
-                  <Chip
-                    label={testCases.length}
-                    size="small"
-                    color="secondary"
-                    sx={{ ml: 1, height: { xs: 18, sm: 20 }, fontSize: { xs: "0.65rem", sm: "0.75rem" } }}
-                  />
-                )}
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, sm: 1 } }}>
+            <div className="cp-problem-bar">
+              <div className="cp-problem-bar__left">
+                <FormatListNumberedIcon className="cp-problem-bar__icon" />
+                <Typography variant="subtitle1" className="cp-problem-bar__title">Problem & Test Cases</Typography>
+                {!testCasesCollapsed && (<Chip label={testCases.length} size="small" color="secondary" sx={{ ml: 1, height: 20, fontSize: "0.75rem" }} />)}
+              </div>
+              <div className="cp-problem-bar__right">
                 {isMobile ? (
-                  <IconButton
-                    size="small"
-                    onClick={() => setShowTestCases(!showTestCases)}
-                    aria-label={showTestCases ? "Collapse test cases" : "Expand test cases"}
-                  >
+                  <IconButton size="small" onClick={() => setShowTestCases(!showTestCases)}>
                     {showTestCases ? <KeyboardArrowUpIcon fontSize="small" /> : <KeyboardArrowDownIcon fontSize="small" />}
                   </IconButton>
                 ) : (
                   <Tooltip title={testCasesCollapsed ? "Expand" : "Collapse"}>
-                    <IconButton
-                      size="small"
-                      onClick={toggleTestCases}
-                      aria-label={testCasesCollapsed ? "Expand test cases" : "Collapse test cases"}
-                    >
+                    <IconButton size="small" onClick={toggleTestCases}>
                       {testCasesCollapsed ? <KeyboardArrowLeftIcon fontSize="small" /> : <KeyboardArrowRightIcon fontSize="small" />}
                     </IconButton>
                   </Tooltip>
                 )}
-              </Box>
-            </Box>
+              </div>
+            </div>
+
             {isMobile && !showTestCases && (
-              <Box
-                sx={{
-                  p: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderBottom: 1,
-                  borderColor: "divider",
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: "text.secondary",
-                    fontSize: "0.75rem",
-                    fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                  }}
-                >
+              <div className="cp-collapsed-msg">
+                <Typography variant="body2" className="cp-collapsed-msg__text">
                   {testCases.length} test case{testCases.length !== 1 ? "s" : ""} available
                 </Typography>
-              </Box>
+              </div>
             )}
+
             {!testCasesCollapsed && showTestCases && (
-              <Box sx={{ flex: 1, overflow: "auto", p: 1 }}>
+              <div className="cp-problem-body">
                 {loading ? (
-                  <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-                    <CircularProgress sx={{ color: "#0c83c8" }} />
-                  </Box>
+                  <div className="cp-loading-center"><CircularProgress className="cp-loading-spinner" /></div>
                 ) : selectedCode ? (
                   <>
-                    <Card sx={{ mb: 1 }}>
-                      <CardContent sx={{ p: 1 }}>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
-                          <Typography
-                            variant="subtitle1"
-                            fontWeight="medium"
-                            sx={{
-                              fontSize: { xs: "0.85rem", sm: "1rem" },
-                              fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                            }}
-                          >
-                            {selectedCode.code_title || "Problem"}
-                          </Typography>
-                          <Chip
-                            label={"10 Mark"}
-                            size="small"
-                            sx={{
-                              bgcolor:
-                                selectedCode.code_difficulty === "Easy"
-                                  ? "#00af9b"
-                                  : selectedCode.code_difficulty === "Hard"
-                                  ? "#ff375f"
-                                  : "#ffa116",
-                              color: "white",
-                              fontWeight: "bold",
-                              height: { xs: 18, sm: 20 },
-                              fontSize: { xs: "0.65rem", sm: "0.75rem" },
-                            }}
-                          />
-                        </Box>
+                    <Card className="cp-problem-card">
+                      <CardContent className="cp-problem-card__content">
+                        <div className="cp-problem-card__header">
+                          <Typography variant="subtitle1" className="cp-problem-card__title">{selectedCode.code_title || "Problem"}</Typography>
+                          <Chip label="10 Mark" size="small" className={difficultyChipClass(selectedCode.code_difficulty)} sx={{ height: 20, fontSize: "0.75rem" }} />
+                        </div>
                         <Divider sx={{ mb: 1 }} />
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                            color: "text.secondary",
-                            whiteSpace: "pre-wrap",
-                            fontSize: { xs: "0.7rem", sm: "0.8rem" },
-                          }}
-                        >
-                          {selectedCode.code_problem_statement}
-                        </Typography>
+                        <Typography variant="body2" className="cp-problem-card__statement">{selectedCode.code_problem_statement}</Typography>
                       </CardContent>
                     </Card>
+
+                    {/* Show only first 3 test cases */}
                     {testCases.length > 0 ? (
                       <Stack spacing={1}>
                         {visibleTestCases.map((tc, i) => (
-                          <Card key={i} sx={{ position: "relative" }}>
-                            <CardContent sx={{ p: 1 }}>
-                              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
-                                <Typography
-                                  variant="subtitle2"
-                                  fontWeight="medium"
-                                  sx={{
-                                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                                    fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                                  }}
-                                >
-                                  Test Case #{i + 1}
-                                </Typography>
-                              </Box>
+                          <Card key={i} className="cp-testcase-card">
+                            <CardContent className="cp-testcase-card__content">
+                              <div className="cp-testcase-card__header">
+                                <Typography variant="subtitle2" className="cp-testcase-card__title">Test Case #{i + 1}</Typography>
+                              </div>
                               <Divider sx={{ mb: 1 }} />
                               {tc.testcase_input && (
-                                <Typography
-                                  sx={{
-                                    fontFamily: "'Fira Code', monospace",
-                                    color: "text.secondary",
-                                    mb: 0.5,
-                                    p: 1,
-                                    bgcolor: alpha(theme.palette.background.default, 0.7),
-                                    borderRadius: 1,
-                                    whiteSpace: "pre-wrap",
-                                    wordBreak: "break-word",
-                                    fontSize: { xs: "0.65rem", sm: "0.75rem" },
-                                  }}
-                                >
-                                  <strong>Input:</strong>
-                                  <br />
-                                  {Array.isArray(tc.testcase_input)
-                                    ? tc.testcase_input.join("\n")
-                                    : tc.testcase_input || "No input provided"}
+                                <Typography className="cp-testcase-card__code">
+                                  <strong>Input:</strong><br />
+                                  {Array.isArray(tc.testcase_input) ? tc.testcase_input.join("\n") : tc.testcase_input || "No input provided"}
                                 </Typography>
                               )}
                               {tc.testcase_output && (
-                                <Typography
-                                  sx={{
-                                    fontFamily: "'Fira Code', monospace",
-                                    color: "text.secondary",
-                                    p: 1,
-                                    bgcolor: alpha(theme.palette.background.default, 0.7),
-                                    borderRadius: 1,
-                                    whiteSpace: "pre-wrap",
-                                    wordBreak: "break-word",
-                                    fontSize: { xs: "0.65rem", sm: "0.75rem" },
-                                  }}
-                                >
-                                  <strong>Expected Output:</strong>
-                                  <br />
-                                  {Array.isArray(tc.testcase_output)
-                                    ? tc.testcase_output.join("\n")
-                                    : tc.testcase_output || "No output provided"}
+                                <Typography className="cp-testcase-card__code">
+                                  <strong>Expected Output:</strong><br />
+                                  {Array.isArray(tc.testcase_output) ? tc.testcase_output.join("\n") : tc.testcase_output || "No output provided"}
                                 </Typography>
                               )}
                             </CardContent>
                           </Card>
                         ))}
                         {hiddenTestCasesCount > 0 && (
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color: "text.secondary",
-                              fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                              fontSize: { xs: "0.7rem", sm: "0.8rem" },
-                              p: 1,
-                            }}
-                          >
-                            + {hiddenTestCasesCount} hidden test cases
+                          <Typography variant="body2" className="cp-testcase-hidden">
+                            + {hiddenTestCasesCount} hidden test case{hiddenTestCasesCount !== 1 ? "s" : ""}
                           </Typography>
                         )}
                       </Stack>
                     ) : (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "text.secondary",
-                          fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                          fontSize: { xs: "0.7rem", sm: "0.8rem" },
-                          p: 1,
-                        }}
-                      >
-                        No test cases available for this problem.
-                      </Typography>
+                      <Typography variant="body2" className="cp-testcase-empty">No test cases available for this problem.</Typography>
                     )}
                   </>
                 ) : (
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "text.secondary",
-                      fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-                      fontSize: { xs: "0.7rem", sm: "0.8rem" },
-                      p: 1,
-                    }}
-                  >
-                    No problem selected or failed to load problem data.
-                  </Typography>
+                  <Typography variant="body2" className="cp-testcase-empty">No problem selected or failed to load problem data.</Typography>
                 )}
-              </Box>
+              </div>
             )}
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            p: { xs: 1, sm: 1.5 },
-            borderTop: 1,
-            borderColor: "divider",
-            bgcolor: "background.paper",
-            flexWrap: "wrap",
-            gap: 1,
-          }}
-        >
-          <Box sx={{ display: "flex", gap: { xs: 0.5, sm: 1 } }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handlePrevious}
-              disabled={isFirstProgram || loading}
-              startIcon={<NavigateBeforeIcon />}
-              size="small"
-              sx={{
-                fontSize: { xs: "0.65rem", sm: "0.75rem" },
-                fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-              }}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleNext}
-              disabled={isLastProgram || loading}
-              endIcon={<NavigateNextIcon />}
-              size="small"
-              sx={{
-                fontSize: { xs: "0.65rem", sm: "0.75rem" },
-                fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-              }}
-            >
-              Next
-            </Button>
-          </Box>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => handleFinalSubmit(false)}
-            disabled={loading}
-            startIcon={<DoneIcon />}
-            size="small"
-            sx={{
-              fontSize: { xs: "0.65rem", sm: "0.75rem" },
-              fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-            }}
-          >
+          </div>
+        </div>
+
+        {/* ── Footer ──────────────────────────────────────────────── */}
+        <div className="cp-footer">
+          <div className="cp-footer__nav">
+            <Button variant="outlined" color="primary" onClick={handlePrevious} disabled={isFirstProgram || loading} startIcon={<NavigateBeforeIcon />} size="small" className="cp-btn-nav">Previous</Button>
+            <Button variant="outlined" color="primary" onClick={handleNext}     disabled={isLastProgram  || loading} endIcon={<NavigateNextIcon />}    size="small" className="cp-btn-nav">Next</Button>
+          </div>
+          <Button variant="contained" color="error" onClick={() => handleFinalSubmit(false)} disabled={loading} startIcon={<DoneIcon />} size="small" className="cp-btn-submit">
             Submit Test
           </Button>
-        </Box>
-      </Box>
-      {showFullScreenPrompt && (
-        <Box
-          sx={{
-            position: "fixed",
-            bottom: 16,
-            right: 16,
-            zIndex: 1300,
-          }}
-        >
-        </Box>
-      )}
+        </div>
+
+      </div>
     </ThemeProvider>
   );
 };

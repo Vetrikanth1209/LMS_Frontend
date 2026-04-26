@@ -1,0 +1,106 @@
+/* ============================================================
+   CourseInfoCards.css
+   Styles lifted exactly from CourseInfoCards.jsx inline styles.
+   No visual changes — only moved to CSS and values use tokens.
+   ============================================================ */
+
+/* ── Grid wrapper ─────────────────────────────────────────── */
+.cic-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* ── Base stat card ───────────────────────────────────────── */
+.cic-card {
+  padding: var(--spacing-sm, 12px);
+  border-radius: var(--radius-md, 12px);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 12px);
+  min-height: var(--stat-card-min-height, 70px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cic-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Card color variants ──────────────────────────────────── */
+.cic-card--org {
+  background-color: rgba(56, 182, 255, 0.1);
+}
+
+.cic-card--module {
+  background-color: rgba(255, 102, 196, 0.1);
+}
+
+.cic-card--expert {
+  background-color: rgba(64, 196, 255, 0.1);
+}
+
+.cic-card--coordinator {
+  background-color: rgba(240, 98, 146, 0.1);
+}
+
+/* ── Icon wrapper ─────────────────────────────────────────── */
+.cic-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Icon color variants ──────────────────────────────────── */
+.cic-icon--org {
+  background-color: rgba(56, 182, 255, 0.2);
+  color: #38b6ff;
+}
+
+.cic-icon--module {
+  background-color: rgba(255, 102, 196, 0.2);
+  color: #ff66c4;
+}
+
+.cic-icon--expert {
+  background-color: rgba(64, 196, 255, 0.2);
+  color: #40c4ff;
+}
+
+.cic-icon--coordinator {
+  background-color: rgba(240, 98, 146, 0.2);
+  color: #f06292;
+}
+
+/* ── Text ─────────────────────────────────────────────────── */
+.cic-label {
+  font-size: var(--font-size-sm, clamp(10px, 2vw, 12px));
+  color: var(--color-text-muted, #6b7280);
+  margin-bottom: 4px;
+}
+
+.cic-value {
+  font-size: var(--font-size-stat, clamp(14px, 2.5vw, 16px));
+  font-weight: var(--font-weight-semibold, 600);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .cic-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .cic-grid {
+    grid-template-columns: 1fr;
+  }
+}

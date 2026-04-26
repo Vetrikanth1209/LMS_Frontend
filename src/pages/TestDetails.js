@@ -20,7 +20,7 @@ import {
   Alert,
   Tooltip,
 } from "@mui/material";
-import { alpha, styled } from "@mui/material/styles";
+import { alpha } from "@mui/material/styles";
 import {
   Language as LanguageIcon,
   EmojiEvents as ScoreIcon,
@@ -32,223 +32,54 @@ import {
   LockClock as LockIcon,
   Error as ErrorIcon,
 } from "@mui/icons-material";
-import { getTestById } from "../axios"; // Import from apiService
+import { getTestById } from "../axios";
+import "../styles/TestDetails.css";
 
-// Create a custom theme with improved typography
+// ── MUI theme (typography + palette only — layout/shape via CSS) ──────────────
 const theme = createTheme({
   typography: {
     fontFamily: ["Inter", "Roboto", '"Segoe UI"', "Arial", "sans-serif"].join(","),
-    h1: {
-      fontWeight: 700,
-      letterSpacing: "-0.01em",
-    },
-    h4: {
-      fontWeight: 700,
-      letterSpacing: "-0.01em",
-    },
-    h6: {
-      fontWeight: 600,
-      letterSpacing: "-0.01em",
-    },
-    button: {
-      fontWeight: 600,
-      letterSpacing: "0.02em",
-      textTransform: "none",
-    },
-    subtitle1: {
-      fontWeight: 500,
-    },
-    body1: {
-      lineHeight: 1.6,
-    },
+    h1:       { fontWeight: 700, letterSpacing: "-0.01em" },
+    h4:       { fontWeight: 700, letterSpacing: "-0.01em" },
+    h6:       { fontWeight: 600, letterSpacing: "-0.01em" },
+    button:   { fontWeight: 600, letterSpacing: "0.02em", textTransform: "none" },
+    subtitle1:{ fontWeight: 500 },
+    body1:    { lineHeight: 1.6 },
   },
   palette: {
-    primary: {
-      main: "#0c83c8",
-      light: "#3a9bd7",
-      dark: "#096ba3",
-    },
-    secondary: {
-      main: "#fc7a46",
-      light: "#fd9469",
-      dark: "#e56a3a",
-    },
-    background: {
-      default: "#f5f7fa",
-    },
+    primary:   { main: "#0c83c8", light: "#3a9bd7", dark: "#096ba3" },
+    secondary: { main: "#fc7a46", light: "#fd9469", dark: "#e56a3a" },
+    background:{ default: "#f5f7fa" },
   },
-  shape: {
-    borderRadius: 10,
-  },
+  shape: { borderRadius: 10 },
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          padding: "10px 24px",
-          boxShadow: "none",
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 16,
-          boxShadow: "0 10px 40px rgba(0, 0, 0, 0.1)",
-        },
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          fontWeight: 500,
-          borderRadius: 6,
-        },
-      },
-    },
-    MuiAlert: {
-      styleOverrides: {
-        root: {
-          fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-          borderRadius: 8,
-        },
-      },
-    },
+    MuiButton: { styleOverrides: { root: { borderRadius: 8, padding: "10px 24px", boxShadow: "none" } } },
+    MuiCard:   { styleOverrides: { root: { borderRadius: 16, boxShadow: "0 10px 40px rgba(0,0,0,0.1)" } } },
+    MuiChip:   { styleOverrides: { root: { fontWeight: 500, borderRadius: 6 } } },
+    MuiAlert:  { styleOverrides: { root: { fontFamily: "'Inter','Helvetica','Arial',sans-serif !important", borderRadius: 8 } } },
     MuiSnackbar: {
       styleOverrides: {
-        root: {
-          "& .MuiAlert-root": {
-            fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-          },
-        },
+        root: { "& .MuiAlert-root": { fontFamily: "'Inter','Helvetica','Arial',sans-serif !important" } },
       },
     },
   },
 });
 
-// Custom styled components
-const AnimatedCard = styled(Card)(({ theme }) => ({
-  position: "relative",
-  overflow: "hidden",
-  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-  "&:hover": {
-    transform: "translateY(-4px)",
-    boxShadow: "0 16px 70px rgba(0, 0, 0, 0.12)",
-  },
-}));
-
-const ColorBar = styled(Box)(({ theme }) => ({
-  height: 6,
-  background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-}));
-
-const AnimatedButton = styled(Button)(({ theme }) => ({
-  position: "relative",
-  overflow: "hidden",
-  transition: "all 0.3s ease",
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: `0 6px 20px ${alpha(theme.palette.primary.main, 0.4)}`,
-    "& .MuiButton-endIcon": {
-      transform: "translateX(4px)",
-    },
-    "& .MuiButton-startIcon": {
-      transform: "translateX(-4px)",
-    },
-  },
-  "& .MuiButton-endIcon, & .MuiButton-startIcon": {
-    transition: "transform 0.2s ease",
-  },
-  "&::after": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    background: "linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 70%)",
-    transform: "translateX(-100%)",
-  },
-  "&:hover::after": {
-    transition: "transform 1s ease",
-    transform: "translateX(100%)",
-  },
-}));
-
-const InfoCard = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
-  height: "100%",
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(1.5),
-  borderRadius: 12,
-  transition: "transform 0.2s ease, box-shadow 0.2s ease",
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-  backgroundColor: alpha(theme.palette.primary.main, 0.03),
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.1)}`,
-  },
-}));
-
-const IconWrapper = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: 40,
-  height: 40,
-  borderRadius: "50%",
-  backgroundColor: alpha(theme.palette.primary.main, 0.1),
-  color: theme.palette.primary.main,
-}));
-
-const SecondaryIconWrapper = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: 40,
-  height: 40,
-  borderRadius: "50%",
-  backgroundColor: alpha(theme.palette.secondary.main, 0.1),
-  color: theme.palette.secondary.main,
-}));
-
-const LoadingContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  minHeight: "100vh",
-  gap: theme.spacing(2),
-}));
-
-const StatusChip = styled(Chip)(({ theme, status }) => ({
-  ...(status === "active" && {
-    backgroundColor: alpha(theme.palette.success.main, 0.1),
-    color: theme.palette.success.main,
-  }),
-  ...(status === "disabled" && {
-    backgroundColor: alpha(theme.palette.error.main, 0.1),
-    color: theme.palette.error.main,
-  }),
-}));
-
+// ── Component ─────────────────────────────────────────────────────────────────
 const TestDetails = () => {
   const { testId } = useParams();
-  const navigate = useNavigate();
-  const [testData, setTestData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const navigate   = useNavigate();
+  const [testData,          setTestData]          = useState(null);
+  const [loading,           setLoading]           = useState(true);
+  const [isFullscreen,      setIsFullscreen]      = useState(false);
+  const [snackbarOpen,      setSnackbarOpen]      = useState(false);
+  const [snackbarMessage,   setSnackbarMessage]   = useState("");
+  const [snackbarSeverity,  setSnackbarSeverity]  = useState("success");
 
-  // Responsive breakpoints
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen  = useMediaQuery(theme.breakpoints.down("sm"));
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
-    // Set testId in localStorage
     localStorage.setItem("test_id", testId);
 
     const fetchTestData = async () => {
@@ -268,9 +99,7 @@ const TestDetails = () => {
 
     fetchTestData();
 
-    // Prevent back navigation by handling popstate
     const handlePopState = () => {
-      // Push the current page back to the history to prevent going back
       window.history.pushState(null, null, window.location.pathname);
       setSnackbarMessage("Navigation back is disabled during the test.");
       setSnackbarSeverity("warning");
@@ -278,30 +107,20 @@ const TestDetails = () => {
     };
 
     window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
+    return () => window.removeEventListener("popstate", handlePopState);
   }, [testId]);
 
-  // Check if test has MCQ component
-  const hasMcq = testData?.test_mcq_id && testData.test_mcq_id.length > 0;
-  
-  // Check if test has coding component
-  const hasCoding = testData?.test_coding_id && testData.test_coding_id.length > 0;
-  
-  // Check if test is active
+  const hasMcq       = testData?.test_mcq_id    && testData.test_mcq_id.length    > 0;
+  const hasCoding    = testData?.test_coding_id && testData.test_coding_id.length > 0;
   const isTestActive = testData?.status === "active";
 
-  // Determine first component to navigate to
   const getFirstComponentPath = () => {
-    if (hasMcq) return `/mcq/${testId}`;
-    if (hasCoding) return `/coding/${testData.test_coding_id[0]}`; // Use first coding ID
+    if (hasMcq)    return `/mcq/${testId}`;
+    if (hasCoding) return `/coding/${testData.test_coding_id[0]}`;
     return null;
   };
 
   const handleProceed = async () => {
-    // Don't proceed if test is disabled
     if (!isTestActive) {
       setSnackbarMessage("This test is currently disabled. Please try again later.");
       setSnackbarSeverity("error");
@@ -318,12 +137,10 @@ const TestDetails = () => {
     }
 
     try {
-      // Calculate total time: 60 seconds per MCQ, 600 seconds per coding question
-      const mcqCount = testData.test_mcq_id?.length || 0;
+      const mcqCount    = testData.test_mcq_id?.length    || 0;
       const codingCount = testData.test_coding_id?.length || 0;
-      const totalTime = (mcqCount * 60) + (codingCount * 600);
+      const totalTime   = (mcqCount * 60) + (codingCount * 600);
 
-      // Store total time in localStorage
       if (totalTime > 0) {
         localStorage.setItem("test_timer", totalTime.toString());
       } else {
@@ -333,7 +150,6 @@ const TestDetails = () => {
         return;
       }
 
-      // Request fullscreen mode
       if (document.documentElement.requestFullscreen) {
         await document.documentElement.requestFullscreen();
         setIsFullscreen(true);
@@ -347,19 +163,15 @@ const TestDetails = () => {
         await document.documentElement.msRequestFullscreen();
         setIsFullscreen(true);
       } else {
-        // Fallback if fullscreen not supported
         setSnackbarMessage("Fullscreen mode not supported by your browser. The test requires fullscreen.");
         setSnackbarSeverity("warning");
         setSnackbarOpen(true);
         return;
       }
 
-      // Prevent back navigation by replacing history and pushing dummy entries
       window.history.replaceState(null, null, firstComponentPath);
       window.history.pushState(null, null, firstComponentPath);
       window.history.pushState(null, null, firstComponentPath);
-
-      // Navigate to first component
       navigate(firstComponentPath);
     } catch (err) {
       console.error("Fullscreen request failed:", err);
@@ -370,107 +182,78 @@ const TestDetails = () => {
     }
   };
 
-  const handleBack = () => {
-    window.history.back(); 
-  };
+  const handleBack         = () => window.history.back();
+  const handleSnackbarClose = () => setSnackbarOpen(false);
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
-  const renderLoading = () => (
-    <LoadingContainer>
-      <CircularProgress
-        size={48}
-        thickness={4}
-        sx={{
-          color: theme.palette.primary.main,
-          animationDuration: "1.2s",
-        }}
-      />
-      <Typography
-        variant="subtitle1"
-        color="textSecondary"
-        sx={{
-          opacity: 0.8,
-          animation: "pulse 1.5s infinite ease-in-out",
-          "@keyframes pulse": {
-            "0%, 100%": { opacity: 0.8 },
-            "50%": { opacity: 0.5 },
-          },
-        }}
-      >
-        Loading test details...
-      </Typography>
-    </LoadingContainer>
-  );
-
-  if (loading) {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {renderLoading()}
-      </ThemeProvider>
-    );
-  }
-
-  if (!testData) {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" p={isSmallScreen ? 2 : 4}>
-          <Paper
-            elevation={2}
-            sx={{
-              p: 4,
-              maxWidth: 500,
-              borderRadius: 3,
-              textAlign: "center",
-              border: `1px solid ${alpha(theme.palette.error.main, 0.2)}`,
-            }}
-          >
-            <Typography variant="h6" gutterBottom>
-              Unable to load test details
-            </Typography>
-            <Typography variant="body1" color="textSecondary" paragraph>
-              We couldn't retrieve the test details. Please check your connection and try again.
-            </Typography>
-            <AnimatedButton variant="outlined" color="primary" onClick={() => window.location.reload()} sx={{ mt: 2 }}>
-              Retry
-            </AnimatedButton>
-          </Paper>
-        </Box>
-      </ThemeProvider>
-    );
-  }
-
-  // Determine button text based on available components
   const getButtonText = () => {
     if (!isTestActive) return "Test Disabled";
-    if (hasMcq) return "Proceed to MCQ";
-    if (hasCoding) return "Proceed to Coding";
+    if (hasMcq)        return "Proceed to MCQ";
+    if (hasCoding)     return "Proceed to Coding";
     return "No Components Available";
   };
 
   const getTestOverviewText = () => {
     let description = `This assessment is designed to evaluate your proficiency in ${testData.test_language}.`;
-    
-    if (hasMcq && hasCoding) {
-      description += " The test consists of multiple-choice questions and coding challenges.";
-    } else if (hasMcq) {
-      description += " The test consists of multiple-choice questions.";
-    } else if (hasCoding) {
-      description += " The test consists of coding challenges.";
-    }
-    
+    if (hasMcq && hasCoding)      description += " The test consists of multiple-choice questions and coding challenges.";
+    else if (hasMcq)              description += " The test consists of multiple-choice questions.";
+    else if (hasCoding)           description += " The test consists of coding challenges.";
     description += " The test is timed, and your performance will be scored based on accuracy and completion time.";
-    
     return description;
   };
 
+  // ── Loading state ───────────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className="td-loading-container">
+          <CircularProgress
+            size={48}
+            thickness={4}
+            sx={{ color: theme.palette.primary.main, animationDuration: "1.2s" }}
+          />
+          <Typography variant="subtitle1" className="td-loading-text">
+            Loading test details...
+          </Typography>
+        </div>
+      </ThemeProvider>
+    );
+  }
+
+  // ── No-data / error state ───────────────────────────────────────────────────
+  if (!testData) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className={`td-page-wrapper${isSmallScreen ? " td-page-wrapper--small" : ""}`}>
+          <Paper elevation={2} className="td-error-paper">
+            <Typography variant="h6" gutterBottom className="td-error-title">
+              Unable to load test details
+            </Typography>
+            <Typography variant="body1" paragraph className="td-error-body">
+              We couldn't retrieve the test details. Please check your connection and try again.
+            </Typography>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => window.location.reload()}
+              className="td-btn td-btn--back"
+              sx={{ mt: 2 }}
+            >
+              Retry
+            </Button>
+          </Paper>
+        </div>
+      </ThemeProvider>
+    );
+  }
+
+  // ── Main render ─────────────────────────────────────────────────────────────
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+
+      {/* Snackbar */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}
@@ -481,65 +264,64 @@ const TestDetails = () => {
           onClose={handleSnackbarClose}
           severity={snackbarSeverity}
           variant="filled"
-          sx={{
-            width: "100%",
-            fontFamily: "'Inter', 'Helvetica', 'Arial', sans-serif !important",
-          }}
+          className="td-alert"
         >
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
-          p: isSmallScreen ? 2 : 4,
-          backgroundColor: theme.palette.background.default,
-        }}
-      >
-        <AnimatedCard sx={{ width: "100%", maxWidth: 800 }}>
-          <ColorBar />
-          <Box sx={{ p: isSmallScreen ? 2 : 3 }}>
-            <Box sx={{ mb: 2, display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+
+      {/* Page wrapper */}
+      <div className={`td-page-wrapper${isSmallScreen ? " td-page-wrapper--small" : ""}`}>
+
+        {/* Main card */}
+        <Card className="td-card" sx={{ width: "100%", maxWidth: 800 }}>
+
+          {/* Gradient color bar */}
+          <div className="td-color-bar" />
+
+          {/* Card body */}
+          <div className={`td-card-body${isSmallScreen ? " td-card-body--small" : ""}`}>
+
+            {/* Header: label chip + test name + status chip */}
+            <div className="td-header-row">
               <Box>
                 <Chip
                   label="Test Details"
                   size="small"
-                  sx={{
-                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                    color: theme.palette.primary.main,
-                    mb: 1.5,
-                  }}
+                  className="td-label-chip"
+                  sx={{ mb: 1.5 }}
                 />
                 <Typography
                   variant={isSmallScreen ? "h5" : "h4"}
                   component="h1"
                   gutterBottom
-                  sx={{
-                    fontWeight: 700,
-                    lineHeight: 1.2,
-                  }}
+                  className="td-test-name"
                 >
                   {testData.test_name}
                 </Typography>
               </Box>
-              <StatusChip
+              <Chip
                 label={testData.status === "active" ? "Active" : "Disabled"}
-                status={testData.status}
                 size="small"
+                className={
+                  testData.status === "active"
+                    ? "td-status-chip--active"
+                    : "td-status-chip--disabled"
+                }
                 icon={testData.status === "active" ? <CheckIcon /> : <LockIcon />}
               />
-            </Box>
+            </div>
 
+            {/* Card content */}
             <CardContent sx={{ p: 0 }}>
+
+              {/* Info row: Language + Total Score */}
               <Grid container spacing={2} sx={{ mb: 1 }}>
                 <Grid item xs={12} sm={6}>
-                  <InfoCard elevation={0}>
-                    <IconWrapper>
+                  <Paper elevation={0} className="td-info-card">
+                    <div className="td-icon-wrapper">
                       <LanguageIcon />
-                    </IconWrapper>
+                    </div>
                     <Box>
                       <Typography variant="caption" color="textSecondary" sx={{ display: "block" }}>
                         Language
@@ -548,13 +330,13 @@ const TestDetails = () => {
                         {testData.test_language}
                       </Typography>
                     </Box>
-                  </InfoCard>
+                  </Paper>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <InfoCard elevation={0}>
-                    <IconWrapper>
+                  <Paper elevation={0} className="td-info-card">
+                    <div className="td-icon-wrapper">
                       <ScoreIcon />
-                    </IconWrapper>
+                    </div>
                     <Box>
                       <Typography variant="caption" color="textSecondary" sx={{ display: "block" }}>
                         Total Score
@@ -563,27 +345,22 @@ const TestDetails = () => {
                         {testData.test_total_score} points
                       </Typography>
                     </Box>
-                  </InfoCard>
+                  </Paper>
                 </Grid>
               </Grid>
 
-              <Typography
-                variant="h6"
-                gutterBottom
-                sx={{
-                  mt: 2,
-                  mb: 2,
-                }}
-              >
+              {/* Test Components heading */}
+              <Typography variant="h6" gutterBottom className="td-section-heading">
                 Test Components
               </Typography>
 
+              {/* MCQ + Coding cards */}
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <InfoCard elevation={0} sx={{ opacity: hasMcq ? 1 : 0.7 }}>
-                    <IconWrapper>
+                  <Paper elevation={0} className="td-info-card" sx={{ opacity: hasMcq ? 1 : 0.7 }}>
+                    <div className="td-icon-wrapper">
                       <QuizIcon />
-                    </IconWrapper>
+                    </div>
                     <Box sx={{ flexGrow: 1 }}>
                       <Typography variant="caption" color="textSecondary" sx={{ display: "block" }}>
                         MCQ Questions
@@ -596,33 +373,27 @@ const TestDetails = () => {
                           <Chip
                             size="small"
                             label="Included"
-                            sx={{
-                              backgroundColor: alpha(theme.palette.success.main, 0.1),
-                              color: theme.palette.success.main,
-                              ml: 1,
-                            }}
+                            className="td-chip--included"
                             icon={<CheckIcon style={{ fontSize: 16 }} />}
+                            sx={{ ml: 1 }}
                           />
                         ) : (
                           <Chip
                             size="small"
                             label="Not Included"
-                            sx={{
-                              backgroundColor: alpha(theme.palette.grey[500], 0.1),
-                              color: theme.palette.grey[500],
-                              ml: 1,
-                            }}
+                            className="td-chip--not-included"
+                            sx={{ ml: 1 }}
                           />
                         )}
                       </Box>
                     </Box>
-                  </InfoCard>
+                  </Paper>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <InfoCard elevation={0} sx={{ opacity: hasCoding ? 1 : 0.7 }}>
-                    <SecondaryIconWrapper>
+                  <Paper elevation={0} className="td-info-card" sx={{ opacity: hasCoding ? 1 : 0.7 }}>
+                    <div className="td-icon-wrapper td-icon-wrapper--secondary">
                       <CodeIcon />
-                    </SecondaryIconWrapper>
+                    </div>
                     <Box sx={{ flexGrow: 1 }}>
                       <Typography variant="caption" color="textSecondary" sx={{ display: "block" }}>
                         Coding Tasks
@@ -635,126 +406,98 @@ const TestDetails = () => {
                           <Chip
                             size="small"
                             label="Included"
-                            sx={{
-                              backgroundColor: alpha(theme.palette.success.main, 0.1),
-                              color: theme.palette.success.main,
-                              ml: 1,
-                            }}
+                            className="td-chip--included"
                             icon={<CheckIcon style={{ fontSize: 16 }} />}
+                            sx={{ ml: 1 }}
                           />
                         ) : (
                           <Chip
                             size="small"
                             label="Not Included"
-                            sx={{
-                              backgroundColor: alpha(theme.palette.grey[500], 0.1),
-                              color: theme.palette.grey[500],
-                              ml: 1,
-                            }}
+                            className="td-chip--not-included"
+                            sx={{ ml: 1 }}
                           />
                         )}
                       </Box>
                     </Box>
-                  </InfoCard>
+                  </Paper>
                 </Grid>
               </Grid>
 
+              {/* Test Overview */}
               <Box sx={{ mt: 2 }}>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{
-                    mb: 2,
-                  }}
-                >
+                <Typography variant="h6" gutterBottom className="td-section-heading" sx={{ mb: 2 }}>
                   Test Overview
                 </Typography>
-                <Typography variant="body1" color="textSecondary" paragraph>
+                <Typography variant="body1" color="textSecondary" paragraph className="td-overview-text">
                   {getTestOverviewText()}
                 </Typography>
-                
+
                 {!isTestActive && (
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 2,
-                      mt: 2,
-                      mb: 2,
-                      borderRadius: 2,
-                      backgroundColor: alpha(theme.palette.error.main, 0.05),
-                      border: `1px solid ${alpha(theme.palette.error.main, 0.2)}`,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                    }}
-                  >
+                  <div className="td-disabled-banner">
                     <ErrorIcon color="error" fontSize="small" />
-                    <Typography variant="body2" color="error.main">
+                    <Typography variant="body2" className="td-disabled-banner-text">
                       This test is currently disabled and not available for taking. Please check back later or contact the administrator.
                     </Typography>
-                  </Paper>
+                  </div>
                 )}
-                
+
                 {(hasMcq || hasCoding) ? (
-                  <Typography variant="body1" color="textSecondary" sx={{ mb: -3}}>
+                  <Typography variant="body1" color="textSecondary" className="td-hint-text" sx={{ mb: -3 }}>
                     {isTestActive
                       ? `Click "${getButtonText()}" to begin the assessment. The test will open in fullscreen mode.`
                       : "The test is currently disabled and cannot be started."}
                   </Typography>
                 ) : (
-                  <Typography variant="body1" color="error" sx={{ mb: 0.5 }}>
+                  <Typography variant="body1" className="td-hint-text td-hint-text--error" sx={{ mb: 0.5 }}>
                     No test components found. Please contact the administrator.
                   </Typography>
                 )}
               </Box>
             </CardContent>
-          </Box>
+          </div>
+
           <Divider />
+
+          {/* Card actions footer */}
           <CardActions
-            sx={{
-              p: isSmallScreen ? 2 : 3,
-              justifyContent: "space-between",
-              alignItems: "center",
-              backgroundColor: alpha(theme.palette.background.default, 0.5),
-            }}
+            className={`td-card-actions${isSmallScreen ? " td-card-actions--small" : ""}`}
           >
-            <AnimatedButton
+            {/* Back button */}
+            <Button
               variant="outlined"
               color="primary"
               onClick={handleBack}
-              startIcon={<ArrowBackIcon />}
-              sx={{
-                borderColor: alpha(theme.palette.primary.main, 0.5),
-              }}
+              startIcon={<ArrowBackIcon className="td-btn-start-icon" />}
+              className="td-btn td-btn--back"
             >
               Back
-            </AnimatedButton>
-            <Tooltip 
-              title={!isTestActive ? "This test is currently disabled" : ""} 
+            </Button>
+
+            {/* Proceed button */}
+            <Tooltip
+              title={!isTestActive ? "This test is currently disabled" : ""}
               placement="top"
               disableHoverListener={isTestActive}
             >
               <span>
-                <AnimatedButton
+                <Button
                   variant="contained"
                   color="secondary"
                   onClick={handleProceed}
-                  endIcon={isTestActive ? <ArrowIcon /> : <LockIcon />}
+                  endIcon={isTestActive ? <ArrowIcon className="td-btn-end-icon" /> : <LockIcon className="td-btn-end-icon" />}
                   disableElevation
                   disabled={!isTestActive || (!hasMcq && !hasCoding)}
-                  sx={{
-                    px: isSmallScreen ? 3 : 4,
-                    py: isSmallScreen ? 1 : 1.5,
-                    color: "#ffffff",
-                  }}
+                  className="td-btn td-btn--proceed"
                 >
                   {getButtonText()}
-                </AnimatedButton>
+                </Button>
               </span>
             </Tooltip>
           </CardActions>
-        </AnimatedCard>
-      </Box>
+
+        </Card>
+      </div>
     </ThemeProvider>
   );
 };
