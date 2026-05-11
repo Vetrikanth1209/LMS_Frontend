@@ -70,6 +70,7 @@ import {
   getTestById,
 } from "../axios";
 import "../styles/CodePage.css";
+import useAssessmentBackup from "../hooks/assessmentBackup";
 
 // ── Language mapping ──────────────────────────────────────────────────────────
 const languageApiMap = {
@@ -324,43 +325,45 @@ const CodingPage = () => {
   const [userId, setUserId] = useState("");
   const [pocId, setPocId] = useState("");
   const [studentName, setStudentName] = useState("");
+  const { saveBackup, loadBackup, clearBackup, addSecurityLog } =
+    useAssessmentBackup({
+      testId,
+      userId,
+      pocId,
+    });
   const [timer, setTimer] = useState(
-    parseInt(localStorage.getItem("test_timer")) || 0,
+    // parseInt(localStorage.getItem("test_timer")) || 0,
+    0,
   );
   const timerRef = useRef(null);
+  // Track whether the timer has ever been set to a positive value
+  // so we don't auto-submit on initial render when timer is 0
+  const timerInitializedRef = useRef(false);
 
-  const savedTestResult = JSON.parse(localStorage.getItem("test_result")) || {};
+  // const savedTestResult = JSON.parse(localStorage.getItem("test_result")) || {};
   const [testResult, setTestResult] = useState({
-    result_user_id:
-      savedTestResult.result_user_id || state?.result_user_id || "",
-    codingAnswered:
-      savedTestResult.codingAnswered || state?.codingAnswered || 0,
-    codingCorrect: savedTestResult.codingCorrect || state?.codingCorrect || 0,
-    codingIds: savedTestResult.codingIds || state?.codingIds || [],
-    codingNotAnswered:
-      savedTestResult.codingNotAnswered || state?.codingNotAnswered || 0,
-    codingNotVisited:
-      savedTestResult.codingNotVisited || state?.codingNotVisited || 0,
-    codingWrong: savedTestResult.codingWrong || state?.codingWrong || 0,
-    marked: savedTestResult.marked || state?.marked || 0,
-    mcqAnswered: savedTestResult.mcqAnswered || state?.mcqAnswered || 0,
-    mcqCorrect: savedTestResult.mcqCorrect || state?.mcqCorrect || 0,
-    mcqNotAnswered:
-      savedTestResult.mcqNotAnswered || state?.mcqNotAnswered || 0,
-    mcqNotVisited: savedTestResult.mcqNotVisited || state?.mcqNotVisited || 0,
-    mcqWrong: savedTestResult.mcqWrong || state?.mcqWrong || 0,
-    result_poc_id: savedTestResult.result_poc_id || state?.result_poc_id || "",
-    result_score: savedTestResult.result_score || state?.result_score || 0,
-    result_total_score:
-      savedTestResult.result_total_score || state?.result_total_score || 0,
-    studentName: savedTestResult.studentName || state?.studentName || "",
-    testLanguage: savedTestResult.testLanguage || state?.testLanguage || "",
-    testName: savedTestResult.testName || state?.testName || "",
-    currentCodingIndex:
-      savedTestResult.currentCodingIndex || state?.currentCodingIndex || 0,
-    codingResults: savedTestResult.codingResults || state?.codingResults || [],
-    testInstructions:
-      savedTestResult.testInstructions || state?.testInstructions || [],
+    result_user_id: state?.result_user_id || "",
+    codingAnswered: state?.codingAnswered || 0,
+    codingCorrect: state?.codingCorrect || 0,
+    codingIds: state?.codingIds || [],
+    codingNotAnswered: state?.codingNotAnswered || 0,
+    codingNotVisited: state?.codingNotVisited || 0,
+    codingWrong: state?.codingWrong || 0,
+    marked: state?.marked || 0,
+    mcqAnswered: state?.mcqAnswered || 0,
+    mcqCorrect: state?.mcqCorrect || 0,
+    mcqNotAnswered: state?.mcqNotAnswered || 0,
+    mcqNotVisited: state?.mcqNotVisited || 0,
+    mcqWrong: state?.mcqWrong || 0,
+    result_poc_id: state?.result_poc_id || "",
+    result_score: state?.result_score || 0,
+    result_total_score: state?.result_total_score || 0,
+    studentName: state?.studentName || "",
+    testLanguage: state?.testLanguage || "",
+    testName: state?.testName || "",
+    currentCodingIndex: state?.currentCodingIndex || 0,
+    codingResults: state?.codingResults || [],
+    testInstructions: state?.testInstructions || [],
   });
 
   const [terminalLines, setTerminalLines] = useState([]);
@@ -418,6 +421,10 @@ const CodingPage = () => {
   const editorRef = useRef(null);
   const resizeObserverRef = useRef(null);
   const autoSaveTimeoutRef = useRef(null);
+  // Suppress malpractice detection while navigating between coding questions
+  const isNavigatingRef = useRef(false);
+  // Store the freshly compiled result so confirmFinalSubmit always uses up-to-date data
+  const compiledResultRef = useRef(null);
 
   const handleSetInput = (val) => {
     inputRef.current = val;
@@ -462,6 +469,57 @@ const CodingPage = () => {
     "Contact the test administrator for any technical issues or clarifications during the test.",
   ];
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      saveBackup({
+        timer: {
+          remainingTime: timer,
+        },
+      });
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [timer, saveBackup]);
+
+  useEffect(() => {
+    const restoreBackup = async () => {
+      const backup = await loadBackup();
+
+      if (!backup) return;
+
+      if (backup.timer?.remainingTime) {
+        timerInitializedRef.current = true;
+        setTimer(backup.timer.remainingTime);
+      }
+
+      if (backup.result) {
+        setTestResult(backup.result);
+      }
+
+      const savedCode = backup?.coding?.answers?.[codeId];
+
+      if (savedCode) {
+        setLanguage(savedCode.language);
+
+        handleSetInput(savedCode.code);
+      }
+
+      const fsCount = backup?.security?.fullscreenExitCount || 0;
+
+      setFullScreenExitCount(fsCount);
+
+      fullScreenExitCountRef.current = fsCount;
+
+      const wsCount = backup?.security?.windowSwitchCount || 0;
+
+      setWindowSwitchCount(wsCount);
+
+      windowSwitchCountRef.current = wsCount;
+    };
+
+    restoreBackup();
+  }, [codeId]);
+
   // ── Effects ────────────────────────────────────────────────────────────────
   useEffect(() => {
     window.history.pushState(null, null, window.location.href);
@@ -499,10 +557,10 @@ const CodingPage = () => {
             result_poc_id:
               user.user.mod_poc_id?.mod_poc_id || prev.result_poc_id,
           };
-          localStorage.setItem(
-            "test_result",
-            JSON.stringify(updatedTestResult),
-          );
+          // localStorage.setItem(
+          //   "test_result",
+          //   JSON.stringify(updatedTestResult),
+          // );
           return updatedTestResult;
         });
       } catch (error) {
@@ -520,25 +578,10 @@ const CodingPage = () => {
 
   useEffect(() => {
     if (codeId) {
-      const savedPayload = localStorage.getItem(`code_${codeId}`);
-      if (savedPayload) {
-        try {
-          const parsedPayload = JSON.parse(savedPayload);
-          const savedLanguage =
-            Object.keys(languageApiMap).find(
-              (key) => languageApiMap[key] === parsedPayload.language,
-            ) || "python";
-          setLanguage((cur) =>
-            cur === "python" || !cur ? savedLanguage : cur,
-          );
-          handleSetInput(parsedPayload.code || templates[savedLanguage]);
-        } catch (error) {
-          console.error("Error parsing saved payload:", error);
-          handleSetInput(templates[language]);
-        }
-      } else {
-        handleSetInput(templates[language]);
-      }
+      // The restoreBackup effect (above) handles loading any previously
+      // saved code from IndexedDB. We only set the template here as a
+      // fallback; restoreBackup will overwrite it if saved code exists.
+      handleSetInput(templates[language]);
     }
   }, [codeId]);
 
@@ -565,10 +608,10 @@ const CodingPage = () => {
               (res.test_coding_id?.length || 0) * 10,
             testInstructions: res.test_instructions || defaultInstructions,
           };
-          localStorage.setItem(
-            "test_result",
-            JSON.stringify(updatedTestResult),
-          );
+          // localStorage.setItem(
+          //   "test_result",
+          //   JSON.stringify(updatedTestResult),
+          // );
           return updatedTestResult;
         });
         setTestCases([]);
@@ -585,14 +628,22 @@ const CodingPage = () => {
   }, [testId]);
 
   useEffect(() => {
-    if (!timer || timer <= 0 || hasSubmitted) {
-      if (timer <= 0 && !hasSubmitted) handleFinalSubmit(true);
+    if (timer > 0) {
+      // Mark that the timer has been initialized to a real value
+      timerInitializedRef.current = true;
+    }
+    if (hasSubmitted) return;
+    // Only auto-submit on timer expiry if the timer was actually running before
+    if (timer <= 0) {
+      if (timerInitializedRef.current) {
+        handleFinalSubmit(true);
+      }
       return;
     }
     timerRef.current = setInterval(() => {
       setTimer((prev) => {
         const n = prev - 1;
-        localStorage.setItem("test_timer", n);
+        // localStorage.setItem("test_timer", n);
         return n;
       });
     }, 1000);
@@ -613,7 +664,11 @@ const CodingPage = () => {
           const n = fullScreenExitCountRef.current + 1;
           fullScreenExitCountRef.current = n;
           setFullScreenExitCount(n);
-          localStorage.setItem("fs_exit_count", String(n));
+          saveBackup({
+            security: {
+              fullscreenExitCount: n,
+            },
+          });
           if (n >= MAX_FULLSCREEN_WARNINGS) {
             setSnackbarMessage(
               "Fullscreen exited 5 times. Test submitted automatically.",
@@ -655,11 +710,15 @@ const CodingPage = () => {
   useEffect(() => {
     if (!hasSubmitted) {
       const handleWindowBlur = () => {
-        if (hasSubmitted) return;
+        if (hasSubmitted || isNavigatingRef.current) return;
         const newCount = windowSwitchCountRef.current + 1;
         windowSwitchCountRef.current = newCount;
         setWindowSwitchCount(newCount);
-        localStorage.setItem("window_switch_count", String(newCount));
+        saveBackup({
+          security: {
+            windowSwitchCount: newCount,
+          },
+        });
         if (newCount >= MAX_WINDOW_SWITCH_WARNINGS) {
           setSnackbarMessage(
             `Switched away from test ${MAX_WINDOW_SWITCH_WARNINGS} times. Test submitted automatically.`,
@@ -683,10 +742,11 @@ const CodingPage = () => {
 
   useEffect(() => {
     const handleMalpractice = (reason) => {
-      if (!hasSubmitted) {
+      if (!hasSubmitted && !isNavigatingRef.current) {
         setSnackbarMessage(
           `Malpractice detected: ${reason}. Test submitted automatically.`,
         );
+        addSecurityLog("MALPRACTICE", reason);
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
         handleFinalSubmit(true);
@@ -768,24 +828,54 @@ const CodingPage = () => {
     };
   }, [hasSubmitted]);
 
+  //   const saveSubmissionPayload = useCallback(() => {
+  //     const formattedTestCases = testCases.map((tc) => ({
+  //       input: Array.isArray(tc.testcase_input)
+  //         ? tc.testcase_input.join("\n")
+  //         : tc.testcase_input || "",
+  //       expectedOutput: Array.isArray(tc.testcase_output)
+  //         ? tc.testcase_output.join("\n")
+  //         : tc.testcase_output || "",
+  //     }));
+  //     // localStorage.setItem(
+  //     //   `code_${codeId}`,
+  //     //   JSON.stringify({
+  //     //     language: languageApiMap[language],
+  //     //     code: inputRef.current,
+  //     //     testCases: formattedTestCases,
+  //     //   }),
+  //     // );
+  //     saveBackup({
+  //   coding: {
+  //     currentCodingIndex:
+  //       testResult.currentCodingIndex,
+
+  //     answers: {
+  //       [codeId]: {
+  //         code: inputRef.current,
+  //         language,
+  //         lastSavedAt: Date.now(),
+  //       },
+  //     },
+  //   },
+  // });
+  //   }, [codeId, language, testCases]);
+
   const saveSubmissionPayload = useCallback(() => {
-    const formattedTestCases = testCases.map((tc) => ({
-      input: Array.isArray(tc.testcase_input)
-        ? tc.testcase_input.join("\n")
-        : tc.testcase_input || "",
-      expectedOutput: Array.isArray(tc.testcase_output)
-        ? tc.testcase_output.join("\n")
-        : tc.testcase_output || "",
-    }));
-    localStorage.setItem(
-      `code_${codeId}`,
-      JSON.stringify({
-        language: languageApiMap[language],
-        code: inputRef.current,
-        testCases: formattedTestCases,
-      }),
-    );
-  }, [codeId, language, testCases]);
+    saveBackup({
+      coding: {
+        currentCodingIndex: testResult.currentCodingIndex,
+
+        answers: {
+          [codeId]: {
+            code: inputRef.current,
+            language,
+            lastSavedAt: Date.now(),
+          },
+        },
+      },
+    });
+  }, [codeId, language, testResult.currentCodingIndex, saveBackup]);
 
   const debounce =
     (func, delay) =>
@@ -953,21 +1043,15 @@ const CodingPage = () => {
 
   const handleLanguageChange = (event) => {
     const nl = event.target.value;
-    setLanguage(() => nl);
-    const saved = localStorage.getItem(`code_${codeId}`);
-    let newCode = templates[nl];
-    if (saved) {
-      try {
-        const p = JSON.parse(saved);
-        if (p.language === languageApiMap[nl])
-          newCode = p.code || templates[nl];
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    handleSetInput(newCode);
-    if (editorRef.current && editorRef.current.getModel())
+
+    setLanguage(nl);
+
+    handleSetInput(templates[nl]);
+
+    if (editorRef.current && editorRef.current.getModel()) {
       window.monaco.editor.setModelLanguage(editorRef.current.getModel(), nl);
+    }
+
     saveSubmissionPayload();
   };
 
@@ -975,7 +1059,20 @@ const CodingPage = () => {
   const cancelResetEditor = () => setResetDialogOpen(false);
   const confirmResetEditor = () => {
     handleSetInput(templates[language] || "");
-    localStorage.removeItem(`code_${codeId}`);
+    // localStorage.removeItem(`code_${codeId}`);
+    saveBackup({
+      coding: {
+        currentCodingIndex: testResult.currentCodingIndex,
+
+        answers: {
+          [codeId]: {
+            code: inputRef.current,
+            language,
+            lastSavedAt: Date.now(),
+          },
+        },
+      },
+    });
     setSnackbarMessage("Editor reset to template");
     setSnackbarSeverity("info");
     setSnackbarOpen(true);
@@ -991,14 +1088,27 @@ const CodingPage = () => {
         ? tc.testcase_output.join("\n")
         : tc.testcase_output || "",
     }));
-    localStorage.setItem(
-      `code_${codeId}`,
-      JSON.stringify({
-        language: languageApiMap[language],
-        code: input,
-        testCases: f,
-      }),
-    );
+    // localStorage.setItem(
+    //   `code_${codeId}`,
+    //   JSON.stringify({
+    //     language: languageApiMap[language],
+    //     code: input,
+    //     testCases: f,
+    //   }),
+    // );
+    saveBackup({
+      coding: {
+        currentCodingIndex: testResult.currentCodingIndex,
+
+        answers: {
+          [codeId]: {
+            code: inputRef.current,
+            language,
+            lastSavedAt: Date.now(),
+          },
+        },
+      },
+    });
     setSnackbarMessage("Progress saved manually");
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
@@ -1261,8 +1371,8 @@ const CodingPage = () => {
       };
       let currentTestResult = testResult;
       try {
-        const stored = localStorage.getItem("test_result");
-        if (stored) currentTestResult = JSON.parse(stored);
+        // const stored = localStorage.getItem("test_result");
+        // if (stored) currentTestResult = JSON.parse(stored);
       } catch (e) {
         console.error(e);
       }
@@ -1301,16 +1411,32 @@ const CodingPage = () => {
         codingWrong: updatedCodingResults.filter((r) => r.score === 0).length,
         studentName: studentName || currentTestResult.studentName || "",
       };
-      localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
-      setTestResult(updatedTestResult);
-      localStorage.setItem(
-        `code_${codeId}`,
-        JSON.stringify({
-          language: languageApiMap[language],
-          code: input,
-          testCases: formattedTestCases,
-        }),
-      );
+      // localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
+      saveBackup({
+        result: updatedTestResult,
+      });
+
+      // localStorage.setItem(
+      //   `code_${codeId}`,
+      //   JSON.stringify({
+      //     language: languageApiMap[language],
+      //     code: input,
+      //     testCases: formattedTestCases,
+      //   }),
+      // );
+      saveBackup({
+        coding: {
+          currentCodingIndex: testResult.currentCodingIndex,
+
+          answers: {
+            [codeId]: {
+              code: inputRef.current,
+              language,
+              lastSavedAt: Date.now(),
+            },
+          },
+        },
+      });
     } catch (error) {
       console.error("Run test cases error:", error);
       setTestCaseResults([]);
@@ -1413,8 +1539,8 @@ const CodingPage = () => {
       };
       let currentTestResult = testResult;
       try {
-        const stored = localStorage.getItem("test_result");
-        if (stored) currentTestResult = JSON.parse(stored);
+        // const stored = localStorage.getItem("test_result");
+        // if (stored) currentTestResult = JSON.parse(stored);
       } catch (e) {
         console.error(e);
       }
@@ -1453,8 +1579,10 @@ const CodingPage = () => {
         codingWrong: updatedCodingResults.filter((r) => r.score === 0).length,
         studentName: studentName || currentTestResult.studentName || "",
       };
-      localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
-      setTestResult(updatedTestResult);
+      // localStorage.setItem("test_result", JSON.stringify(updatedTestResult));
+      saveBackup({
+        result: updatedTestResult,
+      });
       setSnackbarMessage("Code compiled and evaluated successfully!");
       setSnackbarSeverity("success");
       return { success: true, testResult: updatedTestResult };
@@ -1478,16 +1606,22 @@ const CodingPage = () => {
       fetchedTestCodingIds.length > 0
         ? fetchedTestCodingIds
         : testResult.codingIds || [];
+
     setLoading(true);
     setOpenProgressDialog(true);
+
     setTerminalLines([
       {
         type: "info",
         text: "Processing results...\nCompiling all programs...",
       },
     ]);
-    let compilationErrors = 0,
-      processedResults = [];
+
+    let compilationErrors = 0;
+    // Collect coding results directly from each compile call —
+    // do NOT read back from React state (which is stale during async loop)
+    let collectedCodingResults = [];
+
     try {
       for (const [index, id] of effectiveCodingIds.entries()) {
         setTerminalLines((prev) => [
@@ -1497,18 +1631,32 @@ const CodingPage = () => {
             text: `📝 Processing program ${index + 1}/${effectiveCodingIds.length} (ID: ${id})...`,
           },
         ]);
-        let codeInput = templates[language] || "",
-          codeLanguage = language,
-          codeTestCases = [{ testcase_input: "", testcase_output: "" }];
-        const savedPayload = localStorage.getItem(`code_${id}`);
+
+        let codeInput = templates[language] || "";
+
+        let codeLanguage = language;
+
+        let codeTestCases = [
+          {
+            testcase_input: "",
+            testcase_output: "",
+          },
+        ];
+
+        // ─────────────────────────────────────
+        // LOAD FROM INDEXEDDB
+        // ─────────────────────────────────────
+
+        const backup = await loadBackup();
+
+        const savedPayload = backup?.coding?.answers?.[id];
+
         if (savedPayload) {
           try {
-            const p = JSON.parse(savedPayload);
-            codeInput = p.code || templates[language] || "";
-            codeLanguage =
-              Object.keys(languageApiMap).find(
-                (k) => languageApiMap[k] === p.language,
-              ) || language;
+            codeInput = savedPayload.code || templates[language] || "";
+
+            codeLanguage = savedPayload.language || language;
+
             setTerminalLines((prev) => [
               ...prev,
               {
@@ -1517,9 +1665,14 @@ const CodingPage = () => {
               },
             ]);
           } catch (e) {
+            console.error(e);
+
             setTerminalLines((prev) => [
               ...prev,
-              { type: "warn", text: "   ⚠️ Error parsing saved code" },
+              {
+                type: "warn",
+                text: "   ⚠️ Error reading saved code",
+              },
             ]);
           }
         } else {
@@ -1530,28 +1683,30 @@ const CodingPage = () => {
               text: "   ⚠️ No saved code found, using default template",
             },
           ]);
-          localStorage.setItem(
-            `code_${id}`,
-            JSON.stringify({
-              language: languageApiMap[language] || language,
-              code: templates[language] || "",
-              testCases: [{ input: "", expectedOutput: "" }],
-            }),
-          );
         }
+
+        // ─────────────────────────────────────
+        // FETCH TEST CASES
+        // ─────────────────────────────────────
+
         try {
           const code = await fetchCodeById(id);
+
           if (code?.code_test_cases_id?.length > 0) {
             const tcPromises = code.code_test_cases_id.map(async (tid) => {
               try {
                 const tc = await fetchTestCaseById(tid);
+
                 return tc?.testcase_input && tc?.testcase_output ? tc : null;
               } catch (e) {
                 return null;
               }
             });
+
             const responses = await Promise.all(tcPromises);
+
             codeTestCases = responses.filter((tc) => tc !== null);
+
             setTerminalLines((prev) => [
               ...prev,
               {
@@ -1559,126 +1714,239 @@ const CodingPage = () => {
                 text: `   📋 Found ${codeTestCases.length} test cases`,
               },
             ]);
-          } else
+          } else {
             setTerminalLines((prev) => [
               ...prev,
-              { type: "warn", text: "   ⚠️ No test cases found" },
+              {
+                type: "warn",
+                text: "   ⚠️ No test cases found",
+              },
             ]);
+          }
         } catch (e) {
+          console.error(e);
+
           setTerminalLines((prev) => [
             ...prev,
-            { type: "warn", text: "   ⚠️ Error fetching test cases" },
+            {
+              type: "warn",
+              text: "   ⚠️ Error fetching test cases",
+            },
           ]);
         }
+
+        // ─────────────────────────────────────
+        // COMPILE
+        // ─────────────────────────────────────
+
         setTerminalLines((prev) => [
           ...prev,
-          { type: "info", text: "   ⚙️ Compiling..." },
+          {
+            type: "info",
+            text: "   ⚙️ Compiling...",
+          },
         ]);
+
         const result = await compileAndEvaluate(
           id,
           codeInput,
           codeLanguage,
           codeTestCases,
         );
+
         if (!result.success) {
           compilationErrors++;
+
           setTerminalLines((prev) => [
             ...prev,
-            { type: "error", text: `   ❌ Failed: ${result.error}` },
+            {
+              type: "error",
+              text: `   ❌ Failed: ${result.error}`,
+            },
           ]);
         } else {
-          processedResults.push(result);
+          // Collect the coding result returned by compileAndEvaluate
+          // (this avoids relying on stale React state)
+          const compiledCodingResults =
+            result.testResult?.codingResults || [];
+          const thisResult = compiledCodingResults.find(
+            (r) => r.codeId === id,
+          );
+          if (thisResult) {
+            // Upsert into collectedCodingResults
+            const existingIdx = collectedCodingResults.findIndex(
+              (r) => r.codeId === id,
+            );
+            if (existingIdx !== -1) {
+              collectedCodingResults[existingIdx] = thisResult;
+            } else {
+              collectedCodingResults.push(thisResult);
+            }
+          }
+
           setTerminalLines((prev) => [
             ...prev,
-            { type: "success", text: "   ✅ Success" },
+            {
+              type: "success",
+              text: "   ✅ Success",
+            },
           ]);
         }
       }
+
+      // ─────────────────────────────────────
+      // FINALIZE
+      // ─────────────────────────────────────
+
       setTerminalLines((prev) => [
         ...prev,
-        { type: "info", text: "🔄 Finalizing..." },
+        {
+          type: "info",
+          text: "🔄 Finalizing...",
+        },
       ]);
-      let finalTestResult = testResult;
-      try {
-        const stored = localStorage.getItem("test_result");
-        if (stored) finalTestResult = JSON.parse(stored);
-      } catch (e) {
-        console.error(e);
-      }
-      finalTestResult.codingResults = finalTestResult.codingResults || [];
+
+      // Start from the current testResult snapshot for MCQ data etc,
+      // but use collectedCodingResults (fresh from compile loop) for coding
+      let finalTestResult = {
+        ...testResult,
+        codingResults: [...collectedCodingResults],
+      };
+
+      // ─────────────────────────────────────
+      // HANDLE PROGRAMS NOT YET COMPILED
+      // (not in collectedCodingResults)
+      // ─────────────────────────────────────
+
       const missingIds = effectiveCodingIds.filter(
         (id) => !finalTestResult.codingResults.some((r) => r.codeId === id),
       );
+
       for (const mid of missingIds) {
-        const sc = localStorage.getItem(`code_${mid}`);
+        const backup = await loadBackup();
+
+        const savedCode = backup?.coding?.answers?.[mid];
+
         let score = 0;
-        if (sc) {
-          try {
-            const p = JSON.parse(sc);
-            if (
-              p.code &&
-              p.code !== templates[language] &&
-              p.code.trim().length > (templates[language]?.length || 0)
-            )
-              score = 5;
-          } catch (e) {
-            console.error(e);
-          }
+
+        if (
+          savedCode?.code &&
+          savedCode.code !== templates[savedCode.language] &&
+          savedCode.code.trim().length >
+            (templates[savedCode.language]?.length || 0)
+        ) {
+          score = 5;
         }
-        finalTestResult.codingResults.push({ codeId: mid, score, total: 10 });
+
+        finalTestResult.codingResults.push({
+          codeId: mid,
+          score,
+          total: 10,
+          testcasesPassed: 0,
+          totalTestcases: 0,
+        });
       }
+
+      // ─────────────────────────────────────
+      // UPDATE RESULT STATS
+      // ─────────────────────────────────────
+
       finalTestResult.codingAnswered = finalTestResult.codingResults.length;
+
       finalTestResult.codingCorrect = finalTestResult.codingResults.filter(
         (r) => r.score > 0,
       ).length;
+
       finalTestResult.codingWrong = finalTestResult.codingResults.filter(
         (r) => r.score === 0,
       ).length;
+
       finalTestResult.codingNotAnswered = Math.max(
         0,
         effectiveCodingIds.length - finalTestResult.codingAnswered,
       );
+
       finalTestResult.codingNotVisited = Math.max(
         0,
         effectiveCodingIds.length - finalTestResult.codingAnswered,
       );
+
       finalTestResult.result_score =
         (finalTestResult.mcqCorrect || 0) +
         finalTestResult.codingResults.reduce((sum, r) => sum + r.score, 0);
-      localStorage.setItem("test_result", JSON.stringify(finalTestResult));
+
       setTestResult(finalTestResult);
+
+      // ─────────────────────────────────────
+      // SAVE TO INDEXEDDB
+      // ─────────────────────────────────────
+
+      saveBackup({
+        result: finalTestResult,
+      });
+
+      // ─────────────────────────────────────
+      // TERMINAL
+      // ─────────────────────────────────────
+
       setTerminalLines((prev) => [
         ...prev,
-        { type: "success", text: `✅ Done — ${compilationErrors} error(s)` },
+
+        {
+          type: "success",
+          text: `✅ Done — ${compilationErrors} error(s)`,
+        },
+
         {
           type: "info",
           text: `📈 ${finalTestResult.codingResults.length}/${effectiveCodingIds.length} programs processed`,
         },
+
         {
           type: "success",
           text: `🏆 Score: ${finalTestResult.result_score}/${finalTestResult.result_total_score}`,
         },
       ]);
+
       setSnackbarMessage(
         `Compilation completed. ${finalTestResult.codingResults.length}/${effectiveCodingIds.length} processed.`,
       );
+
       setSnackbarSeverity(compilationErrors > 0 ? "warning" : "success");
-      return {
+
+      const compilationReturn = {
         success: true,
         errors: compilationErrors,
         finalResult: finalTestResult,
       };
+      // Store in ref so confirmFinalSubmit can access the latest compiled result
+      // even though React state update (setTestResult) is async
+      compiledResultRef.current = compilationReturn;
+      return compilationReturn;
     } catch (error) {
+      console.error(error);
+
       setTerminalLines((prev) => [
         ...prev,
-        { type: "error", text: `❌ Error: ${error.message}` },
+        {
+          type: "error",
+          text: `❌ Error: ${error.message}`,
+        },
       ]);
+
       setSnackbarMessage("Error compiling all programs.");
+
       setSnackbarSeverity("error");
-      return { success: false, error: error.message };
+
+      return {
+        success: false,
+        error: error.message,
+      };
     } finally {
       setLoading(false);
+
       setOpenProgressDialog(false);
+
       setSnackbarOpen(true);
     }
   };
@@ -1710,8 +1978,8 @@ const CodingPage = () => {
       ]);
       let finalTestResult = compilationResult.finalResult;
       try {
-        const stored = localStorage.getItem("test_result");
-        if (stored) finalTestResult = JSON.parse(stored);
+        // const stored = localStorage.getItem("test_result");
+        // if (stored) finalTestResult = JSON.parse(stored);
       } catch (e) {
         console.error(e);
       }
@@ -1768,8 +2036,9 @@ const CodingPage = () => {
           console.error(e);
         }
       });
-      localStorage.removeItem("fs_exit_count");
-      localStorage.removeItem("window_switch_count");
+      // localStorage.removeItem("fs_exit_count");
+      // localStorage.removeItem("window_switch_count");
+      await clearBackup();
       setHasSubmitted(true);
       setTerminalLines((prev) => [
         ...prev,
@@ -1802,7 +2071,10 @@ const CodingPage = () => {
       { type: "info", text: "Submitting test for final evaluation..." },
     ]);
     try {
-      const codingResults_c = testResult.codingResults || [];
+      // Use the freshly compiled result (stored in ref) rather than stale React state
+      const latestResult =
+        compiledResultRef.current?.finalResult || testResult;
+      const codingResults_c = latestResult.codingResults || [];
       const totalCodingScore_c = codingResults_c.reduce(
         (sum, r) => sum + (r.score || 0),
         0,
@@ -1812,41 +2084,42 @@ const CodingPage = () => {
         0,
       );
       const resultData = {
-        result_user_id: testResult.result_user_id || userId || "",
-        result_test_id: testResult.result_test_id || testId || "",
-        result_poc_id: testResult.result_poc_id || pocId || "",
-        result_score: testResult.result_score || 0,
-        result_total_score: testResult.result_total_score || 0,
-        result_mcq_score: testResult.mcqCorrect || 0,
+        result_user_id: latestResult.result_user_id || userId || "",
+        result_test_id: latestResult.result_test_id || testId || "",
+        result_poc_id: latestResult.result_poc_id || pocId || "",
+        result_score: latestResult.result_score || 0,
+        result_total_score: latestResult.result_total_score || 0,
+        result_mcq_score: latestResult.mcqCorrect || 0,
         result_coding_score: {
           score: totalCodingScore_c,
           testcases_passed: totalTestcasesPassed_c,
         },
-        codingAnswered: testResult.codingAnswered || 0,
-        codingCorrect: testResult.codingCorrect || 0,
-        codingIds: testResult.codingIds || [],
-        codingNotAnswered: testResult.codingNotAnswered || 0,
-        codingNotVisited: testResult.codingNotVisited || 0,
-        codingWrong: testResult.codingWrong || 0,
-        marked: testResult.marked || 0,
-        mcqAnswered: testResult.mcqAnswered || 0,
-        mcqCorrect: testResult.mcqCorrect || 0,
-        mcqNotAnswered: testResult.mcqNotAnswered || 0,
-        mcqNotVisited: testResult.mcqNotVisited || 0,
-        mcqWrong: testResult.mcqWrong || 0,
-        studentName: testResult.studentName || studentName || "",
-        testLanguage: testResult.testLanguage || "",
-        testName: testResult.testName || "",
+        codingAnswered: latestResult.codingAnswered || 0,
+        codingCorrect: latestResult.codingCorrect || 0,
+        codingIds: latestResult.codingIds || [],
+        codingNotAnswered: latestResult.codingNotAnswered || 0,
+        codingNotVisited: latestResult.codingNotVisited || 0,
+        codingWrong: latestResult.codingWrong || 0,
+        marked: latestResult.marked || 0,
+        mcqAnswered: latestResult.mcqAnswered || 0,
+        mcqCorrect: latestResult.mcqCorrect || 0,
+        mcqNotAnswered: latestResult.mcqNotAnswered || 0,
+        mcqNotVisited: latestResult.mcqNotVisited || 0,
+        mcqWrong: latestResult.mcqWrong || 0,
+        studentName: latestResult.studentName || studentName || "",
+        testLanguage: latestResult.testLanguage || "",
+        testName: latestResult.testName || "",
         codingResults: codingResults_c,
       };
       await submitTestResult(resultData);
       const effectiveCodingIds =
         fetchedTestCodingIds.length > 0
           ? fetchedTestCodingIds
-          : testResult.codingIds;
+          : latestResult.codingIds;
       effectiveCodingIds.forEach((id) => localStorage.removeItem(`code_${id}`));
       localStorage.removeItem("fs_exit_count");
       localStorage.removeItem("window_switch_count");
+      await clearBackup();
       setHasSubmitted(true);
       setTerminalLines((prev) => [
         ...prev,
@@ -1880,7 +2153,6 @@ const CodingPage = () => {
 
   const handlePrevious = async () => {
     saveSubmissionPayload();
-    await compileAndEvaluate(codeId, input, language, testCases);
     const effectiveCodingIds =
       fetchedTestCodingIds.length > 0
         ? fetchedTestCodingIds
@@ -1889,9 +2161,15 @@ const CodingPage = () => {
       const prevCodeId = effectiveCodingIds[testResult.currentCodingIndex - 1];
       setTestResult((prev) => {
         const u = { ...prev, currentCodingIndex: prev.currentCodingIndex - 1 };
-        localStorage.setItem("test_result", JSON.stringify(u));
+        saveBackup({
+          coding: {
+            currentCodingIndex: prev.currentCodingIndex - 1,
+          },
+        });
+        // localStorage.setItem("test_result", JSON.stringify(u));
         return u;
       });
+      isNavigatingRef.current = true;
       navigate(`/coding/${prevCodeId}`, {
         state: {
           ...testResult,
@@ -1899,7 +2177,7 @@ const CodingPage = () => {
         },
       });
       window.history.pushState(null, null, window.location.href);
-      setSnackbarMessage("Compiled and moved to previous program.");
+      setSnackbarMessage("Moved to previous program.");
       setSnackbarSeverity("info");
       setSnackbarOpen(true);
     }
@@ -1907,7 +2185,6 @@ const CodingPage = () => {
 
   const handleNext = async () => {
     saveSubmissionPayload();
-    await compileAndEvaluate(codeId, input, language, testCases);
     const effectiveCodingIds =
       fetchedTestCodingIds.length > 0
         ? fetchedTestCodingIds
@@ -1916,9 +2193,15 @@ const CodingPage = () => {
       const nextCodeId = effectiveCodingIds[testResult.currentCodingIndex + 1];
       setTestResult((prev) => {
         const u = { ...prev, currentCodingIndex: prev.currentCodingIndex + 1 };
-        localStorage.setItem("test_result", JSON.stringify(u));
+        // localStorage.setItem("test_result", JSON.stringify(u));
+        saveBackup({
+          coding: {
+            currentCodingIndex: prev.currentCodingIndex + 1,
+          },
+        });
         return u;
       });
+      isNavigatingRef.current = true;
       navigate(`/coding/${nextCodeId}`, {
         state: {
           ...testResult,
@@ -1926,7 +2209,7 @@ const CodingPage = () => {
         },
       });
       window.history.pushState(null, null, window.location.href);
-      setSnackbarMessage("Compiled and moved to next program.");
+      setSnackbarMessage("Moved to next program.");
       setSnackbarSeverity("info");
       setSnackbarOpen(true);
     }
