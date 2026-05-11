@@ -24,7 +24,7 @@ import {
   Tooltip, Legend, ArcElement, PointElement, LineElement, Filler,
 } from "chart.js";
 import Admin_Dash from "../components/AdminDash";
-import { getModId, getOrgId, getPocId } from "../axios";
+import { getModId, getOrgId, getPocId ,fetchOrgModPocDetails} from "../axios";
 import "../styles/MasterAnalytics.css";
 
 ChartJS.register(
@@ -755,40 +755,68 @@ const ClassPerformance = () => {
     return { score: totalScored, maxScore: totalPossible, aggregateScore: totalPossible === 0 ? 0 : Number(((totalScored / totalPossible) * scale).toFixed(2)) };
   };
 
-  const handleFetchData = async () => {
-    if (!orgId || !modId || !modPocId) { setError("Please enter all IDs (Organization, Module, POC)"); return; }
-    setLoading(true); setError(null);
-    try {
-      const sessionData = JSON.parse(localStorage.getItem("true"));
-      const token = sessionData?.token;
-      const response = await axios.get(`http://localhost:5000/api/fetch_details/${orgId}/${modId}/${modPocId}`, { headers: { Authorization: `Bearer ${token}` } });
-      const data = response.data;
-      if (!Array.isArray(data.user_scores)) throw new Error("Invalid response: user_scores is not an array");
-      const modTests = Array.isArray(data.poc?.mod_tests) ? data.poc.mod_tests : [];
-      const enhancedData = data.user_scores.map((user) => {
-        const scores = user.scores || {};
-        const tests  = Array.isArray(scores.tests) ? scores.tests : [];
-        return {
-          user_name: user.name || "Unknown", user_id: user.userId || user.user_id || user._id || user.id || null,
-          college_name: data.organization?.org_name || "Unknown College", module_name: data.module?.mod_name || "Unknown Module",
-          module_poc_name: data.poc?.poc_name || "Unknown POC", module_poc_id: data.poc?.poc_id || "",
-          rollno: scores.userDetails?.rollno || "—", department: scores.userDetails?.department || "—",
-          email: scores.userDetails?.email || "—", userDetails: scores.userDetails || null,
-          tests: tests.map((test, idx) => {
-            const modTest = modTests.find((mt) => mt.test_id === test.test_id) || {};
-            return { test_id: test.test_id, scored_mark: test.result_score || 0, total_mark: test.test_total_score || 0, date: modTest.activeAt || test.assigned_date || "", name: test.name || modTest.name || `Test ${idx + 1}`, percentage: test.percentage || 0, test_language: test.test_language || modTest.test_language || "N/A" };
-          }),
-          details: { aggregate_score: scores.aggregate_score || 0, total_days: scores.total_days || 0, attend_test_days: scores.attend_test_days || 0, not_attend_test_days: scores.not_attend_test_days || 0 },
-          totalScoredMarks: tests.reduce((sum, t) => sum + (t.result_score || 0), 0),
-          totalMarks: tests.reduce((sum, t) => sum + (t.test_total_score || 0), 0),
-          totalTestDays: tests.length,
-        };
-      });
-      setStudents(enhancedData);
-      setTestWiseResults(data.test_wise_total_result || []);
-      setLoadedData(true);
-    } catch (err) { setError(err.message); } finally { setLoading(false); }
-  };
+ const handleFetchData = async () => {
+  if (!orgId || !modId || !modPocId) {
+    setError("Please enter all IDs (Organization, Module, POC)");
+    return;
+  }
+  setLoading(true);
+  setError(null);
+  try {
+    const data = await fetchOrgModPocDetails(orgId, modId, modPocId);
+
+    if (!Array.isArray(data.user_scores))
+      throw new Error("Invalid response: user_scores is not an array");
+
+    const modTests = Array.isArray(data.poc?.mod_tests) ? data.poc.mod_tests : [];
+
+    const enhancedData = data.user_scores.map((user) => {
+      const scores = user.scores || {};
+      const tests  = Array.isArray(scores.tests) ? scores.tests : [];
+      return {
+        user_name:       user.name || "Unknown",
+        user_id:         user.userId || user.user_id || user._id || user.id || null,
+        college_name:    data.organization?.org_name || "Unknown College",
+        module_name:     data.module?.mod_name || "Unknown Module",
+        module_poc_name: data.poc?.poc_name || "Unknown POC",
+        module_poc_id:   data.poc?.poc_id || "",
+        rollno:          scores.userDetails?.rollno || "—",
+        department:      scores.userDetails?.department || "—",
+        email:           scores.userDetails?.email || "—",
+        userDetails:     scores.userDetails || null,
+        tests: tests.map((test, idx) => {
+          const modTest = modTests.find((mt) => mt.test_id === test.test_id) || {};
+          return {
+            test_id:       test.test_id,
+            scored_mark:   test.result_score || 0,
+            total_mark:    test.test_total_score || 0,
+            date:          modTest.activeAt || test.assigned_date || "",
+            name:          test.name || modTest.name || `Test ${idx + 1}`,
+            percentage:    test.percentage || 0,
+            test_language: test.test_language || modTest.test_language || "N/A",
+          };
+        }),
+        details: {
+          aggregate_score:       scores.aggregate_score || 0,
+          total_days:            scores.total_days || 0,
+          attend_test_days:      scores.attend_test_days || 0,
+          not_attend_test_days:  scores.not_attend_test_days || 0,
+        },
+        totalScoredMarks: tests.reduce((sum, t) => sum + (t.result_score || 0), 0),
+        totalMarks:       tests.reduce((sum, t) => sum + (t.test_total_score || 0), 0),
+        totalTestDays:    tests.length,
+      };
+    });
+
+    setStudents(enhancedData);
+    setTestWiseResults(data.test_wise_total_result || []);
+    setLoadedData(true);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const getIndividualTestScore = async (pocId, userId) => {
     try {

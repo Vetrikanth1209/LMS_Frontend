@@ -54,6 +54,7 @@ import Link_Module_To_POC   from "./pages/Link_Module_To_POC";
 import Link_Users_To_POC    from "./pages/Link_Users_To_POC";
 import MoreCustomization    from "./pages/MoreCustomization_Side";
 import Certificate_Generator from "./pages/Certificate_Generator";
+import SystemCheck from "./pages/SystemCheck";
 
 // ── Root App component ──────────────────────────────────────────────────────
 //
@@ -130,6 +131,7 @@ function App() {
     <Routes>
       <Route path="/landing"              element={<StudentDashboard />} />
       <Route path="/test-modules"         element={<TestModule />} />
+      {/* <Route path="/system-check/:testId" element={<SystemCheck />} /> */}
       <Route path="/test-intro/:testId"   element={<TestIntro />} />
       <Route path="/test-details/:testId" element={<TestDetails />} />
       <Route path="/mcq/:testId"          element={<McqPage />} />

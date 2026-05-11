@@ -1,0 +1,376 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap');
+
+/* ── Animations ── */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes gradShift {
+  0%,100% { background-position: 0% center; }
+  50%     { background-position: 100% center; }
+}
+
+@keyframes goPulse {
+  0%,100% { box-shadow: 0 0 0 10px rgba(12,131,200,0.1), 0 8px 24px rgba(12,131,200,0.3); }
+  50%     { box-shadow: 0 0 0 18px rgba(12,131,200,0.05), 0 8px 32px rgba(12,131,200,0.45); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92) translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Layout ── */
+.sc-root {
+  min-height: 100vh;
+  background: linear-gradient(145deg, #f0f4f8 0%, #e8eff8 100%);
+  display: flex;
+  flex-direction: column;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Top bar ── */
+.sc-topbar {
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sc-topbar__title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1e293b;
+  letter-spacing: -0.01em;
+}
+
+.sc-topbar__badge {
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 99px;
+  letter-spacing: 0.06em;
+}
+
+.sc-topbar__badge--pass {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.sc-topbar__badge--fail {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ── Main content area ── */
+.sc-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px;
+}
+
+/* ── Card ── */
+.sc-card {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: cardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── Colour bar ── */
+.sc-colorbar {
+  height: 5px;
+  background: linear-gradient(90deg, #0c83c8, #10b981, #f59e0b);
+  background-size: 200% 100%;
+  animation: gradShift 3s ease infinite;
+}
+
+/* ── Card head ── */
+.sc-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 28px 0;
+}
+
+.sc-head__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(12, 131, 200, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sc-head__title {
+  margin: 0 0 3px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.sc-head__sub {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* ── Gauge wrapper ── */
+.sc-gauge-wrap {
+  padding: 16px 24px 0;
+  overflow: hidden;
+}
+
+/* ── Progress bar ── */
+.sc-progress {
+  padding: 8px 28px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sc-progress__track {
+  flex: 1;
+  height: 4px;
+  background: #f1f5f9;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.sc-progress__fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #0c83c8, #10b981, #f59e0b);
+  background-size: 200% 100%;
+  transition: width 0.4s ease;
+  animation: gradShift 2s ease infinite;
+}
+
+.sc-progress__pct {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  min-width: 32px;
+}
+
+/* ── Stat cards grid ── */
+.sc-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 12px 28px 0;
+}
+
+/* ── Individual stat card ── */
+.sc-stat {
+  border-radius: 12px;
+  padding: 12px 6px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.sc-stat__icon {
+  font-size: 1rem;
+  margin-bottom: 3px;
+}
+
+.sc-stat__label {
+  font-size: 0.57rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 3px;
+}
+
+.sc-stat__value {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.sc-stat__unit {
+  font-size: 0.57rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}
+
+/* ── Result box ── */
+.sc-result {
+  margin: 14px 28px 0;
+  padding: 14px 18px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: popIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.sc-result--pass {
+  background: rgba(16, 185, 129, 0.07);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.sc-result--fail {
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.sc-result__emoji { font-size: 1.5rem; }
+
+.sc-result__body { flex: 1; }
+
+.sc-result__title {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.sc-result__sub {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+.sc-result__cta {
+  flex-shrink: 0;
+  padding: 9px 18px;
+  border-radius: 9px;
+  border: none;
+  background: #059669;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+/* ── Actions area ── */
+.sc-actions {
+  padding: 16px 28px 22px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  align-items: center;
+}
+
+/* GO button */
+.sc-btn-go {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #0c83c8, #0a6bb3);
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  cursor: pointer;
+  box-shadow: 0 0 0 10px rgba(12,131,200,0.1), 0 8px 24px rgba(12,131,200,0.35);
+  animation: goPulse 2s ease infinite;
+  transition: transform 0.15s;
+}
+
+.sc-btn-go:hover { transform: scale(1.08); }
+
+/* Spinner row */
+.sc-spinner-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.sc-spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(12,131,200,0.2);
+  border-top-color: #0c83c8;
+  animation: spin 0.75s linear infinite;
+}
+
+/* Retest / Try-again button */
+.sc-btn-retest {
+  padding: 11px 32px;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sc-btn-retest--fail {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.sc-btn-retest--pass {
+  background: linear-gradient(135deg, #64748b, #475569);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sc-btn-retest:hover { transform: translateY(-1px); }
+
+/* ── Fail tips ── */
+.sc-tips {
+  margin: 0 28px 24px;
+  padding: 14px 16px;
+  background: rgba(239, 68, 68, 0.04);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: 12px;
+}
+
+.sc-tips__heading {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #ef4444;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.sc-tips__list {
+  margin: 0;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sc-tips__list li {
+  font-size: 0.76rem;
+  color: #64748b;
+  line-height: 1.5;
+}

@@ -860,3 +860,16 @@ export const getPocId = async()=>{
     throw new Error("Failed to fetch POC IDs");
   }
 };
+
+
+export const fetchOrgModPocDetails = async (orgId, modId, modPocId) => {
+  try {
+    const sessionData = JSON.parse(localStorage.getItem("true"));
+    const token = sessionData?.token;
+    const response = await axiosWithAuth.get(`/fetch_details/${orgId}/${modId}/${modPocId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching org/module/poc details:", error);
+    throw error;
+  }
+};

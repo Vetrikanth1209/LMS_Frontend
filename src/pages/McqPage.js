@@ -5,6 +5,7 @@ import {
   Typography,
   Paper,
   Radio,
+  Checkbox,
   FormControlLabel,
   Button,
   CircularProgress,
@@ -20,6 +21,7 @@ import {
   ThemeProvider,
   createTheme,
   CssBaseline,
+  Chip,
 } from "@mui/material";
 import {
   Flag as FlagIcon,
@@ -31,7 +33,7 @@ import {
 import { getTestById, getMcqById, submitTestResult } from "../axios";
 import "../styles/McqStyle.css";
 
-// ── MUI theme (palette + typography only) ────────────────────────────────────
+// ── MUI theme ─────────────────────────────────────────────────────────────────
 const theme = createTheme({
   typography: {
     fontFamily: ["Inter", "Roboto", '"Segoe UI"', "Arial", "sans-serif"].join(","),
@@ -57,15 +59,13 @@ const PieChart = ({ data }) => {
   let cumulativePercentage = 0;
 
   const createPath = (percentage, cumulativePercentage) => {
-    const startAngle = cumulativePercentage * 3.6;
-    const endAngle   = (cumulativePercentage + percentage) * 3.6;
+    const startAngle   = cumulativePercentage * 3.6;
+    const endAngle     = (cumulativePercentage + percentage) * 3.6;
     const largeArcFlag = percentage > 50 ? 1 : 0;
-
     const x1 = 50 + 35 * Math.cos(((startAngle - 90) * Math.PI) / 180);
     const y1 = 50 + 35 * Math.sin(((startAngle - 90) * Math.PI) / 180);
     const x2 = 50 + 35 * Math.cos(((endAngle   - 90) * Math.PI) / 180);
     const y2 = 50 + 35 * Math.sin(((endAngle   - 90) * Math.PI) / 180);
-
     return `M 50 50 L ${x1} ${y1} A 35 35 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
   };
 
@@ -94,9 +94,9 @@ const PieChart = ({ data }) => {
 
 // ── Circular Timer ────────────────────────────────────────────────────────────
 const CircularTimer = ({ timeLeft, totalTime }) => {
-  const percentage      = (timeLeft / totalTime) * 100;
-  const circumference   = 2 * Math.PI * 35;
-  const strokeDasharray = circumference;
+  const percentage       = (timeLeft / totalTime) * 100;
+  const circumference    = 2 * Math.PI * 35;
+  const strokeDasharray  = circumference;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   const getTimerColor = () => {
@@ -133,11 +133,12 @@ const QuestionNavigator = ({ progress, currentQuestion, onQuestionSelect }) => (
     </Typography>
     <div className="question-grid">
       {progress.map((item, index) => {
+        const hasAnswer = item.selected_options?.length > 0;
         let status = "not-visited";
-        if (item.selected_option && item.marked) status = "answered-and-marked";
-        else if (item.selected_option) status = "answered";
-        else if (item.marked) status = "marked";
-        else if (item.visited) status = "not-answered";
+        if (hasAnswer && item.marked) status = "answered-and-marked";
+        else if (hasAnswer)           status = "answered";
+        else if (item.marked)         status = "marked";
+        else if (item.visited)        status = "not-answered";
 
         return (
           <div
@@ -178,15 +179,25 @@ const McqPage = () => {
 
   // ── Fullscreen warning state ──────────────────────────────────────────────
   const MAX_FULLSCREEN_WARNINGS = 5;
-  const [fullscreenExitCount,    setFullscreenExitCount]    = useState(
+  const [fullscreenExitCount,   setFullscreenExitCount]   = useState(
     () => parseInt(localStorage.getItem("fs_exit_count") || "0")
   );
-  const [fullscreenWarningOpen,  setFullscreenWarningOpen]  = useState(false);
+  const [fullscreenWarningOpen, setFullscreenWarningOpen] = useState(false);
   const fullscreenExitCountRef = useRef(
     parseInt(localStorage.getItem("fs_exit_count") || "0")
   );
 
-  const timerRef    = useRef(null);
+  // ── Window-switch (Alt+Tab) warning state ────────────────────────────────
+  const MAX_WINDOW_SWITCH_WARNINGS = 5;
+  const [windowSwitchCount,       setWindowSwitchCount]       = useState(
+    () => parseInt(localStorage.getItem("window_switch_count") || "0")
+  );
+  const [windowSwitchWarningOpen, setWindowSwitchWarningOpen] = useState(false);
+  const windowSwitchCountRef = useRef(
+    parseInt(localStorage.getItem("window_switch_count") || "0")
+  );
+
+  const timerRef     = useRef(null);
   const isSubmitting = useRef(false);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -197,7 +208,7 @@ const McqPage = () => {
     "Click 'Next' to move to the next question or 'Previous' to go back.",
     "Do not refresh the page or navigate away, as this will submit the test.",
     "Ensure you remain in fullscreen mode throughout the test.",
-    "Any attempt to copy, paste, open developer tools, or switch tabs will result in immediate test submission.",
+    "Any attempt to copy, paste, open developer tools, or switch windows will result in immediate test submission after 5 warnings.",
     "Submit the test when you are ready, or proceed to the coding section if applicable.",
   ];
 
@@ -256,7 +267,7 @@ const McqPage = () => {
         const savedProgress   = JSON.parse(localStorage.getItem("test_progress") || "[]");
         const initialProgress = shuffledMcq.map((mcq) => ({
           mcq_id: mcq.mcq_id,
-          selected_option: null,
+          selected_options: [],
           marked: false,
           visited: false,
         }));
@@ -273,34 +284,42 @@ const McqPage = () => {
         setTimer(timerValue);
         setTotalTime(timerValue);
 
-        const savedResult     = JSON.parse(localStorage.getItem("test_result") || "{}");
+        const savedResult      = JSON.parse(localStorage.getItem("test_result") || "{}");
         const navigationResult = state || {};
         const updatedResult = {
-          result_user_id:    userData.user?.user_id || savedResult.result_user_id || navigationResult.result_user_id || "",
-          result_test_id:    testId,
-          result_score:      savedResult.result_score || navigationResult.result_score || 0,
+          result_user_id:
+            userData.user?.user_id || savedResult.result_user_id || navigationResult.result_user_id || "",
+          result_test_id: testId,
+          result_score:
+            savedResult.result_score || navigationResult.result_score || 0,
           result_total_score:
             savedResult.result_total_score ||
             navigationResult.result_total_score ||
             (test.test_mcq_id?.length || 0) + (test.test_coding_id?.length || 0) * 10,
           result_poc_id:
             userData.user?.mod_poc_id?.mod_poc_id || savedResult.result_poc_id || navigationResult.result_poc_id || "",
-          studentName:       userData.user?.full_name     || savedResult.studentName     || navigationResult.studentName     || "",
-          testName:          test.test_name               || savedResult.testName         || navigationResult.testName         || "",
-          testLanguage:      test.test_language           || savedResult.testLanguage     || navigationResult.testLanguage     || "",
+          studentName:
+            userData.user?.full_name || savedResult.studentName || navigationResult.studentName || "",
+          testName:
+            test.test_name || savedResult.testName || navigationResult.testName || "",
+          testLanguage:
+            test.test_language || savedResult.testLanguage || navigationResult.testLanguage || "",
           codingIds:         savedResult.codingIds        || navigationResult.codingIds   || ids,
           codingAnswered:    savedResult.codingAnswered   || navigationResult.codingAnswered   || 0,
-          codingNotAnswered: savedResult.codingNotAnswered || navigationResult.codingNotAnswered || test.test_coding_id?.length || 0,
-          codingNotVisited:  savedResult.codingNotVisited  || navigationResult.codingNotVisited  || test.test_coding_id?.length || 0,
-          codingCorrect:     savedResult.codingCorrect    || navigationResult.codingCorrect    || 0,
-          codingWrong:       savedResult.codingWrong      || navigationResult.codingWrong      || 0,
-          codingResults:     savedResult.codingResults    || navigationResult.codingResults    || [],
-          mcqAnswered:       savedResult.mcqAnswered      || navigationResult.mcqAnswered      || 0,
-          mcqCorrect:        savedResult.mcqCorrect       || navigationResult.mcqCorrect       || 0,
-          mcqWrong:          savedResult.mcqWrong         || navigationResult.mcqWrong         || 0,
-          mcqNotAnswered:    savedResult.mcqNotAnswered   || navigationResult.mcqNotAnswered   || 0,
-          mcqNotVisited:     savedResult.mcqNotVisited    || navigationResult.mcqNotVisited    || test.test_mcq_id?.length || 0,
-          marked:            savedResult.marked           || navigationResult.marked           || 0,
+          codingNotAnswered:
+            savedResult.codingNotAnswered || navigationResult.codingNotAnswered || test.test_coding_id?.length || 0,
+          codingNotVisited:
+            savedResult.codingNotVisited || navigationResult.codingNotVisited || test.test_coding_id?.length || 0,
+          codingCorrect:  savedResult.codingCorrect  || navigationResult.codingCorrect  || 0,
+          codingWrong:    savedResult.codingWrong    || navigationResult.codingWrong    || 0,
+          codingResults:  savedResult.codingResults  || navigationResult.codingResults  || [],
+          mcqAnswered:    savedResult.mcqAnswered    || navigationResult.mcqAnswered    || 0,
+          mcqCorrect:     savedResult.mcqCorrect     || navigationResult.mcqCorrect     || 0,
+          mcqWrong:       savedResult.mcqWrong       || navigationResult.mcqWrong       || 0,
+          mcqNotAnswered: savedResult.mcqNotAnswered || navigationResult.mcqNotAnswered || 0,
+          mcqNotVisited:
+            savedResult.mcqNotVisited || navigationResult.mcqNotVisited || test.test_mcq_id?.length || 0,
+          marked:             savedResult.marked             || navigationResult.marked             || 0,
           currentCodingIndex: savedResult.currentCodingIndex || navigationResult.currentCodingIndex || 0,
         };
         setTestResult(updatedResult);
@@ -311,19 +330,11 @@ const McqPage = () => {
         window.history.pushState(null, null, `/mcq/${testId}`);
 
         try {
-          if (document.documentElement.requestFullscreen) {
-            await document.documentElement.requestFullscreen();
-            setIsFullscreen(true);
-          } else if (document.documentElement.mozRequestFullScreen) {
-            await document.documentElement.mozRequestFullScreen();
-            setIsFullscreen(true);
-          } else if (document.documentElement.webkitRequestFullscreen) {
-            await document.documentElement.webkitRequestFullscreen();
-            setIsFullscreen(true);
-          } else if (document.documentElement.msRequestFullscreen) {
-            await document.documentElement.msRequestFullscreen();
-            setIsFullscreen(true);
-          } else {
+          if      (document.documentElement.requestFullscreen)       { await document.documentElement.requestFullscreen();       setIsFullscreen(true); }
+          else if (document.documentElement.mozRequestFullScreen)    { await document.documentElement.mozRequestFullScreen();    setIsFullscreen(true); }
+          else if (document.documentElement.webkitRequestFullscreen) { await document.documentElement.webkitRequestFullscreen(); setIsFullscreen(true); }
+          else if (document.documentElement.msRequestFullscreen)     { await document.documentElement.msRequestFullscreen();     setIsFullscreen(true); }
+          else {
             console.warn("Fullscreen API not supported");
             setDialog({
               open: true,
@@ -374,7 +385,7 @@ const McqPage = () => {
     return () => clearInterval(timerRef.current);
   }, [timer, isInitialized]);
 
-  // ── Malpractice prevention + fullscreen handling ──────────────────────────
+  // ── Malpractice prevention + fullscreen + window-switch handling ──────────
   useEffect(() => {
     if (!isInitialized) return;
 
@@ -391,10 +402,10 @@ const McqPage = () => {
 
     const requestFullscreen = async () => {
       try {
-        if (document.documentElement.requestFullscreen)            { await document.documentElement.requestFullscreen();           setIsFullscreen(true); }
-        else if (document.documentElement.mozRequestFullScreen)    { await document.documentElement.mozRequestFullScreen();       setIsFullscreen(true); }
-        else if (document.documentElement.webkitRequestFullscreen) { await document.documentElement.webkitRequestFullscreen();   setIsFullscreen(true); }
-        else if (document.documentElement.msRequestFullscreen)     { await document.documentElement.msRequestFullscreen();       setIsFullscreen(true); }
+        if      (document.documentElement.requestFullscreen)       { await document.documentElement.requestFullscreen();       setIsFullscreen(true); }
+        else if (document.documentElement.mozRequestFullScreen)    { await document.documentElement.mozRequestFullScreen();    setIsFullscreen(true); }
+        else if (document.documentElement.webkitRequestFullscreen) { await document.documentElement.webkitRequestFullscreen(); setIsFullscreen(true); }
+        else if (document.documentElement.msRequestFullscreen)     { await document.documentElement.msRequestFullscreen();     setIsFullscreen(true); }
       } catch (error) {
         console.error("Fullscreen request failed:", error);
       }
@@ -437,13 +448,38 @@ const McqPage = () => {
       }
     };
 
-    const handleVisibilityChange = () => {
-      if (document.hidden) handleMalpractice("Tab/window switching detected");
+    // ── Window switch (Alt+Tab / click outside): 5-warning logic ─────────────
+    const handleWindowBlur = () => {
+      if (isSubmitting.current) return;
+
+      const newCount = windowSwitchCountRef.current + 1;
+      windowSwitchCountRef.current = newCount;
+      setWindowSwitchCount(newCount);
+      localStorage.setItem("window_switch_count", String(newCount));
+
+      if (newCount >= MAX_WINDOW_SWITCH_WARNINGS) {
+        handleMalpractice(`Switched away from test window ${MAX_WINDOW_SWITCH_WARNINGS} times`);
+      } else {
+        setWindowSwitchWarningOpen(true);
+      }
     };
 
-    const preventCopyPaste  = (e) => { e.preventDefault(); handleMalpractice("Copy/paste attempted"); };
+    // Close the window-switch warning when user returns focus
+    const handleWindowFocus = () => {
+      setWindowSwitchWarningOpen(false);
+    };
 
-    const preventDevTools   = (e) => {
+    const handleVisibilityChange = () => {
+      // visibilitychange covers browser-tab switches — keep for completeness
+      // but Alt+Tab is caught by window blur above, so no extra action needed
+    };
+
+    const preventCopyPaste = (e) => {
+      e.preventDefault();
+      handleMalpractice("Copy/paste attempted");
+    };
+
+    const preventDevTools = (e) => {
       if (
         e.key === "F12" ||
         (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) ||
@@ -455,15 +491,20 @@ const McqPage = () => {
     };
 
     const handleMouseLeave = (e) => {
-      if (e.clientY <= 0 || e.clientX <= 0 || e.clientX >= window.innerWidth || e.clientY >= window.innerHeight) {
+      if (
+        e.clientY <= 0 ||
+        e.clientX <= 0 ||
+        e.clientX >= window.innerWidth ||
+        e.clientY >= window.innerHeight
+      ) {
         handleMalpractice("Mouse moved outside test window");
       }
     };
 
-    const detectNewWindow = () => handleMalpractice("Attempted to open a new tab or window");
-
     window.addEventListener("popstate",          handlePopState);
     window.addEventListener("beforeunload",       handleBeforeUnload);
+    window.addEventListener("blur",              handleWindowBlur);
+    window.addEventListener("focus",             handleWindowFocus);
     document.addEventListener("fullscreenchange",       handleFullscreenChange);
     document.addEventListener("mozfullscreenchange",    handleFullscreenChange);
     document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
@@ -473,7 +514,6 @@ const McqPage = () => {
     document.addEventListener("paste",            preventCopyPaste);
     document.addEventListener("keydown",          preventDevTools);
     document.addEventListener("mouseleave",       handleMouseLeave);
-    window.addEventListener("blur",               detectNewWindow);
 
     const fullscreenCheckInterval = setInterval(() => {
       if (!isFullscreen && isInitialized && !fullscreenWarningOpen) requestFullscreen();
@@ -482,6 +522,8 @@ const McqPage = () => {
     return () => {
       window.removeEventListener("popstate",          handlePopState);
       window.removeEventListener("beforeunload",       handleBeforeUnload);
+      window.removeEventListener("blur",              handleWindowBlur);
+      window.removeEventListener("focus",             handleWindowFocus);
       document.removeEventListener("fullscreenchange",       handleFullscreenChange);
       document.removeEventListener("mozfullscreenchange",    handleFullscreenChange);
       document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
@@ -491,7 +533,6 @@ const McqPage = () => {
       document.removeEventListener("paste",            preventCopyPaste);
       document.removeEventListener("keydown",          preventDevTools);
       document.removeEventListener("mouseleave",       handleMouseLeave);
-      window.removeEventListener("blur",               detectNewWindow);
       clearInterval(fullscreenCheckInterval);
     };
   }, [isInitialized, testId, isFullscreen, fullscreenWarningOpen]);
@@ -502,20 +543,29 @@ const McqPage = () => {
 
     localStorage.setItem("test_progress", JSON.stringify(progress));
 
-    const answeredCount    = progress.filter((p) =>  p.selected_option).length;
-    const markedCount      = progress.filter((p) =>  p.marked).length;
-    const notAnsweredCount = progress.filter((p) => !p.selected_option &&  p.visited && !p.marked).length;
-    const notVisitedCount  = progress.filter((p) => !p.visited && !p.marked && !p.selected_option).length;
+    const answeredCount    = progress.filter((p) => p.selected_options?.length > 0).length;
+    const markedCount      = progress.filter((p) => p.marked).length;
+    const notAnsweredCount = progress.filter((p) => !p.selected_options?.length && p.visited && !p.marked).length;
+    const notVisitedCount  = progress.filter((p) => !p.visited && !p.marked && !p.selected_options?.length).length;
 
     let mcqScore = 0;
     let wrongAnswersCount = 0;
     progress.forEach((p) => {
       const question = mcqData.find((q) => q.mcq_id === p.mcq_id);
-      if (question && p.selected_option && p.selected_option === question.mcq_answer) {
-        mcqScore += 1;
-      } else if (p.selected_option) {
-        wrongAnswersCount += 1;
-      }
+      if (!question || !p.selected_options?.length) return;
+
+      const correctAnswers = Array.isArray(question.mcq_answer)
+        ? question.mcq_answer
+        : [question.mcq_answer];
+
+      const selectedSorted = [...p.selected_options].sort();
+      const correctSorted  = [...correctAnswers].sort();
+      const isCorrect =
+        selectedSorted.length === correctSorted.length &&
+        selectedSorted.every((ans, i) => ans === correctSorted[i]);
+
+      if (isCorrect) mcqScore += 1;
+      else           wrongAnswersCount += 1;
     });
 
     setTestResult((prev) => {
@@ -523,25 +573,27 @@ const McqPage = () => {
         ...prev,
         result_user_id:    userId || prev.result_user_id || "",
         result_test_id:    testId,
-        result_score:      mcqScore + (prev.codingResults?.reduce((sum, res) => sum + res.score, 0) || 0),
-        result_total_score:(testData.test_mcq_id?.length || 0) + (testData.test_coding_id?.length || 0) * 10,
-        result_poc_id:     pocId || prev.result_poc_id || "",
-        studentName:       studentName || prev.studentName || "",
-        testName:          testData.test_name     || prev.testName     || "",
-        testLanguage:      testData.test_language || prev.testLanguage || "",
+        result_score:
+          mcqScore + (prev.codingResults?.reduce((sum, res) => sum + res.score, 0) || 0),
+        result_total_score:
+          (testData.test_mcq_id?.length || 0) + (testData.test_coding_id?.length || 0) * 10,
+        result_poc_id:  pocId        || prev.result_poc_id  || "",
+        studentName:    studentName  || prev.studentName    || "",
+        testName:       testData.test_name     || prev.testName     || "",
+        testLanguage:   testData.test_language || prev.testLanguage || "",
         codingIds:         prev.codingIds || codingIds,
         codingAnswered:    prev.codingAnswered    || 0,
         codingNotAnswered: prev.codingNotAnswered || testData.test_coding_id?.length || 0,
         codingNotVisited:  prev.codingNotVisited  || testData.test_coding_id?.length || 0,
-        codingCorrect:     prev.codingCorrect  || 0,
-        codingWrong:       prev.codingWrong    || 0,
-        codingResults:     prev.codingResults  || [],
-        mcqAnswered:       answeredCount,
-        mcqCorrect:        mcqScore,
-        mcqWrong:          wrongAnswersCount,
-        mcqNotAnswered:    notAnsweredCount,
-        mcqNotVisited:     notVisitedCount,
-        marked:            markedCount,
+        codingCorrect:  prev.codingCorrect  || 0,
+        codingWrong:    prev.codingWrong    || 0,
+        codingResults:  prev.codingResults  || [],
+        mcqAnswered:    answeredCount,
+        mcqCorrect:     mcqScore,
+        mcqWrong:       wrongAnswersCount,
+        mcqNotAnswered: notAnsweredCount,
+        mcqNotVisited:  notVisitedCount,
+        marked:         markedCount,
         currentCodingIndex: prev.currentCodingIndex || 0,
       };
       localStorage.setItem("test_result", JSON.stringify(updatedResult));
@@ -551,12 +603,23 @@ const McqPage = () => {
 
   // ── Event handlers ────────────────────────────────────────────────────────
   const handleOptionClick = (option) => {
+    const currentMcq = mcqData[currentQuestion];
+    const isMulti    = currentMcq?.mcq_type === "multi";
+
     setProgress((prev) =>
-      prev.map((item, idx) =>
-        idx === currentQuestion
-          ? { ...item, selected_option: item?.selected_option === option ? null : option, visited: true }
-          : item
-      )
+      prev.map((item, idx) => {
+        if (idx !== currentQuestion) return item;
+        const current = item.selected_options || [];
+        if (isMulti) {
+          const updated = current.includes(option)
+            ? current.filter((o) => o !== option)
+            : [...current, option];
+          return { ...item, selected_options: updated, visited: true };
+        } else {
+          const updated = current.includes(option) ? [] : [option];
+          return { ...item, selected_options: updated, visited: true };
+        }
+      })
     );
   };
 
@@ -570,22 +633,45 @@ const McqPage = () => {
 
   const handleQuestionNavigation = (index) => {
     if (index >= 0 && index < mcqData.length) {
-      setProgress((prev) => prev.map((item, idx) => (idx === index ? { ...item, visited: true } : item)));
+      setProgress((prev) =>
+        prev.map((item, idx) => (idx === index ? { ...item, visited: true } : item))
+      );
       setCurrentQuestion(index);
     }
   };
 
+  // ── Submit — correctly shaped payload for backend ─────────────────────────
   const handleSubmitTest = useCallback(async () => {
     if (isSubmitting.current) return;
     isSubmitting.current = true;
 
     try {
       console.log("Submitting test...");
-      const resultData = JSON.parse(localStorage.getItem("test_result") || "{}") || testResult;
-      await submitTestResult(resultData);
+      const resultData =
+        JSON.parse(localStorage.getItem("test_result") || "{}") || testResult;
+
+      // Map frontend fields → backend-expected fields
+      const payload = {
+        result_user_id:    resultData.result_user_id    || userId,
+        result_test_id:    resultData.result_test_id    || testId,
+        result_score:      resultData.result_score      ?? 0,
+        result_total_score:resultData.result_total_score ?? 0,
+        result_poc_id:     resultData.result_poc_id     || pocId,
+        result_mcq_score:  resultData.mcqCorrect        ?? 0,
+        result_coding_score: {
+          score:            resultData.codingCorrect ?? 0,
+          testcases_passed: resultData.codingResults?.reduce(
+            (sum, r) => sum + (r.testcases_passed ?? 0), 0
+          ) ?? 0,
+        },
+      };
+
+      await submitTestResult(payload);
       console.log("Test submitted successfully");
 
+      // Clear all warning counters
       localStorage.removeItem("fs_exit_count");
+      localStorage.removeItem("window_switch_count");
 
       if      (document.exitFullscreen)       await document.exitFullscreen()      .catch((e) => console.error(e));
       else if (document.mozCancelFullScreen)  await document.mozCancelFullScreen() .catch((e) => console.error(e));
@@ -608,12 +694,12 @@ const McqPage = () => {
     } finally {
       isSubmitting.current = false;
     }
-  }, [testResult, navigate]);
+  }, [testResult, navigate, userId, pocId, testId]);
 
   // ── Re-enter fullscreen handler ───────────────────────────────────────────
   const handleReEnterFullscreen = async () => {
     try {
-      if (document.documentElement.requestFullscreen)            await document.documentElement.requestFullscreen();
+      if      (document.documentElement.requestFullscreen)       await document.documentElement.requestFullscreen();
       else if (document.documentElement.mozRequestFullScreen)    await document.documentElement.mozRequestFullScreen();
       else if (document.documentElement.webkitRequestFullscreen) await document.documentElement.webkitRequestFullscreen();
       else if (document.documentElement.msRequestFullscreen)     await document.documentElement.msRequestFullscreen();
@@ -637,7 +723,8 @@ const McqPage = () => {
     setDialog({
       open: true,
       type: "proceed",
-      message: "Once you proceed to the coding section, you cannot return to the MCQ section. Do you want to continue?",
+      message:
+        "Once you proceed to the coding section, you cannot return to the MCQ section. Do you want to continue?",
       onConfirm: () => {
         navigate(`/coding/${codingIds[0]}`, {
           state: { ...testResult, currentCodingIndex: 0, codingIds },
@@ -651,7 +738,8 @@ const McqPage = () => {
     setDialog({
       open: true,
       type: "submit",
-      message: "Submitting the test is final. You cannot make further changes. Do you want to submit?",
+      message:
+        "Submitting the test is final. You cannot make further changes. Do you want to submit?",
       onConfirm: handleSubmitTest,
     });
   };
@@ -668,7 +756,8 @@ const McqPage = () => {
       : testData.test_instructions.split("\n").filter((line) => line.trim())
     : defaultInstructions;
 
-  const warningsRemaining = MAX_FULLSCREEN_WARNINGS - fullscreenExitCount;
+  const fsWarningsRemaining = MAX_FULLSCREEN_WARNINGS    - fullscreenExitCount;
+  const wsWarningsRemaining = MAX_WINDOW_SWITCH_WARNINGS - windowSwitchCount;
 
   // ── Loading state ─────────────────────────────────────────────────────────
   if (loading) {
@@ -684,9 +773,7 @@ const McqPage = () => {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" p={2}>
         <Paper elevation={3} sx={{ p: 4, maxWidth: 500, textAlign: "center" }}>
-          <Typography variant="h6" gutterBottom>
-            Error Loading Test
-          </Typography>
+          <Typography variant="h6" gutterBottom>Error Loading Test</Typography>
           <Typography variant="body1" color="textSecondary" paragraph>
             Unable to load test data. Please try again later.
           </Typography>
@@ -710,11 +797,12 @@ const McqPage = () => {
       notAnsweredCount = 0, notVisitedCount = 0;
 
   progress.forEach((p) => {
-    if      (p.selected_option && p.marked)  answeredAndMarkedCount += 1;
-    else if (p.selected_option)              answeredCount          += 1;
-    else if (p.marked)                       markedCount            += 1;
-    else if (p.visited)                      notAnsweredCount       += 1;
-    else                                     notVisitedCount        += 1;
+    const hasAnswer = p.selected_options?.length > 0;
+    if      (hasAnswer && p.marked) answeredAndMarkedCount += 1;
+    else if (hasAnswer)             answeredCount          += 1;
+    else if (p.marked)              markedCount            += 1;
+    else if (p.visited)             notAnsweredCount       += 1;
+    else                            notVisitedCount        += 1;
   });
 
   const pieChartData = [
@@ -726,7 +814,8 @@ const McqPage = () => {
   ];
 
   const isLastQuestionAnswered =
-    currentQuestion === mcqData.length - 1 && progress[currentQuestion]?.selected_option;
+    currentQuestion === mcqData.length - 1 &&
+    progress[currentQuestion]?.selected_options?.length > 0;
 
   // ── Main render ───────────────────────────────────────────────────────────
   return (
@@ -750,11 +839,13 @@ const McqPage = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You have exited fullscreen mode. This is warning <strong>{fullscreenExitCount}</strong> of <strong>{MAX_FULLSCREEN_WARNINGS}</strong>.
+            You have exited fullscreen mode. This is warning{" "}
+            <strong>{fullscreenExitCount}</strong> of{" "}
+            <strong>{MAX_FULLSCREEN_WARNINGS}</strong>.
           </DialogContentText>
           <DialogContentText sx={{ color: "#d32f2f", mt: 1, fontWeight: 600 }}>
-            {warningsRemaining > 0
-              ? `You have ${warningsRemaining} warning${warningsRemaining !== 1 ? "s" : ""} remaining before the test is automatically submitted.`
+            {fsWarningsRemaining > 0
+              ? `You have ${fsWarningsRemaining} warning${fsWarningsRemaining !== 1 ? "s" : ""} remaining before the test is automatically submitted.`
               : "This is your final warning. The test will be submitted on next fullscreen exit."}
           </DialogContentText>
           <DialogContentText sx={{ mt: 1 }}>
@@ -771,6 +862,50 @@ const McqPage = () => {
             sx={{ background: "#f57c00", "&:hover": { background: "#e65100" } }}
           >
             Return to Fullscreen
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ── Window-switch (Alt+Tab) warning dialog ─────────────────── */}
+      <Dialog
+        open={windowSwitchWarningOpen}
+        disableEscapeKeyDown
+        aria-labelledby="ws-warning-title"
+        className="clean-dialog"
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle id="ws-warning-title">
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <WarningAmberIcon sx={{ color: "#f57c00" }} />
+            Window Switch Detected — Warning {windowSwitchCount} of {MAX_WINDOW_SWITCH_WARNINGS}
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You switched away from the test window (Alt+Tab or clicked outside). This is warning{" "}
+            <strong>{windowSwitchCount}</strong> of{" "}
+            <strong>{MAX_WINDOW_SWITCH_WARNINGS}</strong>.
+          </DialogContentText>
+          <DialogContentText sx={{ color: "#d32f2f", mt: 1, fontWeight: 600 }}>
+            {wsWarningsRemaining > 0
+              ? `You have ${wsWarningsRemaining} warning${wsWarningsRemaining !== 1 ? "s" : ""} remaining before the test is automatically submitted.`
+              : "This is your final warning. The test will be submitted on the next window switch."}
+          </DialogContentText>
+          <DialogContentText sx={{ mt: 1 }}>
+            Please stay on the test window and do not switch to other applications.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setWindowSwitchWarningOpen(false)}
+            color="warning"
+            variant="contained"
+            autoFocus
+            className="clean-button"
+            sx={{ background: "#f57c00", "&:hover": { background: "#e65100" } }}
+          >
+            I Understand, Continue Test
           </Button>
         </DialogActions>
       </Dialog>
@@ -864,27 +999,38 @@ const McqPage = () => {
             >
               <InfoIcon />
             </IconButton>
+
+            {/* Fullscreen warning badge */}
             {fullscreenExitCount > 0 && (
               <Box
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  ml: 1,
-                  px: 1.5,
-                  py: 0.5,
-                  borderRadius: 2,
+                  display: "flex", alignItems: "center", gap: 0.5,
+                  ml: 1, px: 1.5, py: 0.5, borderRadius: 2,
                   background: fullscreenExitCount >= 4 ? "#d32f2f" : "#f57c00",
-                  color: "#fff",
-                  fontSize: "0.78rem",
-                  fontWeight: 700,
+                  color: "#fff", fontSize: "0.78rem", fontWeight: 700,
                 }}
               >
                 <WarningAmberIcon sx={{ fontSize: 16 }} />
-                FS Warnings: {fullscreenExitCount}/{MAX_FULLSCREEN_WARNINGS}
+                FS: {fullscreenExitCount}/{MAX_FULLSCREEN_WARNINGS}
+              </Box>
+            )}
+
+            {/* Window-switch warning badge */}
+            {windowSwitchCount > 0 && (
+              <Box
+                sx={{
+                  display: "flex", alignItems: "center", gap: 0.5,
+                  ml: 1, px: 1.5, py: 0.5, borderRadius: 2,
+                  background: windowSwitchCount >= 4 ? "#d32f2f" : "#f57c00",
+                  color: "#fff", fontSize: "0.78rem", fontWeight: 700,
+                }}
+              >
+                <WarningAmberIcon sx={{ fontSize: 16 }} />
+                WS: {windowSwitchCount}/{MAX_WINDOW_SWITCH_WARNINGS}
               </Box>
             )}
           </div>
+
           <div className="header-right">
             <div className="timer-display">
               <TimerIcon className="timer-icon" />
@@ -910,37 +1056,69 @@ const McqPage = () => {
               {mcqData[currentQuestion]?.mcq_question || "Loading question..."}
             </Typography>
 
+            <Box sx={{ mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
+              <Chip
+                label={mcqData[currentQuestion]?.mcq_type === "multi" ? "Multi Select" : "Single Select"}
+                size="small"
+                sx={{
+                  background: mcqData[currentQuestion]?.mcq_type === "multi" ? "#fc7a46" : "#0c83c8",
+                  color: "#fff", fontWeight: 600, fontSize: "0.72rem",
+                }}
+              />
+              {mcqData[currentQuestion]?.mcq_type === "multi" && (
+                <Typography variant="caption" color="text.secondary">
+                  Select all that apply
+                </Typography>
+              )}
+            </Box>
+
             <div className="options-group">
-              {(mcqData[currentQuestion]?.mcq_options || []).map((option, index) => (
-                <div
-                  key={index}
-                  className={`option-item ${progress[currentQuestion]?.selected_option === option ? "selected" : ""}`}
-                  onClick={() => handleOptionClick(option)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      handleOptionClick(option);
-                    }
-                  }}
-                >
-                  <FormControlLabel
-                    value={option}
-                    control={
-                      <Radio
-                        className="custom-radio"
-                        checked={progress[currentQuestion]?.selected_option === option}
-                        onChange={() => {}}
-                        onClick={(e) => e.stopPropagation()}
-                        tabIndex={-1}
-                      />
-                    }
-                    label={option}
-                    className="option-label"
-                  />
-                </div>
-              ))}
+              {(mcqData[currentQuestion]?.mcq_options || []).map((option, index) => {
+                const isMulti    = mcqData[currentQuestion]?.mcq_type === "multi";
+                const isSelected = progress[currentQuestion]?.selected_options?.includes(option) || false;
+
+                return (
+                  <div
+                    key={index}
+                    className={`option-item ${isSelected ? "selected" : ""}`}
+                    onClick={() => handleOptionClick(option)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleOptionClick(option);
+                      }
+                    }}
+                  >
+                    <FormControlLabel
+                      value={option}
+                      control={
+                        isMulti ? (
+                          <Checkbox
+                            className="custom-checkbox"
+                            checked={isSelected}
+                            onChange={() => {}}
+                            onClick={(e) => e.stopPropagation()}
+                            tabIndex={-1}
+                            sx={{ color: "#0c83c8", "&.Mui-checked": { color: "#0c83c8" } }}
+                          />
+                        ) : (
+                          <Radio
+                            className="custom-radio"
+                            checked={isSelected}
+                            onChange={() => {}}
+                            onClick={(e) => e.stopPropagation()}
+                            tabIndex={-1}
+                          />
+                        )
+                      }
+                      label={option}
+                      className="option-label"
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -1003,15 +1181,11 @@ const McqPage = () => {
 
           <div className="charts-container">
             <div className="chart-item">
-              <Typography variant="subtitle2" className="chart-label">
-                Progress
-              </Typography>
+              <Typography variant="subtitle2" className="chart-label">Progress</Typography>
               <PieChart data={pieChartData} />
             </div>
             <div className="chart-item">
-              <Typography variant="subtitle2" className="chart-label">
-                Time
-              </Typography>
+              <Typography variant="subtitle2" className="chart-label">Time</Typography>
               <CircularTimer timeLeft={timer} totalTime={totalTime} />
             </div>
           </div>
